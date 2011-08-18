@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<title>Mapping-Help</title>
+</head>
+<body>
+<h1 align="center">Mapping</h1>
+<br>
+A mapping defines the HBase schema. it describes whether your row key is a simple key or composite, what are 
+your column families and your qualifiers. Using aliases, you can provide user friendly names to identify the 
+row and column keys. 
+<br>
+<b>Steps to create mapping:-</b>
+<br>
+<b>Step 1:</b>&nbsp;Define unique mapping name.
+<br>
+<img align="middle"  height="50" width="400" src="../Images/mapping_step1.jpg" /> 
+<br>
+<b>Step 2:</b>&nbsp; There are three tabs on mapping page (Table, Row Key Alias and Column Alias). Select 
+'Table' tab and select unique pair of Connection and HBase Table. A mapping is specific to a hbase table.
+<br>
+<img align="middle"  height="80" width="400" src="../Images/mapping_step2.jpg" /> 
+<br>
+<b>Step 3:</b>&nbsp;To Define Row Key Alias, select Row Key Alias tab and then define Alias with unique value,
+also define length and select appropriate Value Type. If your rowkey is a composite, you will need multiple 
+aliases to define each portion of your rowkey. Save aliases after defining above.
+<br>
+<img align="middle"  height="150" width="400" src="../Images/mapping_step3.jpg" /> 
+<br>
+Now you can save alias after defining above.
+<br>
+<b>Step 4:</b>&nbsp;To Define the Column Aliases, select Column Alias tab and then select the column family. 
+Define qualifier as in HBase table. The alias name should be unique. Also select appropriate Value Type.
+Now you can save the aliases. 
+<br>
+<img align="middle"  height="150" width="400" src="../Images/mapping_step4.jpg" /> 
+<br>
+Now you can save alias after defining above.
+<br>
+<b>Step 5:</b>&nbsp;After defining rowKeyAlias and columnAlias, please click on Save Mapping button at the 
+bottom of page.
+<br>
+<img align="middle"  height="200" width="800" src="../Images/mapping_step5.jpg" /> 
+<br>
+</body>
+</html>

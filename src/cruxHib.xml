@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<!-- * Copyright 2011 Nube Technologies * * Licensed under the Apache License, 
+	Version 2.0 (the "License"); * you may not use this file except in compliance 
+	with the License. * You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 
+	* * Unless required by applicable law or agreed to in writing, software distributed 
+	* under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR * CONDITIONS OF ANY KIND, either express or implied. * See the License 
+	for the specific language governing permissions and limitations under the 
+	License. -->
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="co.nubetech.crux.model">
+
+	<class name="Datastore" table="datastore" lazy="false">
+		<id name="id">
+			<generator class="increment" />
+		</id>
+		<property name="name" type="string" column="name" />
+	</class>
+
+	<class name="User" table="user">
+		<id name="id">
+			<generator class="increment" />
+		</id>
+		<property name="name" column="name" />
+		<property name="password" column="password" />
+	</class>
+
+	<class name="Connection" table="connection" lazy="false">
+		<id name="id">
+			<generator class="increment"/>
+		</id>
+		<many-to-one name="datastore" column="datastoreId" class="Datastore" lazy="false"/>
+		<many-to-one name="user" column="userId" class="User" lazy="false" />
+		<property name="name" type="string" column="name" />
+		<map name="properties" table="connectionProperty" cascade="all" inverse="true">
+			<key column="connectionId"/>
+			<map-key type="string" column="property" />
+			<one-to-many class="ConnectionProperty"/>
+		</map>		
+	</class>
+	
+	 <class name="ConnectionProperty" table="connectionProperty" lazy="false">
+		<id name="id">
+			<generator class="increment" />
+		</id>
+		<many-to-one name="connection" column="connectionId" class="Connection" lazy="false"/>
+		<property name="property" type="string" column="property" />
+		<property name="value" type="string" column="value" />
+	</class>
+	
+	<class name="ReportType" table="reportType">
+		<id name="id">
+			<generator class="increment" />
+		</id>
+		<property name="type" column="type" />
+	</class>
+
+	<class name="ValueType" table="valueType" lazy="false">
+		<id name="id" >
+			<generator class="increment" />
+		</id>
+		<many-to-one name="datastore" column="datastoreId" class="Datastore" lazy="false" />
+		<property name="name" type="string" column="name" />
+		<property name="className" type="string" column="className" />
+		<property name="numeric" type="boolean" column="isNumeric" />
+	</class>
+	
+	<class name="Mapping" table="mapping" lazy="false">
+		<id name="id">
+			<generator class="increment" />
+		</id>
+		<many-to-one name="connection" column="connectionId" class="Connection" lazy="false"/>
+		<property name="name" type="string" column="name" />
+		<property name="tableName" type="string" column="tableName" />
+		<map name="columnAlias" table="columnAlias" cascade="all"
+			inverse="true">
+			<key column="mappingId" />
+			<map-key type="string" column="alias" />
+			<one-to-many class="ColumnAlias" />
+		</map>
+		<map name="rowAlias" table="rowAlias" cascade="all"
+			inverse="true" order-by="id asc">
+			<key column="mappingId" />
+			<map-key type="string" column="alias" />
+			<one-to-many class="RowAlias" />
+		</map>
+	</class>
+
+	<class name="ColumnAlias" table="columnAlias" lazy="false">
+		<id name="id">
+			<generator class="increment" />
+		</id>
+		<property name="columnFamily" type="string" column="columnFamily" />
+		<property name="qualifier" type="string" column="qualifier" />
+		<property name="alias" type="string" column="alias" />
+		<many-to-one name="mapping" column="mappingId" class="Mapping"  lazy="false"/>
+		<many-to-one name="valueType" column="valueTypeId"
+			class="ValueType" lazy="false"/>
+	</class>
+	
+	<class name="RowAlias" table="rowAlias" lazy="false">
+		<id name="id">
+			<generator class="increment" />
+		</id>
+		<property name="length" type="integer" column="length" />
+		<property name="alias" type="string" column="alias" />
+		<many-to-one name="mapping" column="mappingId" class="Mapping"  lazy="false"/>
+		<many-to-one name="valueType" column="valueTypeId"
+			class="ValueType" lazy="false"/>
+	</class>
+	 
+	<class name="Report" table="report" lazy="false">
+		<id name="id">
+			<generator class="increment" />
+		</id>
+		<many-to-one name="user" column="userId" class="User" lazy="false"/>
+		<many-to-one name="reportType" column="reportTypeId" class="ReportType"  lazy="false"/>
+		<property name="name" type="string" column="name" />
+		<bag name="designs" table="reportDesign" cascade="all"
+			inverse="true">
+			<key column="reportId" />
+			<one-to-many class="ReportDesign" />
+		</bag>
+		<bag name="rowAliasFilters" table="rowFilter" cascade="all"
+			inverse="true">
+			<key column="reportId" />
+			<one-to-many class="RowAliasFilter" />
+		</bag>
+		<bag name="columnFilters" table="columnFilter" cascade="all"
+			inverse="true">
+			<key column="reportId" />
+			<one-to-many class="ColumnFilter" />
+		</bag>
+	</class>
+
+	<class name="ReportDesign" table="reportDesign" lazy="false">
+		<id name="id">
+			<generator class="increment" />
+		</id>
+		<many-to-one name="report" column="reportId" class="Report" lazy="false"/>
+		<many-to-one name="columnAlias" column="columnAliasId" class="ColumnAlias" lazy="false"/>
+		<many-to-one name="rowAlias" column="rowAliasId" class="RowAlias" lazy="false"/>
+		<property name="mappingAxis" type="string" column="mappingAxis" />
+	</class>
+	
+	<class name="FilterType" table="filterType">
+		<id name="id">
+			<generator class="increment" />
+		</id>
+		<property name="type" type="string" column="type" />
+	</class>
+	
+	<class name="ValueFilterType" table="valueFilterType">
+	<id name="id">
+			<generator class="increment" />
+		</id>
+		<many-to-one name="valueType" column="valueTypeId" class="ValueType"  lazy="false"/>
+		<many-to-one name="filterType" column="filterTypeId"
+			class="FilterType" lazy="false"/>
+	</class>
+	
+	<class name="RowAliasFilter" table="rowFilter" lazy="false">
+		<id name="id">
+			<generator class="increment" />
+		</id>
+		<many-to-one name="filterType" column="filterTypeId"
+			class="FilterType" lazy="false"/>
+		<property name="value" type="string" column="value" />
+		<many-to-one name="report" column="reportId" class="Report"  lazy="false"/>
+		<many-to-one name="rowAlias" column="rowAliasId"
+			class="RowAlias" lazy="false"/>
+	</class>
+	
+	<class name="ColumnFilter" table="columnFilter" lazy="false">
+		<id name="id">
+			<generator class="increment" />
+		</id>
+		<many-to-one name="filterType" column="filterTypeId"
+			class="FilterType" lazy="false"/>
+		<property name="value" type="string" column="value" />
+		<many-to-one name="report" column="reportId" class="Report"  lazy="false"/>
+		<many-to-one name="columnAlias" column="columnAliasId"
+			class="ColumnAlias" lazy="false"/>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * Copyright 2011 Nube Technologies * * Licensed under the Apache License, 
+	Version 2.0 (the "License"); * you may not use this file except in compliance 
+	with the License. * You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 
+	* * Unless required by applicable law or agreed to in writing, software distributed 
+	* under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR * CONDITIONS OF ANY KIND, either express or implied. * See the License 
+	for the specific language governing permissions and limitations under the 
+	License. -->
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.devMode" value="true" />
+	<package name="crux" namespace="/" extends="json-default,hibernate-default">
+		<interceptors>
+			<interceptor name="demoInterceptor"
+							class="co.nubetech.crux.interceptor.DemoInterceptor">
+				<param name="demo">false</param>
+			</interceptor>
+		<interceptor-stack name="cruxDemoInterceptorStack">
+			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="defaultStackHibernate"/>
+			<interceptor-ref name="json"/>
+			<interceptor-ref name="demoInterceptor"/>
+		</interceptor-stack>
+		</interceptors>
+		<action name="welcome" class="co.nubetech.crux.action.WelcomeAction"
+			method="welcome">
+			<result name="report" type="chain">displayReportList</result>
+			<result name="mapping" type="chain">initializeMappings</result>
+			<result name="connection" type="chain">initializeConnections</result>
+		</action>
+		<action name="initializeConnections" class="co.nubetech.crux.action.ConnectionAction"
+			method="initializeConnections">
+			<result name="success">/connection.jsp</result>
+		</action>
+		<action name="saveConnection" class="co.nubetech.crux.action.ConnectionAction"
+			method="saveConnection">
+			<interceptor-ref name="cruxDemoInterceptorStack"/>
+			<result type="json"/>
+		</action>
+		<action name="updateConnection" class="co.nubetech.crux.action.ConnectionAction"
+			method="updateConnection">
+			<interceptor-ref name="cruxDemoInterceptorStack"/>
+			<result type="json"/>
+		</action>
+		<action name="deleteConnection" class="co.nubetech.crux.action.ConnectionAction"
+			method="deleteConnection">
+			<interceptor-ref name="cruxDemoInterceptorStack"/>
+			<result type="json"/>
+		</action>
+		<action name="initializeMappings" class="co.nubetech.crux.action.MappingAction"
+			method="initializeMappings">
+			<result name="success">/mapping.jsp</result>
+		</action>
+		<action name="populateHBaseTable" class="co.nubetech.crux.action.MappingAction"
+			method="populateHBaseTable">
+			<result type="json"/>
+		</action>
+		<action name="populateColumnFamily" class="co.nubetech.crux.action.MappingAction"
+			method="populateColumnFamily">
+			<result type="json"/>
+		</action>
+		<action name="saveMapping" class="co.nubetech.crux.action.MappingAction"
+			method="saveMapping">
+			<interceptor-ref name="cruxDemoInterceptorStack"/>
+			<result type="json"/>
+		</action>
+		<action name="editMapping" class="co.nubetech.crux.action.MappingAction"
+			method="editMapping">
+			<result type="json"/>
+		</action>
+		<action name="deleteMapping" class="co.nubetech.crux.action.MappingAction"
+			method="deleteMapping">
+			<interceptor-ref name="cruxDemoInterceptorStack"/>
+			<result type="json"/>
+		</action>
+		<action name="checkRowAliasForForeignKey" class="co.nubetech.crux.action.MappingAction"
+			method="checkRowAliasForForeignKey">
+			<result type="json"/>
+		</action>
+		<action name="checkColumnAliasForForeignKey" class="co.nubetech.crux.action.MappingAction"
+			method="checkColumnAliasForForeignKey">
+			<result type="json"/>
+		</action>
+		<action name="displayReportList" class="co.nubetech.crux.action.ReportAction"
+			method="displayReportList">
+			<result name="success">/report.jsp</result>
+			<result name="report" type="redirect">getDesignPage.action</result>
+		</action>
+		<action name="getDesignPage" class="co.nubetech.crux.action.ReportDesignAction"
+			method="getDesignPage">
+			<result name="success">/design.jsp</result>
+		</action>
+		<action name="populateDimensionAndMeasureList" class="co.nubetech.crux.action.ReportDesignAction"
+			method="populateDimensionAndMeasureList">
+			<result type="json" />
+		</action>
+		<action name="populateFilterType" class="co.nubetech.crux.action.ReportDesignAction"
+			method="populateFilterType">
+			<result type="json" />
+		</action>
+		<action name="saveReport" class="co.nubetech.crux.action.SaveReportAction"
+			method="saveReport">
+			<interceptor-ref name="cruxDemoInterceptorStack"/>
+			<result name="success" type="redirectAction">
+			<param name="actionName">displayReportList</param>
+			</result>
+			<result name="error" type="redirectAction">
+			<param name="actionName">getDesignPage</param>
+			<param name="parse">true</param>
+        	<param name="errorMsg">${error.message}</param>
+			</result>
+		</action>
+		<action name="viewReport" class="co.nubetech.crux.action.ViewReportAction"
+			method="viewReport">
+			<result name="success">/viewReport.jsp</result>
+			<result name="error" type="redirectAction">
+			<param name="actionName">displayReportList</param>
+			<param name="parse">true</param>
+        	<param name="errorMsg">${error.message}</param>
+			</result>
+		</action>
+			<action name="deleteReport" class="co.nubetech.crux.action.DeleteReportAction"
+			method="deleteReport">
+			<interceptor-ref name="cruxDemoInterceptorStack"/>
+			<result type="json" />
+		</action>
+		<action name="editReport" class="co.nubetech.crux.action.ReportDesignAction"
+			method="editReport">
+			<result name="success">/design.jsp</result>
+			<result name="error" type="redirectAction">
+			<param name="actionName">displayReportList</param>
+			<param name="parse">true</param>
+        	<param name="errorMsg">${error.message}</param>
+			</result>
+		</action>
+		<action name="getDataAction" class="co.nubetech.crux.action.SaveReportAction"
+			method="getDataAction">
+			<result type="json" />
+		</action>
+	</package>
+</struts>
