@@ -18,9 +18,10 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import org.apache.hadoop.hbase.filter.BinaryComparator;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
+
+import co.nubetech.crux.server.filter.BinaryComparator;
 
 public class SubBinaryComparator extends BinaryComparator {
 

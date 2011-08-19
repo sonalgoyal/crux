@@ -15,6 +15,7 @@
 package co.nubetech.crux.util;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.log4j.Logger;
 
 import co.nubetech.crux.model.Connection;
@@ -25,8 +26,8 @@ public class Utility {
 			.getLogger(co.nubetech.crux.util.Utility.class);
 
 	// Only passes the first pair of host:port.
-	public static Configuration getConfiguration(Connection conn) {
-		Configuration conf = new Configuration();
+	public static HBaseConfiguration getConfiguration(Connection conn) {
+		HBaseConfiguration conf = new HBaseConfiguration();
 		String propertyValue = conn.getProperties()
 				.get(CruxConstants.HBASE_ZOOKEEPER_PROPERTY).getValue();
 		String[] propertyValueArray = propertyValue.split(",");

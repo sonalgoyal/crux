@@ -16,8 +16,6 @@ package co.nubetech.crux.server.filter;
 
 import java.util.HashMap;
 
-import org.apache.hadoop.hbase.filter.WritableByteArrayComparable;
-
 import co.nubetech.crux.server.filter.types.BooleanComparator;
 import co.nubetech.crux.server.filter.types.DoubleComparator;
 import co.nubetech.crux.server.filter.types.FloatComparator;

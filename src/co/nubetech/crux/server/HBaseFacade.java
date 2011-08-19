@@ -18,15 +18,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.MasterNotRunningException;
-import org.apache.hadoop.hbase.ZooKeeperConnectionException;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.HTablePool;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -52,15 +50,13 @@ public class HBaseFacade {
 
 	private HBaseAdmin getHBaseAdmin(Connection conn) throws CruxException {
 		logger.debug("Trying to get HBaseAdmin " + conn);
-		Configuration conf = Utility.getConfiguration(conn);
+		HBaseConfiguration conf = Utility.getConfiguration(conn);
 		HBaseAdmin admin;
 		try {
 			admin = new HBaseAdmin(conf);
 		} catch (MasterNotRunningException e) {
 			throw new CruxException(e);
-		} catch (ZooKeeperConnectionException e) {
-			throw new CruxException(e);
-		}
+		} 
 		logger.debug("Got hbase admin " + admin);
 		return admin;
 	}
@@ -154,7 +150,7 @@ public class HBaseFacade {
 		logger.debug(" and mapping " + mapping);
 		
 		HTablePool hTablePool = null;
-		HTableInterface hTable = null;
+		HTable hTable = null;
 		try {
 			hTablePool = (HTablePool) hbaseConnectionPool.borrowObject(conn);
 			hTable = hTablePool

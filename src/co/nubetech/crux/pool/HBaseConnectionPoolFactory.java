@@ -15,7 +15,7 @@
 package co.nubetech.crux.pool;
 
 import org.apache.commons.pool.KeyedPoolableObjectFactory;
-import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.HTablePool;
 import org.apache.log4j.Logger;
 
@@ -43,7 +43,7 @@ public class HBaseConnectionPoolFactory implements KeyedPoolableObjectFactory {
 	@Override
 	public Object makeObject(Object obj) {
 		Connection connection = (Connection) obj;
-		Configuration conf = Utility.getConfiguration(connection);
+		HBaseConfiguration conf = Utility.getConfiguration(connection);
 		HTablePool hTablePool = new HTablePool(conf,
 				CruxConstants.HTABLE_POOL_MAX_SIZE);
 		return hTablePool;

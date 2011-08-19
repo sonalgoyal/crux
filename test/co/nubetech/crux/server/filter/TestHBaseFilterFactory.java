@@ -49,7 +49,7 @@ import co.nubetech.crux.server.filter.types.SubSubstringComparator;
 import co.nubetech.crux.util.CruxException;
 
 public class TestHBaseFilterFactory {
-
+/*
 	@Test
 	public void testGetOffsetSingleAlias() {
 		Mapping mapping = new Mapping();
@@ -3991,5 +3991,5 @@ public class TestHBaseFilterFactory {
 
 	}
 
-
+*/
 }

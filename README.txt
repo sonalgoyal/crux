@@ -1,6 +1,6 @@
 Crux is a reporting application for HBase. Crux has been tested against
 
-1. Apache Hadoop 0.90.3 on Apache Hadoop 0.20.2 with Hadoop append.
+1. Apache Hadoop 0.20.3 on Apache Hadoop 0.20.2 with Hadoop append.
 2. Cloudera's distribution. CDH3 - Hadoop 0.20.2-CDH3u1
 
 

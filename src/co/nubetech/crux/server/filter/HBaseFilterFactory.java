@@ -45,7 +45,6 @@ import co.nubetech.crux.server.filter.types.SubBinarySuffixComparator;
 import co.nubetech.crux.server.filter.types.SubRegexStringComparator;
 import co.nubetech.crux.server.filter.types.SubSubstringComparator;
 import co.nubetech.crux.util.CruxException;
-import org.apache.hadoop.hbase.filter.WritableByteArrayComparable;
 import org.apache.hadoop.hbase.util.Bytes;
 
 public class HBaseFilterFactory {
