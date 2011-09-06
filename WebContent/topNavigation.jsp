@@ -30,6 +30,9 @@
 			<td align="left" width="10px">
 				<a  style="padding:5px 6px 5px 6px;" href="<s:url action='displayReportList'/>">Report</a>
 			</td>
+			<td align="left" width="10px">
+				<a  style="padding:5px 6px 5px 6px;" href="<s:url action='getDashBoard'/>">DashBoard</a>
+			</td>
 			<td align="right">
 			<a  style="padding:5px 6px 5px 6px;" href="#" onClick='showHelp()'>Help</a>
 				<img align="right" height="22" width="50" src="Images/crux_transparent.gif" alt="Crux" /> 

@@ -14,10 +14,14 @@
  */
 package co.nubetech.crux.action;
 
+import java.util.ArrayList;
+
 import org.apache.log4j.Logger;
 
 import co.nubetech.crux.dao.ConnectionDAO;
 import co.nubetech.crux.dao.MappingDAO;
+import co.nubetech.crux.dao.ReportDAO;
+import co.nubetech.crux.model.Report;
 
 public class WelcomeAction extends CruxAction {
 
@@ -30,13 +34,30 @@ public class WelcomeAction extends CruxAction {
 
 	private ConnectionDAO connectionDAO = new ConnectionDAO();
 	private MappingDAO mappingDAO = new MappingDAO();
+	private ReportDAO reportDAO = new ReportDAO();
 
 	public String welcome() {
 		int connectionListSize = connectionDAO.findAll().size();
 		int mappingListSize = mappingDAO.findAll().size();
 
 		if (mappingListSize > 0) {
-			return "report";
+			boolean ifExists = false;
+			ArrayList<Report> reportList = new ArrayList<Report>(
+					reportDAO.findAll());
+			for (Report report : reportList) {
+				if (report.getDashboardType() == (short) 1) {
+					ifExists = true;
+				}
+			}
+			if (reportList.size() > 0) {
+				if (ifExists) {
+					return "dashboard";
+				} else {
+					return "report";
+				}
+			} else {
+				return "design";
+			}
 		} else if (connectionListSize > 0 && mappingListSize == 0) {
 			return "mapping";
 		} else {

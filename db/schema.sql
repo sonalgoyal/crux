@@ -213,6 +213,7 @@ CREATE  TABLE IF NOT EXISTS report (
  `userId` BIGINT(100) NOT NULL ,
  `reportTypeId` BIGINT(100) NOT NULL ,
  `name` VARCHAR(100) NOT NULL,
+ `dashboardType` TINYINT NOT NULL ,
  PRIMARY KEY (`id`) ,
  UNIQUE INDEX `report_unique_keys` (`userId`, `name`) ,
 INDEX `fk_report_userId` (`userId` ASC) ,
@@ -354,7 +355,7 @@ CREATE  TABLE IF NOT EXISTS `valueFilterType` (
 `valueTypeId` BIGINT(100) NOT NULL,
 `filterTypeId` BIGINT(100) NOT NULL,
 PRIMARY KEY (`id`),
-UNIQUE INDEX `valueFilterType_unique_keys` (`valueTypeId`,filterTypeId),
+UNIQUE INDEX `valueFilterType_unique_keys` (`valueTypeId`,`filterTypeId`),
 INDEX `fk_valueFilterType_valueTypeId` (`valueTypeId` ASC),
 CONSTRAINT `fk_valueFilterType_valueTypeId`  
 FOREIGN KEY (`valueTypeId`) 
@@ -368,7 +369,74 @@ REFERENCES `filterType` (`id` )
 ON DELETE NO ACTION 
 ON UPDATE NO ACTION) ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `function`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `function` ;
 
+CREATE  TABLE IF NOT EXISTS `function` (
+`id` BIGINT(100) NOT NULL AUTO_INCREMENT ,
+`functionName` VARCHAR(100) NOT NULL ,
+`functionClass` VARCHAR(100) NOT NULL ,
+`functionType` TINYINT NOT NULL ,
+PRIMARY KEY (`id`),
+UNIQUE INDEX `function_unique_keys` (`functionName`,`functionClass`)
+) ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `functionTypeMapping`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `functionTypeMapping` ;
+
+CREATE  TABLE IF NOT EXISTS `functionTypeMapping` (
+`id` BIGINT(100) NOT NULL AUTO_INCREMENT ,
+`functionId` BIGINT(100) NOT NULL ,
+`valueTypeId` BIGINT(100) NOT NULL ,
+`returnValueTypeId` BIGINT(100) NOT NULL ,
+PRIMARY KEY (`id`),
+INDEX `fk_functionTypeMapping_valueTypeId` (`valueTypeId` ASC),
+CONSTRAINT `fk_functionTypeMapping_valueTypeId`  
+FOREIGN KEY (`valueTypeId`) 
+REFERENCES `valueType` (`id` )  
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION,
+INDEX `fk_functionTypeMapping_returnValueTypeId` (`returnValueTypeId` ASC),
+CONSTRAINT `fk_functionTypeMapping_returnValueTypeId`  
+FOREIGN KEY (`returnValueTypeId`) 
+REFERENCES `valueType` (`id` )  
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION,
+INDEX `fk_functionTypeMapping_functionId` (`functionId` ASC),
+CONSTRAINT `fk_functionTypeMapping_functionId`  
+FOREIGN KEY (`functionId`) 
+REFERENCES `function` (`id` )  
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION) ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `reportDesignFunction`
+-- -----------------------------------------------------
+
+DROP TABLE IF EXISTS `reportDesignFunction` ;
+
+CREATE  TABLE IF NOT EXISTS `reportDesignFunction` (
+`id` BIGINT(100) NOT NULL AUTO_INCREMENT,
+`reportDesignId` BIGINT(100) NOT NULL,
+`functionId` BIGINT(100) NOT NULL,
+PRIMARY KEY (`id`),
+UNIQUE INDEX `reportDesignFunction_unique_keys` (`reportDesignId`,`functionId`),
+INDEX `fk_reportDesignFunction_reportDesignId` (`reportDesignId` ASC),
+CONSTRAINT `fk_reportDesignFunction_reportDesignId`  
+FOREIGN KEY (`reportDesignId`) 
+REFERENCES `reportDesign` (`id` )  
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION,
+INDEX `fk_reportDesignFunction_functionId` (`functionId` ASC),
+CONSTRAINT `fk_reportDesignFunction_functionId`  
+FOREIGN KEY (`functionId`) 
+REFERENCES `function` (`id` )  
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION) ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- insert queries
 -- -----------------------------------------------------
@@ -392,6 +460,10 @@ INSERT  INTO `reportType`(`id`,`type`) VALUES (3, 'Pie');
 INSERT  INTO `reportType`(`id`,`type`) VALUES (4, 'Areas');
 INSERT  INTO `reportType`(`id`,`type`) VALUES (5, 'Scatter');
 INSERT  INTO `reportType`(`id`,`type`) VALUES (6, 'Table');
+INSERT  INTO `reportType`(`id`,`type`) VALUES (7, 'ClusteredColumns');
+INSERT  INTO `reportType`(`id`,`type`) VALUES (8, 'StackedColumns');
+INSERT  INTO `reportType`(`id`,`type`) VALUES (9, 'StackedAreas');
+INSERT  INTO `reportType`(`id`,`type`) VALUES (10, 'StackedLines');
 
 -- these values are used directly by the server. So we should be very cautious about changing them.
 INSERT  INTO `filterType`(`id`,`type`) VALUES (1, 'Equals');
@@ -456,5 +528,41 @@ INSERT  INTO `valueFilterType`(`valueTypeId`,`filterTypeId`) VALUES (7, 4);
 INSERT  INTO `valueFilterType`(`valueTypeId`,`filterTypeId`) VALUES (7, 5);
 INSERT  INTO `valueFilterType`(`valueTypeId`,`filterTypeId`) VALUES (7, 6);
 -- INSERT  INTO `valueFilterType`(`id`,`valueTypeId`,`filterTypeId`) VALUES (7, 7);
+
+INSERT  INTO `function`(`functionName`,`functionClass`,`functionType`) VALUES ('Ceil','co.nubetech.crux.functions.Ceil',1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`functionType`) VALUES ('date','co.nubetech.crux.functions.DateFunction',1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`functionType`) VALUES ('day','co.nubetech.crux.functions.DateFunction',1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`functionType`) VALUES ('month','co.nubetech.crux.functions.DateFunction',1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`functionType`) VALUES ('year','co.nubetech.crux.functions.DateFunction',1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`functionType`) VALUES ('hour','co.nubetech.crux.functions.DateFunction',1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`functionType`) VALUES ('minute','co.nubetech.crux.functions.DateFunction',1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`functionType`) VALUES ('second','co.nubetech.crux.functions.DateFunction',1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`functionType`) VALUES ('LowerCase','co.nubetech.crux.functions.LowerCase',1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`functionType`) VALUES ('SubString','co.nubetech.crux.functions.SubString',1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`functionType`) VALUES ('Trim','co.nubetech.crux.functions.Trim',1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`functionType`) VALUES ('UpperCase','co.nubetech.crux.functions.UpperCase',1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`functionType`) VALUES ('Round','co.nubetech.crux.functions.Round',1);
+
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (1,6,6);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (2,1,3);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (2,1,4);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (3,1,3);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (3,1,4);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (4,1,3);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (4,1,4);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (5,1,3);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (5,1,4);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (6,1,3);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (6,1,4);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (7,1,3);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (7,1,4);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (8,1,3);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (8,1,4);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (9,1,1);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (10,1,1);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (11,1,1);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (12,1,1);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (13,1,5);
+INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (13,1,6);
 
 

@@ -19,6 +19,7 @@ var yArray = [];
 var d3 = [];
 var d1 = [];
 var xArray = [];
+var xAxislabels = [];
 
 function populate(valueList) {
 	var dataList = [];
@@ -37,18 +38,31 @@ function populate(valueList) {
 	}
 	d3 = [];
 	for ( var i = 0; i < xArray.length; i++) {
+		xAxislabels = [];
 		var xData = getData(xArray[i]);
 		for ( var j = 0; j < yArray.length; j++) {
 			var yData = getData(yArray[j]);
 			var d1 = [];
+			if(chartType.indexOf("Columns") == -1 &&  chartType.indexOf("Stacked") == -1){	
 			for ( var k = 0; k < xData.length; k += 1) {
-
+				
 				d1.push({
 					x : xData[k],
 					y : yData[k]
 				});
 			}
+			} else {
+				d1 = yData;
+			}
 			d3.push(d1);
+		}
+		if(chartType.indexOf("Columns") != -1  ||  chartType.indexOf("Stacked") != -1){	
+		for ( var k = 0; k < xData.length; k += 1) {
+			xAxislabels.push({
+				value : k+1,
+				text : xData[k]
+			});		
+		}
 		}
 	}
 }
@@ -67,8 +81,12 @@ makeCharts = function() {
 		areas : false,
 		markers : true
 	});
-	cruxChart.addAxis("x");
+	cruxChart.addAxis("x", {rotation:270, labels:xAxislabels});
+	if(chartType.indexOf("Columns") == -1 && chartType.indexOf("Stacked") == -1){	
 	cruxChart.addAxis("y", {vertical: true});
+	} else {
+		cruxChart.addAxis("y", {vertical: true, includeZero: true});
+	}
 	
 //	cruxChart.addAxis("x");
 //	cruxChart.addAxis("y",{vertical: true});

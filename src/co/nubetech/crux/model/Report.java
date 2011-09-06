@@ -23,6 +23,7 @@ public class Report {
 	private User user;
 	private String name;
 	private ReportType reportType;
+	private short dashboardType;
 	private Collection<ReportDesign> designs = new ArrayList<ReportDesign>();
 	private Collection<RowAliasFilter> rowAliasFilters = new ArrayList<RowAliasFilter>();
 	private Collection<ColumnFilter> columnFilters = new ArrayList<ColumnFilter>();
@@ -32,13 +33,15 @@ public class Report {
 	}
 
 	public Report(User user, String name, ReportType reportType,
-			ArrayList<ReportDesign> designs) {
+			short isDashBoard) {
 		super();
 		this.user = user;
 		this.name = name;
 		this.reportType = reportType;
-		this.designs = designs;
+		this.dashboardType = isDashBoard;
 	}
+
+
 
 	public long getId() {
 		return id;
@@ -101,12 +104,23 @@ public class Report {
 		designs.add(design);
 	}
 
+	
+	public short getDashboardType() {
+		return dashboardType;
+	}
+
+	public void setDashboardType(short dashboardType) {
+		this.dashboardType = dashboardType;
+	}
+
+	
+
 	@Override
 	public String toString() {
 		return "Report [id=" + id + ", user=" + user + ", name=" + name
-				+ ", reportType=" + reportType + ", designs=" + designs
-				+ ", rowAliasFilters=" + rowAliasFilters + ", columnFilter=" + columnFilters
-				+ "]";
+				+ ", reportType=" + reportType + ", isDashBoard=" + dashboardType
+				+ ", designs=" + designs + ", rowAliasFilters="
+				+ rowAliasFilters + ", columnFilters=" + columnFilters + "]";
 	}
 
 	@Override
@@ -117,6 +131,7 @@ public class Report {
 				+ ((columnFilters == null) ? 0 : columnFilters.hashCode());
 		result = prime * result + ((designs == null) ? 0 : designs.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + dashboardType;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
 				+ ((reportType == null) ? 0 : reportType.hashCode());
@@ -147,6 +162,8 @@ public class Report {
 			return false;
 		if (id != other.id)
 			return false;
+		if (dashboardType != other.dashboardType)
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -169,8 +186,6 @@ public class Report {
 			return false;
 		return true;
 	}
-	
-	
-	
 
+	
 }

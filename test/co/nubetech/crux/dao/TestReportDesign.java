@@ -35,7 +35,7 @@ public class TestReportDesign extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest')");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
 
 		Session session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
 				.getNewSession();
@@ -87,7 +87,7 @@ public class TestReportDesign extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest')");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		Session session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
@@ -119,7 +119,7 @@ public class TestReportDesign extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest')");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		Session session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory

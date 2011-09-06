@@ -21,47 +21,50 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import co.nubetech.crux.dao.FunctionTypeMappingDAO;
 import co.nubetech.crux.dao.MappingDAO;
-import co.nubetech.crux.dao.ReportDAO;
 import co.nubetech.crux.dao.ReportTypeDAO;
 import co.nubetech.crux.dao.ValueFilterTypeDAO;
 import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.ColumnFilter;
 import co.nubetech.crux.model.FilterType;
+import co.nubetech.crux.model.FunctionTypeMapping;
 import co.nubetech.crux.model.Mapping;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
+import co.nubetech.crux.model.ReportDesignFunction;
 import co.nubetech.crux.model.ReportType;
 import co.nubetech.crux.model.RowAlias;
 import co.nubetech.crux.model.RowAliasFilter;
 import co.nubetech.crux.model.ValueFilterType;
 import co.nubetech.crux.util.CruxError;
 import co.nubetech.crux.util.CruxException;
+import co.nubetech.crux.view.DimensionAndMeasureView;
 import co.nubetech.crux.view.FilterAliasView;
+import co.nubetech.crux.view.FunctionView;
 
-public class ReportDesignAction extends CruxAction {
+public class ReportDesignAction extends ViewReportListAction {
 
 	private static final long serialVersionUID = 1L;
 
 	private final static Logger logger = Logger
 			.getLogger(co.nubetech.crux.action.ReportDesignAction.class);
 
-	private ReportTypeDAO reportTypeDAO = new ReportTypeDAO();
-	private ReportDAO reportDAO = new ReportDAO();
-	private MappingDAO mappingDAO = new MappingDAO();
+	protected ReportTypeDAO reportTypeDAO = new ReportTypeDAO();
 	private ValueFilterTypeDAO valueFilterTypeDAO = new ValueFilterTypeDAO();
-	private ArrayList<Mapping> mappingList;
-	private ArrayList<String> dimensionsList;
-	private ArrayList<String> measuresList;
 	private ArrayList<ReportType> reportTypeList;
 	private ArrayList<FilterType> filterTypeList;
-	private long mappingId;
-	private Report report = new Report();
+	protected long mappingId;
+	protected Report report = new Report();
 	private String edit = "false";
-	private String reportType;
-	private String axisValues = new String();
+	protected String reportType;
+	protected String axisValues = new String();
 	private String aliasName;
+	protected boolean addToDashBoard;
 	private ArrayList<FilterAliasView> filterViewList = new ArrayList<FilterAliasView>();
+	private ArrayList<DimensionAndMeasureView> dimensionAndMeasureViewList = new ArrayList<DimensionAndMeasureView>();
+	private ArrayList<FunctionView> functionViewList = new ArrayList<FunctionView>();
+	protected FunctionTypeMappingDAO functionTypeMappingDAO = new FunctionTypeMappingDAO();
 
 	public ReportDesignAction() {
 
@@ -69,6 +72,14 @@ public class ReportDesignAction extends CruxAction {
 
 	public String getAliasName() {
 		return aliasName;
+	}
+
+	public ArrayList<FunctionView> getFunctionViewList() {
+		return functionViewList;
+	}
+
+	public void setFunctionViewList(ArrayList<FunctionView> functionViewList) {
+		this.functionViewList = functionViewList;
 	}
 
 	public void setAliasName(String aliasName) {
@@ -139,37 +150,16 @@ public class ReportDesignAction extends CruxAction {
 		this.edit = edit;
 	}
 
-	public ArrayList<Mapping> getMappingList() {
-		return mappingList;
-	}
-
-	public void setMappingList(ArrayList<Mapping> mappingList) {
-		this.mappingList = mappingList;
-	}
-
-	public ArrayList<String> getDimensionsList() {
-		return dimensionsList;
-	}
-
-	public void setDimensionsList(ArrayList<String> dimensionsList) {
-		this.dimensionsList = dimensionsList;
-	}
-
-	public ArrayList<String> getMeasuresList() {
-		return measuresList;
-	}
-
-	public void setMeasuresList(ArrayList<String> measuresList) {
-		this.measuresList = measuresList;
-	}
-
 	public String getDesignPage() {
-		populateMappingList();
+		mappingList = populateMappingList(mappingDAO, mappingList);
 		return SUCCESS;
 	}
 
-	private void populateMappingList() {
+	public ArrayList<Mapping> populateMappingList(MappingDAO mappingDAO,
+			ArrayList<Mapping> mappingList) {
 		mappingList = new ArrayList<Mapping>(mappingDAO.findAll());
+		logger.debug("GetDesignPage:" + mappingDAO + ":" + mappingList);
+		return mappingList;
 	}
 
 	public ArrayList<FilterAliasView> getFilterViewList() {
@@ -180,15 +170,30 @@ public class ReportDesignAction extends CruxAction {
 		this.filterViewList = filterViewList;
 	}
 
+	public boolean isAddToDashBoard() {
+		return addToDashBoard;
+	}
+
+	public void setAddToDashBoard(boolean dashBoard) {
+		this.addToDashBoard = dashBoard;
+	}
+
+	public ArrayList<DimensionAndMeasureView> getDimensionAndMeasureViewList() {
+		return dimensionAndMeasureViewList;
+	}
+
+	public void setDimensionAndMeasureViewList(
+			ArrayList<DimensionAndMeasureView> dimensionAndMeasureViewList) {
+		this.dimensionAndMeasureViewList = dimensionAndMeasureViewList;
+	}
+
 	public String populateDimensionAndMeasureList() {
-		populateMappingList();
+		mappingList = populateMappingList(mappingDAO, mappingList);
 		Map<String, ColumnAlias> columnAlias = null;
 		Map<String, RowAlias> rowAlias = null;
 		logger.debug("Mapping Id: " + mappingId);
 
 		if (mappingId != 0) {
-			dimensionsList = new ArrayList<String>();
-			measuresList = new ArrayList<String>();
 
 			try {
 				columnAlias = mappingDAO.findById(mappingId).getColumnAlias();
@@ -200,26 +205,25 @@ public class ReportDesignAction extends CruxAction {
 			if (columnAlias != null) {
 				Set<Entry<String, ColumnAlias>> mapSet = columnAlias.entrySet();
 				for (Map.Entry<String, ColumnAlias> entry : mapSet) {
-					if (entry.getValue().getValueType().isNumeric()) {
-						measuresList.add(entry.getKey());
-					} else {
-						dimensionsList.add(entry.getKey());
-					}
+					dimensionAndMeasureViewList
+							.add(new DimensionAndMeasureView(entry.getValue()));
 				}
 			}
 
 			if (rowAlias != null) {
 				Set<Entry<String, RowAlias>> mapSet = rowAlias.entrySet();
 				for (Map.Entry<String, RowAlias> entry : mapSet) {
-					if (entry.getValue().getValueType().isNumeric()) {
-						measuresList.add(entry.getKey());
-					} else {
-						dimensionsList.add(entry.getKey());
-					}
+					dimensionAndMeasureViewList
+							.add(new DimensionAndMeasureView(entry.getValue()));
 				}
 			}
 		}
 		reportTypeList = new ArrayList<ReportType>(reportTypeDAO.findAll());
+		ArrayList<FunctionTypeMapping> funcTypeMappingList = new ArrayList<FunctionTypeMapping>(
+				functionTypeMappingDAO.findAll());
+		for (FunctionTypeMapping funTypeMapping : funcTypeMappingList) {
+			functionViewList.add(new FunctionView(funTypeMapping));
+		}
 		return SUCCESS;
 	}
 
@@ -259,36 +263,48 @@ public class ReportDesignAction extends CruxAction {
 	}
 
 	public String editReport() {
+		String returnString = SUCCESS;
 		try {
 			report = reportDAO.findById(report.getId());
+
+			logger.debug("Report to edit: " + report);
+			ArrayList<ReportDesign> reportDesignList = new ArrayList<ReportDesign>(
+					report.getDesigns());
+
+			for (ReportDesign reportDesign : reportDesignList) {
+				String alias = (reportDesign.getColumnAlias() != null) ? reportDesign
+						.getColumnAlias().getAlias() : reportDesign
+						.getRowAlias().getAlias();
+					ArrayList<ReportDesignFunction> functionList = new ArrayList<ReportDesignFunction>(reportDesign.getReportDesignFunctionList());
+					for (ReportDesignFunction function :functionList){
+						alias = function.getFunction().getFunctionName()+"("+alias+")";
+					}
+				axisValues = axisValues + reportDesign.getMappingAxis() + ","
+						+ alias + ":";
+			}
+			if (reportDesignList.size() > 0) {
+				mappingId = (reportDesignList.get(0).getColumnAlias() != null) ? reportDesignList
+						.get(0).getColumnAlias().getMapping().getId()
+						: reportDesignList.get(0).getRowAlias().getMapping()
+								.getId();
+				;
+			}
+			reportType = report.getReportType().getType();
+			if (report.getDashboardType() == (short) 1) {
+				addToDashBoard = true;
+			} else {
+				addToDashBoard = false;
+			}
+			mappingList = populateMappingList(mappingDAO, mappingList);
+			getFilterAliasView();
+			edit = "true";
+			logger.debug("Mapping Id: " + mappingId + "," + reportType);
 		} catch (CruxException e) {
 			error.setMessage("Error: " + e.getMessage());
-			return "error";
+			displayReportList();
+			returnString = "error";
 		}
-		logger.debug("Report to edit: " + report);
-		ArrayList<ReportDesign> reportDesignList = new ArrayList<ReportDesign>(
-				report.getDesigns());
-
-		for (ReportDesign reportDesign : reportDesignList) {
-			String alias = (reportDesign.getColumnAlias() != null) ? reportDesign
-					.getColumnAlias().getAlias() : reportDesign.getRowAlias()
-					.getAlias();
-			axisValues = axisValues + reportDesign.getMappingAxis() + ","
-					+ alias + ":";
-		}
-		if (reportDesignList.size() > 0) {
-			mappingId = (reportDesignList.get(0).getColumnAlias() != null) ? reportDesignList
-					.get(0).getColumnAlias().getMapping().getId()
-					: reportDesignList.get(0).getRowAlias().getMapping()
-							.getId();
-			;
-		}
-		reportType = report.getReportType().getType();
-		populateMappingList();
-		getFilterAliasView();
-		edit = "true";
-		logger.debug("Mapping Id: " + mappingId + "," + reportType);
-		return SUCCESS;
+		return returnString;
 	}
 
 	public void getFilterAliasView() {

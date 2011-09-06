@@ -14,32 +14,39 @@
  */
 package co.nubetech.crux.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class ReportDesign {
 
 	private long id;
 	private Report report;
 	private ColumnAlias columnAlias;
 	private RowAlias rowAlias;
-
 	private String mappingAxis;
+	private Collection<ReportDesignFunction> reportDesignFunctionList = new ArrayList<ReportDesignFunction>();
 
 	public ReportDesign() {
 
 	}
 
 	public ReportDesign(Report report, ColumnAlias columnAlias,
-			String mappingAxis) {
+			String mappingAxis,
+			ArrayList<ReportDesignFunction> reportDesignFunctionList) {
 		super();
 		this.report = report;
 		this.columnAlias = columnAlias;
 		this.mappingAxis = mappingAxis;
+		this.reportDesignFunctionList = reportDesignFunctionList;
 	}
 
-	public ReportDesign(Report report, RowAlias rowAlias, String mappingAxis) {
+	public ReportDesign(Report report, RowAlias rowAlias, String mappingAxis,
+			ArrayList<ReportDesignFunction> reportDesignFunctionList) {
 		super();
 		this.report = report;
 		this.rowAlias = rowAlias;
 		this.mappingAxis = mappingAxis;
+		this.reportDesignFunctionList = reportDesignFunctionList;
 	}
 
 	public RowAlias getRowAlias() {
@@ -81,12 +88,25 @@ public class ReportDesign {
 	public void setMappingAxis(String mappingAxis) {
 		this.mappingAxis = mappingAxis;
 	}
+	
+	public Collection<ReportDesignFunction> getReportDesignFunctionList() {
+		return reportDesignFunctionList;
+	}
+
+	public void setReportDesignFunctionList(
+			Collection<ReportDesignFunction> reportDesignFunctionList) {
+		this.reportDesignFunctionList = reportDesignFunctionList;
+	}
+
+
 
 	@Override
 	public String toString() {
 		return "ReportDesign [id=" + id + ", report=" + report.getId()
 				+ ", columnAlias=" + columnAlias + ", rowAlias=" + rowAlias
-				+ ", mappingAxis=" + mappingAxis + "]";
+				+ ", mappingAxis=" + mappingAxis
+				+ ", reportDesignFunctionList=" + reportDesignFunctionList
+				+ "]";
 	}
 
 	@Override
@@ -99,6 +119,10 @@ public class ReportDesign {
 		result = prime * result
 				+ ((mappingAxis == null) ? 0 : mappingAxis.hashCode());
 		result = prime * result + ((report == null) ? 0 : new Long(report.getId()).hashCode());
+		result = prime
+				* result
+				+ ((reportDesignFunctionList == null) ? 0
+						: reportDesignFunctionList.hashCode());
 		result = prime * result
 				+ ((rowAlias == null) ? 0 : rowAlias.hashCode());
 		return result;
@@ -130,6 +154,12 @@ public class ReportDesign {
 				return false;
 		} else if (!(report.getId()==other.report.getId()))
 			return false;
+		if (reportDesignFunctionList == null) {
+			if (other.reportDesignFunctionList != null)
+				return false;
+		} else if (!reportDesignFunctionList
+				.equals(other.reportDesignFunctionList))
+			return false;
 		if (rowAlias == null) {
 			if (other.rowAlias != null)
 				return false;
@@ -137,7 +167,5 @@ public class ReportDesign {
 			return false;
 		return true;
 	}
-	
-	
 
 }

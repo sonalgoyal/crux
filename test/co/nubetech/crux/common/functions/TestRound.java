@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import co.nubetech.crux.functions.Round;
 import co.nubetech.crux.util.CruxException;
 
 public class TestRound {
@@ -28,8 +29,8 @@ public class TestRound {
 	@Test
 	public void testExecuteWithCorrectValuesOfTypeDouble() throws CruxException {
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put("valueType", "Double");
 		Round round = new Round(properties);
-		round.setProperty(round.VALUE_TYPE_PROPERTY, "Double");
 		Long result = (Long) round.execute("1.235".getBytes());
 		assertEquals(result.longValue(), 1);
 	}
@@ -37,8 +38,8 @@ public class TestRound {
 	@Test
 	public void testExecuteWithCorrectValuesOfTypeFloat() throws CruxException {
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put("valueType", "Float");
 		Round round = new Round(properties);
-		round.setProperty(round.VALUE_TYPE_PROPERTY, "Float");
 		Integer result = (Integer) round.execute("1.51f".getBytes());
 		assertEquals(result.intValue(), 2);
 	}

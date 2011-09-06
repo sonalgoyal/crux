@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import co.nubetech.crux.functions.UpperCase;
 import co.nubetech.crux.util.CruxException;
 
 public class TestUpperCase {
@@ -30,10 +31,11 @@ public class TestUpperCase {
 		assertEquals(result, "TESTSTRING");
 	}
 
-	@Test(expected = CruxException.class)
+	@Test
 	public void testExecuteWithNullValues() throws CruxException {
 		UpperCase substring = new UpperCase();
 		String result = (String) substring.execute(null);
+		assertEquals(result, null);
 	}
 
 }

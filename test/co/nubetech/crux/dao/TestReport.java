@@ -40,7 +40,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest')");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		ReportDAO reportDAO = new ReportDAO();
@@ -92,6 +92,7 @@ public class TestReport extends DBConnection {
 		Report report = new Report();
 		report.setName("reportTest");
 		report.setUser(user.findById(1l));
+		report.setDashboardType((short) 1);
 
 		ReportDesign design = new ReportDesign();
 		design.setMappingAxis("x");
@@ -115,6 +116,7 @@ public class TestReport extends DBConnection {
 			assertEquals(rs.getLong("userId"), 1l);
 			assertEquals(rs.getString("name"), "reportTest");
 			assertEquals(rs.getLong("reportTypeId"), 1l);
+			assertEquals(rs.getShort("isDashBoard"),1);
 		}
 
 		rs.close();
@@ -146,7 +148,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest')");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		ReportDAO reportDAO = new ReportDAO();
@@ -290,7 +292,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest')");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		Session session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
@@ -347,7 +349,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest')");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		ReportDAO reportDAO = new ReportDAO();
@@ -397,7 +399,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99998,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamily','qualifier','alias')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest')");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		Session session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
@@ -416,7 +418,7 @@ public class TestReport extends DBConnection {
 
 		Report resultRep = reportDAO.findById(99999l);
 		ReportDesign design = new ReportDesign(resultRep,
-				detail.findById(99998l), "y");
+				detail.findById(99998l), "y",null);
 		resultRep.addDesign(design);
 
 		reportDAO.transaction = reportDAO.session.getTransaction();
@@ -466,7 +468,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest')");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		ReportDAO reportDAO = new ReportDAO();
@@ -520,7 +522,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest')");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		Session session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
@@ -684,7 +686,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
 		stmt.executeUpdate("insert into rowAlias values(99999,99999,'aliasTest',1,1)");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest')");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
 		stmt.executeUpdate("insert into rowFilter values(99999,99999,99999,1,'val')");
 		stmt.executeUpdate("insert into columnFilter values(99999,99999,99999,1,'val')");
 
@@ -731,7 +733,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
 		stmt.executeUpdate("insert into rowAlias values(99999,99999,'aliasTest',1,1)");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest')");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
 		stmt.executeUpdate("insert into rowFilter values(99999,99999,99999,1,'val')");
 		stmt.executeUpdate("insert into columnFilter values(99999,99999,99999,1,'val')");
 

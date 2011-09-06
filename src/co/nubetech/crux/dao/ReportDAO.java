@@ -153,6 +153,7 @@ public class ReportDAO {
 				foundReport.setName(report.getName());
 				foundReport.setReportType(report.getReportType());
 				foundReport.setUser(report.getUser());
+				foundReport.setDashboardType(report.getDashboardType());
 				return saveReport(foundReport);
 
 			}

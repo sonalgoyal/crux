@@ -40,6 +40,10 @@ public class PopulateBseData {
 		put.add(column, qaul, value);
 		hTable.put(put);
 	}
+	
+	public void close() throws IOException{
+		hTable.close();
+	}
 
 	public static void main(String... arg) throws IOException {
 		PopulateBseData tester = new PopulateBseData();
@@ -60,8 +64,8 @@ public class PopulateBseData {
 					String stockId = columnsValue[0].substring(0, 6);
 					String date = columnsValue[0].substring(6);
 					byte[] row = Bytes.add(
-							Bytes.toBytes(Long.parseLong(stockId)),
-							Bytes.toBytes(date));
+							Bytes.toBytes(stockId),
+							Bytes.toBytes(Long.parseLong(date)));
 					for (int i = 0; i < 10; i++) {
 						String[] columnQual = columnList[i].split(":");
 						byte[] col = Bytes.toBytes(columnQual[0]);
@@ -79,6 +83,7 @@ public class PopulateBseData {
 			br.close();
 			in.close();
 			fstream.close();
+			tester.close();
 		}
 	}
 }

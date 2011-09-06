@@ -120,11 +120,7 @@
 		<many-to-one name="user" column="userId" class="User" lazy="false"/>
 		<many-to-one name="reportType" column="reportTypeId" class="ReportType"  lazy="false"/>
 		<property name="name" type="string" column="name" />
-		<bag name="designs" table="reportDesign" cascade="all"
-			inverse="true">
-			<key column="reportId" />
-			<one-to-many class="ReportDesign" />
-		</bag>
+		<property name="dashboardType" type="short" column="dashboardType" />
 		<bag name="rowAliasFilters" table="rowFilter" cascade="all"
 			inverse="true">
 			<key column="reportId" />
@@ -134,6 +130,11 @@
 			inverse="true">
 			<key column="reportId" />
 			<one-to-many class="ColumnFilter" />
+		</bag>
+		<bag name="designs" table="reportDesign" cascade="all"
+			inverse="true">
+			<key column="reportId" />
+			<one-to-many class="ReportDesign" />
 		</bag>
 	</class>
 
@@ -145,6 +146,11 @@
 		<many-to-one name="columnAlias" column="columnAliasId" class="ColumnAlias" lazy="false"/>
 		<many-to-one name="rowAlias" column="rowAliasId" class="RowAlias" lazy="false"/>
 		<property name="mappingAxis" type="string" column="mappingAxis" />
+		<bag name="reportDesignFunctionList" table="reportDesignFunction" cascade="all"
+			inverse="true" order-by="id desc">
+			<key column="reportDesignId" />
+			<one-to-many class="ReportDesignFunction" />
+		</bag>
 	</class>
 	
 	<class name="FilterType" table="filterType">
@@ -185,5 +191,28 @@
 		<many-to-one name="report" column="reportId" class="Report"  lazy="false"/>
 		<many-to-one name="columnAlias" column="columnAliasId"
 			class="ColumnAlias" lazy="false"/>
+	</class>
+	<class name="Function" table="function" lazy="false">
+		<id name="id" >
+			<generator class="increment" />
+		</id>
+		<property name="functionName" type="string" column="functionName" />
+		<property name="functionClass" type="string" column="functionClass" />
+		<property name="functionType" type="short" column="functionType" />
+	</class>
+	<class name="ReportDesignFunction" table="reportDesignFunction" lazy="false">
+		<id name="id" >
+			<generator class="increment" />
+		</id>
+		<many-to-one name="reportDesign" column="reportDesignId" class="ReportDesign"  lazy="false"/>
+		<many-to-one name="function" column="functionId" class="Function"  lazy="false"/>
+	</class>
+	<class name="FunctionTypeMapping" table="functionTypeMapping" lazy="false">
+		<id name="id" >
+			<generator class="increment" />
+		</id>
+		<many-to-one name="function" column="functionId" class="Function"  lazy="false"/>
+		<many-to-one name="valueType" column="valueTypeId" class="ValueType"  lazy="false"/>
+		<many-to-one name="returnValueType" column="returnValueTypeId" class="ValueType"  lazy="false"/>
 	</class>
 </hibernate-mapping>

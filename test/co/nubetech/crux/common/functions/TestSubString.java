@@ -22,6 +22,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import co.nubetech.crux.functions.SubString;
 import co.nubetech.crux.util.CruxException;
 
 public class TestSubString {
@@ -31,37 +32,38 @@ public class TestSubString {
 	@Test
 	public void testExecuteWithCorrectValues() throws CruxException {
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put("offset", "0");
+		properties.put("length", "4");
 		SubString substring = new SubString(properties);
-		substring.setProperty(substring.OFFSET_PROPERTY, "0");
-		substring.setProperty(substring.LENGTH_PROPERTY, "4");
 		String result = (String) substring.execute("TestString".getBytes());
 		assertEquals(result, "Test");
 	}
 
-	@Test(expected = CruxException.class)
+	@Test
 	public void testExecuteWithNullValues() throws CruxException {
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put("offset", "0");
+		properties.put("length", "3");
 		SubString substring = new SubString(properties);
-		substring.setProperty(substring.OFFSET_PROPERTY, "0");
-		substring.setProperty(substring.LENGTH_PROPERTY, "3");
 		String result = (String) substring.execute(null);
+		assertEquals(result, null);
 	}
 
 	@Test(expected = CruxException.class)
 	public void testExecuteWithWrongOffset() throws CruxException {
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put("offset", "a");
+		properties.put("length", "3");
 		SubString substring = new SubString(properties);
-		substring.setProperty(substring.OFFSET_PROPERTY, "a");
-		substring.setProperty(substring.LENGTH_PROPERTY, "3");
 		String result = (String) substring.execute("TestString".getBytes());
 	}
 
 	@Test(expected = CruxException.class)
 	public void testExecuteWithWrongLength() throws CruxException {
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put("offset", "0");
+		properties.put("length", "b");
 		SubString substring = new SubString(properties);
-		substring.setProperty(substring.OFFSET_PROPERTY, "0");
-		substring.setProperty(substring.LENGTH_PROPERTY, "b");
 		String result = (String) substring.execute("TestString".getBytes());
 	}
 

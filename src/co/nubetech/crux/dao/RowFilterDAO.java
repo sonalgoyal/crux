@@ -53,7 +53,6 @@ public class RowFilterDAO {
 	public long delete(RowAliasFilter rowFilter) throws CruxException {
 		long id = rowFilter.getId();
 		try {
-			// deleteAllChildrens(detail);
 			transaction.begin();
 			session.delete(rowFilter);
 			transaction.commit();

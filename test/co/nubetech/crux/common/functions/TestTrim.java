@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import co.nubetech.crux.functions.Trim;
 import co.nubetech.crux.util.CruxException;
 
 public class TestTrim {
@@ -31,10 +32,11 @@ public class TestTrim {
 		assertEquals(result, "Test String");
 	}
 
-	@Test(expected = CruxException.class)
+	@Test
 	public void testExecuteWithNullValues() throws CruxException {
 		Trim substring = new Trim();
 		String result = (String) substring.execute(null);
+		assertEquals(result, null);
 	}
 
 }

@@ -25,6 +25,7 @@
 <br>
 A mapping defines the HBase schema. Using aliases, you can provide user friendly names to identify the row and column keys. 
 <br>
+<br>
 <script>
 dojo.require("dijit.form.Form");
 dojo.require("dijit.form.Button");
@@ -302,7 +303,30 @@ function addingItemsToRowAliasGrid(){
 	clearValuesOfRowAlias();
 }
 
+function checkForLastRowAlias(){
+	var returnValue = false;
+	jsonStoreForRowAlias.fetch( { query: { alias: '*' },  
+        onItem: function(item) {
+           var length = jsonStoreForRowAlias.getValue( item, 'length');
+           if(length == '' || length == null){
+        	   returnValue = true;
+           }
+        }
+	});
+	
+	var isEditRowAliasValue = document.getElementById("isEditRowAlias").getAttribute("value");
+	if(isEditRowAliasValue == "true"){
+		returnValue = false;
+	}
+	
+	return returnValue;
+}
+
 function populateGridNodeForRowAlias(){
+	var isLastRowAliasExists = checkForLastRowAlias();
+	if(isLastRowAliasExists == true){
+		responseMessage("No more alias can be saved.");
+	}else{
 	//alert("populating");
 	var addRowAlias = dijit.byId("addRowAlias");
 	//alert("addRowAlias.isValid: " + addRowAlias.isValid());
@@ -317,7 +341,8 @@ function populateGridNodeForRowAlias(){
 		}
 	}else{
 		responseMessage("Please fill up the form with required and correct values.");
-	}	
+	}
+	}
 }
 
 function jsonConcat(o1, o2) {
@@ -540,7 +565,7 @@ dojo.addOnLoad(function(e) {
 	
 function onChangeConnection(){
 	var connection = dijit.byId("connection");	
-	showProgressIndicator();
+	
 	clearResponse();	
 	//alert("Connection changed");
 	var connectionIdValue = dijit.byId("connection").get('value');		
@@ -550,12 +575,14 @@ function onChangeConnection(){
 	
 	var mappingIdToEdit = dijit.byId("mappingIdToEdit").get('value');
 	//alert(mappingIdToEdit);
-	if (connection.validate() && (mappingIdToEdit == 0 || mappingIdToEdit == '' || mappingIdToEdit == null)) {          	
+	if (connection.validate() && (mappingIdToEdit == 0 || mappingIdToEdit == '' || mappingIdToEdit == null)) {
+		showProgressIndicator();
         var xhrArgs = {
                 url: "<s:url action='populateHBaseTable'/>",
                 handleAs: "json",
                 content: obj,
                 load: function(data) {
+                	hideProgressIndicator();
                 	console.log("Data is  " + data);
                 	//alert ("Returned successfully");
                 	if(data.error.error){
@@ -573,6 +600,7 @@ function onChangeConnection(){
                     }
                 },
                 error: function(error) {
+                	hideProgressIndicator();
                     //We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
                      //docs server.
                      console.log("Error " + error);
@@ -580,7 +608,7 @@ function onChangeConnection(){
             }; 
           var deferred = dojo.xhrPost(xhrArgs);
         }
-	hideProgressIndicator();
+	
 }
 
 
@@ -596,7 +624,7 @@ dojo.addOnLoad(function(e) {
 	
 	var tableName = dijit.byId("tableName");
 	dojo.connect(tableName, "onChange", function(e){
-		showProgressIndicator();
+		
 		//alert("table changed");
 		clearResponse();
 		//clearValuesOfColumnAlias();
@@ -604,11 +632,13 @@ dojo.addOnLoad(function(e) {
 		//alert("Mapping id to edit: " + mappingIdToEdit);
 		if (tableName.validate() && (mappingIdToEdit == 0 || mappingIdToEdit == '' || mappingIdToEdit == null)) {   
 			//alert("TableName is valid.");
+			showProgressIndicator();
             var xhrArgs = {
                     form: dojo.byId("table"),
                     url: "<s:url action='populateColumnFamily'/>",
                     handleAs: "json",
                     load: function(data) {
+                    	hideProgressIndicator();
                     	console.log("Data is  " + data);
                     	//alert ("Returned successfully");
                     	
@@ -633,6 +663,7 @@ dojo.addOnLoad(function(e) {
                     	}
                     },
                     error: function(error) {
+                    	hideProgressIndicator();
                         //We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
                          //docs server.
                          console.log("Error " + error);
@@ -640,7 +671,7 @@ dojo.addOnLoad(function(e) {
                 }; 
               var deferred = dojo.xhrPost(xhrArgs);
             }
-		hideProgressIndicator();
+		
 	});	
 });
 
@@ -651,7 +682,7 @@ dojo.addOnLoad(function(e) {
 	var submitMappingButton = dijit.byId("submitMapping");
 	
     dojo.connect(submitMappingButton, "onClick", function(e) {
-    	showProgressIndicator();    	
+    	  	
     	clearResponse();
     	//alert("Clicked on Submit");
         //alert(mappingForm.isValid());
@@ -665,12 +696,14 @@ dojo.addOnLoad(function(e) {
         	json1 = jsonConcat(json1, json3);
         	//var returnFromTest = test();
         	//alert(dojo.toJson(json1, true));
+        	showProgressIndicator();  
             var xhrArgs = {
                     form: dojo.byId("mapping"),
                     url: "<s:url action='saveMapping'/>",
                     handleAs: "json",
                     content: json1,
                     load: function(data) {
+                    	 hideProgressIndicator();
                     	console.log("Data is  " + data);
                     	if(data.error.error){
                     		responseMessage("Error: "+data.error.message);
@@ -698,6 +731,7 @@ dojo.addOnLoad(function(e) {
                     	
                     },
                     error: function(error) {
+                    	 hideProgressIndicator();
                         //We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
                          //docs server.
                          console.log("Error " + error);
@@ -708,7 +742,7 @@ dojo.addOnLoad(function(e) {
             } else {
             	 responseMessage("Please fill up the form with required and correct values.");
             }
-        hideProgressIndicator();
+       
     });    
 });
 
@@ -791,12 +825,13 @@ function editMapping(){
 	clearValuesOfRowAlias();
 	var items = gridForMapping.selection.getSelected(); 
     if(items.length==1){
-    showProgressIndicator();
+   
     var mappingIdValue;
     dojo.forEach(items, function(selectedItem) {
                 mappingIdValue = gridForMapping.store.getValues(selectedItem, 'id');
                 document.getElementById("mappingIdToEdit").value = mappingIdValue;
             }); // end forEach
+            showProgressIndicator();
 	var xhrArgs = {
             form: dojo.byId("editMappingLink"),
             url: "<s:url action='editMapping'/>",
@@ -805,6 +840,7 @@ function editMapping(){
                 "mapping.id":mappingIdValue
                 },
             load: function(data) {
+            	hideProgressIndicator();
             	if(data.error.error){
             		responseMessage("Error: "+data.error.message);
                 }else{
@@ -841,6 +877,7 @@ function editMapping(){
                 }
             },
             error: function(error) {
+            	hideProgressIndicator();
             	//alert("error:"+error);
             }
 	};
@@ -854,7 +891,6 @@ function editMapping(){
 	document.getElementById("addColumnAlias").style.visibility = "hidden"; 
 	document.getElementById("addRowAlias").style.visibility = "hidden"; 
 	resetTab();	
-	hideProgressIndicator();
 	}else{
     	responseMessage("Please select a mapping.");
     }
@@ -989,14 +1025,16 @@ function deleteColumnAlias(){
 	clearResponse();
 	var items = gridForColumnAlias.selection.getSelected(); 
 	if(items.length==1){
-		  showProgressIndicator();
+		  
           dojo.forEach(items, function(selectedItem) {
         	  var columnAliasIdValue = gridForColumnAlias.store.getValues(selectedItem, 'id'); 
+        	  showProgressIndicator();
   			  var xhrArgs = {            
           		url: "<s:url action='checkColumnAliasForForeignKey'/>",
           		handleAs: "json",
           		content: dojo.fromJson('{' + '"columnAlias.id"' + ':' + '"' + columnAliasIdValue + '"' + '}'),
           		load: function(data) {
+          			 hideProgressIndicator();
           			console.log("Data is  " + data);
           			if(data.error.error){
           				responseMessage("Error: "+data.error.message);
@@ -1005,12 +1043,13 @@ function deleteColumnAlias(){
           			} 
          		},
           		error: function(error) {
+          			 hideProgressIndicator();
           		//alert("error:"+error);
           		}
 			  };
 			  var deferred = dojo.xhrPost(xhrArgs);
   			}); // end forEach
-          hideProgressIndicator();
+         
 	}else{
 		responseMessage("Please select an alias.");
 	}
@@ -1075,14 +1114,16 @@ function deleteRowAlias(){
 	clearResponse();	
 	var items = gridForRowAlias.selection.getSelected();  
     if(items.length==1){
-    showProgressIndicator();
+   
     dojo.forEach(items, function(selectedItem) {
                 var rowAliasIdValue = gridForRowAlias.store.getValues(selectedItem, 'id'); 
+                showProgressIndicator();
     			var xhrArgs = {            
             		url: "<s:url action='checkRowAliasForForeignKey'/>",
             		handleAs: "json",
             		content: dojo.fromJson('{' + '"rowAlias.id"' + ':' + '"' + rowAliasIdValue + '"' + '}'),
             		load: function(data) {
+            			 hideProgressIndicator();
             			console.log("Data is  " + data);
             			if(data.error.error){
             				responseMessage("Error: "+data.error.message);
@@ -1092,12 +1133,13 @@ function deleteRowAlias(){
             			} 
            			},
             		error: function(error) {
+            			 hideProgressIndicator();
             		//alert("error:"+error);
             		}
 				};
 				var deferred = dojo.xhrPost(xhrArgs);
     			}); // end forEach 
-    hideProgressIndicator();
+   
 	}else{
 		responseMessage("Please select an alias.");
 	}
@@ -1292,16 +1334,18 @@ function deleteMapping(){
 	var items = gridForMapping.selection.getSelected();
 	//alert("Items length is: " + items.length);
     if(items.length==1){
-    	showProgressIndicator();
+    	
     	dojo.forEach(items, function(selectedItem) {
                 var value = gridForMapping.store.getValues(selectedItem, 'id');
                 document.getElementById("mappingIdToDelete").value = value;
         }); // end forEach
+        showProgressIndicator();
     	var xhrArgs = {
             form: dojo.byId("deleteMappingLink"),
             url: "<s:url action='deleteMapping'/>",
             handleAs: "json",
             load: function(data) {
+            	hideProgressIndicator();
             	console.log("Data is  " + data);
             	if(data.error.error){
             		responseMessage("Error: "+data.error.message);
@@ -1312,11 +1356,12 @@ function deleteMapping(){
             	} 
             },
             error: function(error) {
+            	hideProgressIndicator();
             	//alert("error:"+error);
             }
 		};
 		var deferred = dojo.xhrPost(xhrArgs);
-		hideProgressIndicator();
+		
 	}else{
  		responseMessage("Please select a mapping.");
 	}
@@ -1341,7 +1386,27 @@ function deleteFalse(){
 	dijit.byId("deleteDialog").hide();
 }
 
-
+dojo.addOnLoad(function(e) {	
+	var rowAliasColumnTypeName = dijit.byId("rowAliasColumnTypeName"); 
+	var length = document.getElementById("length");	
+    dojo.connect(rowAliasColumnTypeName, "onChange", function(e) {
+    	if(rowAliasColumnTypeName.get('value') == 'Short'){
+    		length.value = '2';
+    	} else if(rowAliasColumnTypeName.get('value') == 'Integer'){
+    		length.value = '4';
+    	} else if(rowAliasColumnTypeName.get('value') == 'Long'){
+    		length.value = '8';
+    	} else if(rowAliasColumnTypeName.get('value') == 'Float'){
+    		length.value = '4';
+    	} else if(rowAliasColumnTypeName.get('value') == 'Double'){
+    		length.value = '8';
+    	} else if(rowAliasColumnTypeName.get('value') == 'Boolean'){
+    		length.value = '1';
+    	} else {
+    		length.value = '';
+    	}
+    });
+});
 </script>
 
 

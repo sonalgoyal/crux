@@ -29,13 +29,21 @@
 .dojoDndItemOver{
 background-color:#D9E8F9;;
 cursor:pointer;}
+.claro .dijitArrowButtonInner {
+    background-position: -54px 40%;
+    background-repeat: no-repeat;
+    height: 6px;
+    margin: 0 auto;
+    width: 9px;
+}
 </style>
-<div style="color:#FF0000"><s:property value='%{#parameters.errorMsg}'/></div>
+<div style="color:#FF0000"><s:property value='%{error.message}'/></div>
 
 <script type="text/javascript">
 dojo.require("dijit.form.Form");
 dojo.require("dijit.form.Button"); 
 dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.CheckBox");
 dojo.require("dojo.dnd.Source");
 dojo.require("dijit.TitlePane");
 dojo.require("dijit.form.Select");
@@ -95,8 +103,8 @@ dojo.addOnLoad(function(e) {
 	measuresList = new dojo.dnd.Source("measuresList");
 	var xAxisPane = new dijit.TitlePane({title: "X-Axis", open: true}, "xAxis");
 	var yAxisPane = new dijit.TitlePane({title: "Y-Axis", open: true}, "yAxis");
-	 xAxis = new dojo.dnd.Target("xAxis");
-	 yAxis = new dojo.dnd.Target("yAxis"); 
+	 xAxis = new dojo.dnd.Source("xAxisNode");
+	 yAxis = new dojo.dnd.Source("yAxisNode"); 
 	 xAxis.parent = dojo.query("#xAxisNode tbody")[0];
 	yAxis.parent = dojo.query("#yAxisNode tbody")[0]; 
 	dojo.connect(mappingName, "onChange", populateList);
@@ -106,15 +114,17 @@ dojo.addOnLoad(function(e) {
 	dojo.connect(aliasSelect, "onChange", populateFilterType);	
 });
 function populateFilterType(){
-	showProgressIndicator();
+	
 	clearResponse();
 	var json = '{'+'"aliasName":"'+dijit.byId('alias').get('value')+'","mappingId":"'+dijit.byId('mappingName').get('value')+'"}';
 	var aliasName = dojo.fromJson(json);
+	showProgressIndicator();
 	 var xhrArgs = {
              url: "<s:url action='populateFilterType'/>",
              handleAs: "json",
              content: aliasName,
              load: function(data) {
+            	 hideProgressIndicator();
             	 if(data.error.error){
              		responseMessage("Error: "+data.error.message);
                  }else{
@@ -127,11 +137,12 @@ function populateFilterType(){
                  }
              } ,
              error: function(error) {
+            	 hideProgressIndicator();
             	 responseMessage("Error " + error);
              }
 	 };
 	 var deferred = dojo.xhrPost(xhrArgs);
-	 hideProgressIndicator();
+	
 }
 
 function highlightSelected(){
@@ -172,8 +183,12 @@ function deleteGridItem(grid,i){
 	 jsonStore.deleteItem(grid.getItem(i));
 	 checkGridItems(grid,0);
 }
+
+var aliasValueType = [];
+var functionView = [];
+
 function populateList(){
-	showProgressIndicator();
+	
 	clearResponse();
 	document.getElementById("simplechart").style.visibility = "hidden";
 	document.getElementById("legend").style.visibility = "hidden";
@@ -217,12 +232,13 @@ function populateList(){
 	if(val!=null && val!="" ){
 		
 	if (initReportForm.validate()) {
-		
+		showProgressIndicator();
 		var xhrArgs = {
                 form: dojo.byId("populateDimensionAndMeasureList"),
                 url: "<s:url action='populateDimensionAndMeasureList'/>",
                 handleAs: "json",
                 load: function(data) {
+                	hideProgressIndicator();
                 	if(data.error.error){
                  		responseMessage("Error: "+data.error.message);
                      }else{
@@ -234,18 +250,54 @@ function populateList(){
                 	dimensionList.copyOnly=true;
                 	measuresList.copyOnly=true;
                 	
-            		dimensionList.insertNodes(false, data.dimensionsList);
-            		measuresList.insertNodes(false, data.measuresList);
+                	var dimensionArray = [];
+                	var measureArray = [];
+                	 aliasValueType = data.dimensionAndMeasureViewList;
+                	 functionView = data.functionViewList;
+                		
+                	for (var i=0;i<data.dimensionAndMeasureViewList.length;i++){
+                		if (data.dimensionAndMeasureViewList[i].isDimension=="true"){
+                			dimensionArray.push(data.dimensionAndMeasureViewList[i].alias);
+                		} else {
+                			measureArray.push(data.dimensionAndMeasureViewList[i].alias);
+                		}
+                	}
+            		dimensionList.insertNodes(false, dimensionArray);
+            		measuresList.insertNodes(false, measureArray);
            		
-            		xAxis.checkAcceptance = customCheckAcceptance;
-            		yAxis.checkAcceptance = customCheckAcceptance;
+            		//xAxis.checkAcceptance = customCheckAcceptance;
+            		//yAxis.checkAcceptance = customCheckAcceptance;
             		dimensionList.checkAcceptance = NoneCheckAcceptance;
             		measuresList.checkAcceptance = NoneCheckAcceptance;
             		
             		dojo.subscribe("/dnd/start", null, highlightTargets);
             		dojo.subscribe("/dnd/cancel", null, unhighlightTargets);
-            		dojo.subscribe("/dnd/drop", function(){
+            		/*dojo.subscribe("/dnd/drop", function(){
             			unhighlightTargets(dojo.dnd.manager().target);
+            		});*/
+            		
+            		dojo.subscribe("/dnd/drop", function(source, nodes, copy, target){
+            			
+            			 unhighlightTargets(dojo.dnd.manager().target);
+            			 target.forInSelectedItems(function(item, id){
+            				//alert("Children length: " + dojo.byId(id).childNodes.length);
+            				if(dojo.byId(id).childNodes.length == 1){
+            					displayFunctionMenu(id);
+            				}
+            			 });
+            			 
+            			 if(yAxis.getAllNodes().length==0){
+            					document.getElementById("ybutton").style.visibility = "hidden";
+            					} else if(yAxis.getAllNodes().length==1) {
+            						yAxis.selectAll();
+            						highlightSelected();
+            					}
+            			 if(xAxis.getAllNodes().length==0){
+            					document.getElementById("xbutton").style.visibility = "hidden";
+            					}else if(xAxis.getAllNodes().length==1) {
+            						xAxis.selectAll();
+            						highlightSelected();
+            					}
             		});
 
             	   	var select_box  = dijit.byId('reportType');                    	
@@ -259,15 +311,13 @@ function populateList(){
                 	var alias_box  = dijit.byId('alias');                    	
                 	alias_box.options.length = 0;
                 	
-                	for(var i=0; i < data.dimensionsList.length; ++i){
-                		alias_box.addOption({value: data.dimensionsList[i], label: data.dimensionsList[i]});                     		
-                	};
-                	for(var i=0; i < data.measuresList.length; ++i){
-                		alias_box.addOption({value: data.measuresList[i], label: data.measuresList[i]});                     		
+                	for(var i=0; i < data.dimensionAndMeasureViewList.length; ++i){
+                		alias_box.addOption({value: data.dimensionAndMeasureViewList[i].alias, label: data.dimensionAndMeasureViewList[i].alias});                     		
                 	};
                      }
                 } ,
                     error: function(error) {
+                    	hideProgressIndicator();
                     	 responseMessage("Error: "+error);
                     }
 		};
@@ -279,8 +329,87 @@ function populateList(){
 			document.getElementById("reportTypeTable").style.visibility = "hidden";
 			document.getElementById("addFilter").style.visibility = "hidden";
 	}
-	hideProgressIndicator();
+	
 }
+function displayFunctionMenu(id){
+	if(dojo.byId(id).childNodes.length == 2){
+		dojo.destroy(dojo.byId(id).childNodes[1]);
+	}
+	var menu = new dijit.Menu({
+        style: "display: none;"
+    });
+
+//alert("Creating sub-menu for functions");
+
+var subMenu = new dijit.Menu();
+
+subMenu.addChild(new dijit.MenuItem({
+label: "None",
+onClick: function() {
+removeFunctionIfExists(id);
+}
+}));
+var valueTypeFunc = "";
+var table = document.getElementById(id);
+var tableCells = table.getElementsByTagName("td");
+var alias = "";
+if(tableCells.length!=0){
+	alias = tableCells[0].innerHTML;
+} else {
+	alias = table.innerHTML;
+}
+
+var length = alias.split("(").length;
+var lastFunc = "";
+if(length > 1){
+lastFunc = trim(alias.split("(")[0]);
+for(var i=0;i<functionView.length;i++){
+if(functionView[i].functionName==lastFunc){
+	valueTypeFunc=functionView[i].returnType;
+}
+}
+} else {
+for(var k=0;k<aliasValueType.length;k++){
+if(alias==aliasValueType[k].alias){
+valueTypeFunc = aliasValueType[k].valueType;
+}
+}
+	}
+for(var i=0;i<functionView.length;i++){
+if(valueTypeFunc == functionView[i].valueType){
+var name = functionView[i].functionName;
+var menuItem = new dijit.MenuItem({
+	label: name,
+    onClick: function(e) {
+    	//removeFunctionIfExists(id);
+    	//alert(e.target.innerHTML);
+    	assignFunctionToAlias(id, e.target.innerHTML);
+    	displayFunctionMenu(id);
+    }
+});
+subMenu.addChild(menuItem);
+}
+}
+
+menu.addChild(new dijit.PopupMenuItem({
+label: "Functions",
+popup: subMenu
+}));
+
+//alert("Creating drop-down button");
+
+var button = new dijit.form.DropDownButton({
+name: "function",
+dropDown: menu,
+showLabel: false
+});
+
+//alert("itemName is: " + item.name);            			    
+//alert("id is: " + id);           			    
+
+dojo.byId(id).appendChild(button.domNode);
+}
+
 function NoneCheckAcceptance(source, nodes) {
 	return false;
 }
@@ -292,10 +421,40 @@ function clearInnerHTML(text){
 		return array[0];
 	}
 }
+
+function trim(s)
+{
+	var l=0; var r=s.length -1;
+	while(l < s.length && s[l] == ' ')
+	{	l++; }
+	while(r > l && s[r] == ' ')
+	{	r-=1;	}
+	return s.substring(l, r+1);
+}
+
+
+function assignFunctionToAlias(id, functionName){
+	var table = document.getElementById(id);
+	var tableCells = table.getElementsByTagName("td");
+	var alias = tableCells[0].innerHTML;
+	tableCells[0].innerHTML = functionName + "(" + alias + ")";
+}
+
+function removeFunctionIfExists(id){
+	var table = document.getElementById(id);
+	var tableCells = table.getElementsByTagName("td");
+	var alias = tableCells[0].innerHTML;
+	var length = alias.split("(").length;
+	if(length > 1){
+		tableCells[0].innerHTML = trim(alias.split("(")[length - 1].split(")")[0]);
+	}
+}
+
 function customCheckAcceptance(source, nodes) {
 var xNodes=xAxis.getAllNodes();
 var yNodes=yAxis.getAllNodes();
 var allow=true;
+
 	for(var i=0;i<xNodes.length;i++) {
 		if(clearInnerHTML(xNodes[i].innerHTML)==clearInnerHTML(nodes[0].innerHTML)) {
 			allow = false;	
@@ -306,8 +465,10 @@ var allow=true;
 			allow = false;
 			
 		}
-    }
-	
+    }	
+	if(source==xAxis || source==yAxis){
+		 allow=true;
+	}
 	return allow;
 }
 function getValuesFromPane(paneId){
@@ -315,11 +476,6 @@ function getValuesFromPane(paneId){
 	
 	var table = document.getElementById(paneId);
 	var tableCells = table.getElementsByTagName("td");
-	var tableDivCells = table.getElementsByTagName("div");
-	
-	for(var i=0;i<tableDivCells.length;i++){
-		array.push(tableDivCells[i].innerHTML);
-	}
 	
 	for(var i=0;i<tableCells.length;i++){
 		array.push(tableCells[i].innerHTML);
@@ -329,11 +485,12 @@ function getValuesFromPane(paneId){
 		function getDataFromHBase() {
 			
 			var getDataForm = dijit.byId("saveReportForm");
-			showProgressIndicator();
+			
 			if (getDataForm.validate()) {
+				showProgressIndicator();
 			var xhrArgs = {
 	                form: dojo.byId("saveReportForm"),
-	                url: "<s:url action='getDataAction'/>",
+	                url: "<s:url action='getPreviewDataAction'/>",
 	                handleAs: "json",
 	                load: function(data) {
 	                	if(data.error.error){
@@ -574,7 +731,8 @@ function getValuesFromPane(paneId){
 		} else {
 			if(isValidSaveForm()){			
 		document.getElementById('report_Name').value=reportName;
-		
+		var isDashBoard = dijit.byId('dashBoard').get('value');
+		dijit.byId('addToDashBoard').set('value',isDashBoard);
 		var axisValue = getAxisValue("x",xArray)+getAxisValue("y",yArray);
 		var formAxisVal = document.getElementById("axisValues");
 		formAxisVal.setAttribute("value", axisValue);
@@ -663,7 +821,7 @@ function getValuesFromPane(paneId){
 	<div id="pageDiv" style="width: 1000px; visibility: hidden;">
 	
 		<table>	<tr><td align="right">
-     				Report Name: &nbsp; </td><td align="left">
+     				Report Name:&nbsp; </td><td align="left">
      				<div id="reportNameForm"  dojoType="dijit.form.Form">   				
      						<input type="text" id="reportName" name="report.name" 
      							dojoType="dijit.form.ValidationTextBox" maxlength=100 required="true"
@@ -678,7 +836,14 @@ function getValuesFromPane(paneId){
 								</option>
 						</s:iterator>
 					</select> </td></tr>
-					</table>
+					<tr><td><label for="dashBoard">
+  								  Add To DashBoard:&nbsp;
+							</label></td>
+						<td>
+						<input id="dashBoard" name="dashBoard" dojoType="dijit.form.CheckBox" value="true">							
+						</td>
+					</tr>
+				</table>
   <div id="reportDetail" dojoType="dijit.layout.TabContainer" style="width: 100%;  float: center;" tabPosition="left-h" doLayout="false">
   	 <div dojoType="dijit.layout.ContentPane" title="Design" selected="true" align="center">
 			<div style="float: left;">
@@ -691,16 +856,17 @@ function getValuesFromPane(paneId){
 			</div>
 	
 			<div dojoType="dijit.form.Form"	id="populateDimensionAndMeasureList" jsId="populateDimensionAndMeasureList"
-						encType="multipart/form-data" action="" method="">
+					 action="" method="post">
 						<input type="hidden" id="mappingId" name="mappingId" dojoType="dijit.form.TextBox" value="" />	
 			</div>
 		
 		
-			<div dojoType="dijit.form.Form" action="saveReport" id="saveReportForm" encType="multipart/form-data">
+			<div dojoType="dijit.form.Form" action="saveReport" id="saveReportForm" method="post">
 					<input type="hidden" name="report.id" dojoType="dijit.form.TextBox" value="${report.id}" />
-					<input	type="hidden" id="axisValues" name="axisValues"	dojoType="dijit.form.TextBox" /> 
+					<input type="hidden" id="axisValues" name="axisValues"	dojoType="dijit.form.TextBox" /> 
 					<input type="hidden" id="report_Name" name="report.name" value="${report.name}" dojoType="dijit.form.TextBox" />
 					<input type="hidden" id="mapping_Id" name="mappingId" dojoType="dijit.form.TextBox" />
+					<input type="hidden" id="addToDashBoard" name="addToDashBoard" dojoType="dijit.form.TextBox" />
 				
 		<table id="reportTypeTable" style="visibility: hidden;">	<tr><td align="right">	
   					Report Type: &nbsp; </td><td> 
@@ -711,19 +877,19 @@ function getValuesFromPane(paneId){
 			<table>
 				<tr>
 					<td width="200px">
-						<div id="xAxis" style="width: 100px">
-							<table id="xAxisNode">
-								<tbody>
-						
+						<div id="xAxis" style="width: 100%">
+							<table id="xAxisNode" width=100% height=100%>
+								<tbody align="center">
+								<tr height=100%><th width=100%> </th></tr>
 								</tbody>
 							</table>
 						</div>
 					</td>
 					<td width="200px">
-						<div id="yAxis" style="width: 100px">
-							<table id="yAxisNode">
-								<tbody>
-								
+						<div id="yAxis" style="width: 100%">
+							<table id="yAxisNode" width=100% height=100%>
+								<tbody align="center">
+								<tr  height=100%><th width=100%> </th></tr>
 								</tbody>
 							</table>
 					</div></td>
@@ -816,7 +982,7 @@ function getValuesFromPane(paneId){
 			<button dojoType="dijit.form.Button" onClick='saveReport(false)'>Preview</button>
 			</div>	
 
-		   <div id="chartDialog" dojoType="dijit.Dialog" title="Report Preview" style="width: 800px; height: 400px; float: center;">
+		   <div id="chartDialog" dojoType="dijit.Dialog" title="Report Preview" style="width: 800px; height: 450px; float: center;">
 			<div style="height: 100%">
 			<table align="center">
 				<tr>
@@ -826,7 +992,7 @@ function getValuesFromPane(paneId){
 				</tr>
 				<tr>
 					<td>
-						<div id="simplechart" style="width: 600px; height: 300px; float: center;"></div>
+						<div id="simplechart" style="width: 700px; height: 350px; float: center;"></div>
 					</td>
 				</tr>
 				<tr>
@@ -858,12 +1024,18 @@ function getValuesFromPane(paneId){
 
 <s:if test="%{#isEdit=='true'}">
 <script type="text/javascript">
-var mapName = '<%=request.getAttribute("mappingId")%>';
-document.getElementById(mapName).selected=true;
  
 dojo.addOnLoad(function(e) {
+	var mapName = '<%=request.getAttribute("mappingId")%>';
+	dijit.byId("mappingName").set("value",mapName);
+	if(mapName==1){
 	dijit.byId("mappingName").onChange();
+	}
 	setTimeout("populateEditData()",800);
+	var isDashBoard = '<%=request.getAttribute("addToDashBoard")%>';
+	if(isDashBoard=='true'){
+	dijit.byId("dashBoard").set('value',isDashBoard);
+	}
 });
 
 function populateEditData() {
@@ -898,6 +1070,13 @@ function populateEditData() {
 	
 	document.getElementById("xbutton").style.visibility = "visible";
 	document.getElementById("ybutton").style.visibility = "visible";
+	
+	xAxis.forInItems(function(item, id){
+				displayFunctionMenu(id);
+		 });
+	yAxis.forInItems(function(item, id){
+		displayFunctionMenu(id);
+ });
 	}
 </script> </s:if> 
 <s:else>

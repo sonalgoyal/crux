@@ -23,7 +23,7 @@
 <h1 style="position: absolute; top: 10px; left: 48%;">Report</h1>
 <br>
 <br>
-<div style="color:#FF0000"><s:property value='%{#parameters.errorMsg}'/></div>
+<div style="color:#FF0000"><s:property value='%{error.message}'/></div>
 <script type="text/javascript">
 dojo.require("dijit.form.Form");
 dojo.require("dojox.grid.DataGrid");
@@ -101,6 +101,7 @@ dojo.addOnLoad(function(){
 	
 	var deleteTrue = dijit.byId("deleteTrue");
 	dojo.connect(deleteTrue, "onClick", function(e) {
+		showProgressIndicator();
 		var xhrArgs = {
 	                form: dojo.byId("deleteReport"),
 	                url: "<s:url action='deleteReport'/>",
@@ -132,9 +133,11 @@ dojo.addOnLoad(function(){
 	            	}
 	                    	}
 	                	grid.selection.clear();
+	                	hideProgressIndicator();
 	                },
 	                error: function(error) {
 	                	responseMessage("Error:"+error);
+	                	hideProgressIndicator();
 	                }
 			};
 		var deferred = dojo.xhrPost(xhrArgs);

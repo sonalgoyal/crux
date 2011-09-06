@@ -15,41 +15,32 @@
 package co.nubetech.crux.action;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 
-import co.nubetech.crux.common.functions.Conversion;
-import co.nubetech.crux.common.functions.SubByteArray;
 import co.nubetech.crux.dao.FilterTypeDAO;
-import co.nubetech.crux.dao.MappingDAO;
-import co.nubetech.crux.dao.ReportDAO;
-import co.nubetech.crux.dao.ReportTypeDAO;
+import co.nubetech.crux.dao.FunctionDAO;
 import co.nubetech.crux.dao.UserDAO;
 import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.ColumnFilter;
-import co.nubetech.crux.model.Connection;
 import co.nubetech.crux.model.FilterType;
+import co.nubetech.crux.model.Function;
 import co.nubetech.crux.model.Mapping;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
+import co.nubetech.crux.model.ReportDesignFunction;
 import co.nubetech.crux.model.ReportType;
 import co.nubetech.crux.model.RowAlias;
 import co.nubetech.crux.model.RowAliasFilter;
 import co.nubetech.crux.model.User;
 import co.nubetech.crux.model.ValueType;
-import co.nubetech.crux.server.CruxScanner;
-import co.nubetech.crux.server.HBaseFacade;
 import co.nubetech.crux.util.CruxError;
 import co.nubetech.crux.util.CruxException;
-import co.nubetech.crux.view.Cell;
 import co.nubetech.crux.view.FilterAliasView;
 
-public class SaveReportAction extends CruxAction {
+public class SaveReportAction extends ReportDesignAction {
 
 	private static final long serialVersionUID = 1L;
 
@@ -57,19 +48,12 @@ public class SaveReportAction extends CruxAction {
 			.getLogger(co.nubetech.crux.action.SaveReportAction.class);
 
 	private FilterTypeDAO filterTypeDAO = new FilterTypeDAO();
-	private ReportDAO reportDAO = new ReportDAO();
-	private ReportTypeDAO reportTypeDAO = new ReportTypeDAO();
 	private UserDAO userDAO = new UserDAO();
-	private MappingDAO mappingDAO = new MappingDAO();
-	private String axisValues;
+	private FunctionDAO functionDAO = new FunctionDAO();
 
 	private ReportType reportTypeObject = new ReportType();
 	private User user = new User();
-	private Report report = new Report();
-	private String reportType;
-	private long mappingId;
 	private ArrayList<String> aliasList = new ArrayList<String>();
-	private ArrayList<ArrayList> dataList = new ArrayList<ArrayList>();
 
 	private ArrayList<FilterAliasView> filterList = new ArrayList<FilterAliasView>();
 
@@ -81,44 +65,12 @@ public class SaveReportAction extends CruxAction {
 		this.error = error;
 	}
 
-	public Report getReport() {
-		return report;
-	}
-
 	public ArrayList<FilterAliasView> getFilterList() {
 		return filterList;
 	}
 
 	public void setFilterList(ArrayList<FilterAliasView> filterList) {
 		this.filterList = filterList;
-	}
-
-	public long getMappingId() {
-		return mappingId;
-	}
-
-	public void setMappingId(long mappingId) {
-		this.mappingId = mappingId;
-	}
-
-	public void setReport(Report report) {
-		this.report = report;
-	}
-
-	public String getAxisValues() {
-		return axisValues;
-	}
-
-	public void setAxisValues(String axisValues) {
-		this.axisValues = axisValues;
-	}
-
-	public String getReportType() {
-		return reportType;
-	}
-
-	public void setReportType(String reportType) {
-		this.reportType = reportType;
 	}
 
 	public ArrayList<String> getAliasList() {
@@ -129,180 +81,31 @@ public class SaveReportAction extends CruxAction {
 		this.aliasList = aliasList;
 	}
 
-	public ArrayList<ArrayList> getDataList() {
-		return dataList;
-	}
-
-	public void setDataList(ArrayList<ArrayList> dataList) {
-		this.dataList = dataList;
-	}
-
 	public String saveReport() {
+		String returnString = SUCCESS;
 		if (populateReport().equals("error")) {
-			return "error";
-		}
-		logger.debug("Report Posted: " + report);
-		try {
-			reportDAO.save(report);
-		} catch (CruxException e) {
-			error.setMessage(e.getMessage());
-		} catch (Exception e) {
-			error.setMessage("Something Wrong has happened");
+			returnString = "error";
+		} else {
+			try {
+				logger.debug("Report Posted: " + report);
+
+				reportDAO.save(report);
+			} catch (CruxException e) {
+				error.setMessage(e.getMessage());
+			} catch (Exception e) {
+				error.setMessage("Something Wrong has happened");
+			}
 		}
 		if (error.isError()) {
-			return "error";
+			getDesignPage();
+			returnString = "error";
+		} else {
+			displayReportList();
 		}
-		return SUCCESS;
+		return returnString;
 	}
 
-	public String getDataAction() {
-		try {
-			if (report.getId() == 0 || axisValues != null) {
-				String toReturn = populateReport();
-				if (toReturn.equals("error")) {
-					return SUCCESS;
-				}
-			} else {
-				report = reportDAO.findById(report.getId());
-				Mapping mapping = null;
-				mapping = mappingDAO.findById(mappingId);
-				Map<String, ColumnAlias> hashColumnAlias = mapping
-						.getColumnAlias();
-				Map<String, RowAlias> hashRowAlias = mapping.getRowAlias();
-				populateRowAndColumnFilter(hashColumnAlias, hashRowAlias);
-				ArrayList<RowAliasFilter> rowFilterList = new ArrayList<RowAliasFilter>(
-						report.getRowAliasFilters());
-				ArrayList<ColumnFilter> columnFilterList = new ArrayList<ColumnFilter>(
-						report.getColumnFilters());
-				for (RowAliasFilter rowFilter : rowFilterList) {
-					isValidType(rowFilter.getValue(), rowFilter.getRowAlias()
-							.getValueType());
-				}
-				for (ColumnFilter columnFilter : columnFilterList) {
-					isValidType(columnFilter.getValue(), columnFilter
-							.getColumnAlias().getValueType());
-				}
-			}
-			getData();
-		} catch (CruxException e) {
-			e.printStackTrace();
-			error.setMessage(e.getMessage());
-			return SUCCESS;
-		}
-		return SUCCESS;
-	}
-
-	public String getData() {
-		dataList.clear();
-
-		Mapping mapping = null;
-		CruxScanner cruxScanner = null;
-		try {
-			mapping = mappingDAO.findById(mappingId);
-
-			Connection conn = mapping.getConnection();
-			HBaseFacade hbaseFacade = this.getHBaseFacade();
-			
-			logger.debug("About to get data for Report:" + report);
-			cruxScanner = hbaseFacade.execute(conn, report, mapping);
-			logger.debug("Data fetched from HBaseFacade");
-			Result result = null;
-			ArrayList<ReportDesign> reportDesignList = new ArrayList<ReportDesign>(
-					report.getDesigns());
-
-			if (cruxScanner != null) {
-				logger.debug("About to create dataList");
-				while ((result = cruxScanner.next()) != null) {
-					if (!result.isEmpty()) {
-						dataList.add(getCellList(reportDesignList, result));
-					}
-				}
-				logger.debug("DataList is populated closing scanner");
-				
-			} else {
-				error.setMessage("Cannot determine result.");
-			}
-
-		} catch (CruxException e) {
-			e.printStackTrace();
-			error.setMessage(e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-			error.setMessage(e.getMessage());
-		} finally {
-			if (cruxScanner != null) {
-				cruxScanner.close();
-			}
-		}
-		return SUCCESS;
-	}
-
-	private ArrayList<Cell> getCellList(
-			ArrayList<ReportDesign> reportDesignList, Result result)
-			throws CruxException {
-
-		byte[] rowKey = result.getRow();
-		if (rowKey == null) {
-			throw new CruxException("The result set is empty.");
-		}
-		ArrayList<Cell> cellList = new ArrayList<Cell>();
-
-		for (ReportDesign reportDesign : reportDesignList) {
-			if (reportDesign.getRowAlias() != null) {
-				RowAlias rowAlias = reportDesign.getRowAlias();
-
-				SubByteArray sub = new SubByteArray(
-						new HashMap<String, String>());
-				sub.setProperty(sub.LENGTH_PROPERTY,
-						getRowAliasLength(rowAlias, rowKey.length) + "");
-				sub.setProperty(sub.OFFSET_PROPERTY, getOffset(rowAlias) + "");
-				byte[] value = sub.execute(rowKey);
-				Conversion conversion = new Conversion(
-						new HashMap<String, String>());
-				conversion.setProperty(conversion.CLASS_NAME_PROPERTY, rowAlias
-						.getValueType().getClassName());
-				cellList.add(new Cell(rowAlias.getAlias(), conversion
-						.execute(value)));
-			} else if (reportDesign.getColumnAlias() != null) {
-				ColumnAlias columnAlias = reportDesign.getColumnAlias();
-				byte[] value = result.getValue(
-						Bytes.toBytes(columnAlias.getColumnFamily()),
-						Bytes.toBytes(columnAlias.getQualifier()));
-				if (value != null) {
-					Conversion conversion = new Conversion(
-							new HashMap<String, String>());
-					conversion.setProperty(conversion.CLASS_NAME_PROPERTY,
-							columnAlias.getValueType().getClassName());
-					cellList.add(new Cell(columnAlias.getAlias(), conversion
-							.execute(value)));
-				}
-			}
-		}
-		return cellList;
-	}
-
-	protected static int getOffset(RowAlias rowAlias) {
-		Mapping mapping = rowAlias.getMapping();
-		int offset = 0;
-		Map<String, RowAlias> rowAliases = mapping.getRowAlias();
-		for (String alias : rowAliases.keySet()) {
-			if (alias.equals(rowAlias.getAlias())) {
-				break;
-			} else {
-				offset += rowAliases.get(alias).getLength();
-			}
-		}
-		return offset;
-	}
-
-	protected static int getRowAliasLength(RowAlias rowAlias, int length) {
-		if (!(rowAlias.getLength() == null || rowAlias.getLength() == 0)) {
-			length = rowAlias.getLength().intValue();
-		}
-		return length;
-	}
-
-	private String populateReport() {
+	protected String populateReport() {
 		logger.debug("ReportId: " + report.getId());
 
 		long reportTypeId = 0;
@@ -330,17 +133,36 @@ public class SaveReportAction extends CruxAction {
 				if (!axis.equals("")) {
 					String[] axisNameValue = axis.split(",");
 					if (!axisNameValue[1].equals("")) {
-						if (hashColumnAlias.containsKey(axisNameValue[1])) {
-							designList.add(new ReportDesign(report,
-									hashColumnAlias.get(axisNameValue[1]),
-									axisNameValue[0]));
-						} else if (hashRowAlias.containsKey(axisNameValue[1])) {
-							designList.add(new ReportDesign(report,
-									hashRowAlias.get(axisNameValue[1]),
-									axisNameValue[0]));
+						ReportDesign reportDesign = new ReportDesign();
+						reportDesign.setReport(report);
+
+						String aliasFunction = axisNameValue[1];
+						String aliasName = getAliasName(aliasFunction);
+
+						reportDesign
+								.setReportDesignFunctionList(getReportDesignFunctionList(
+										aliasFunction, reportDesign));
+						reportDesign.setMappingAxis(axisNameValue[0]);
+						if (hashColumnAlias.containsKey(aliasName)) {
+							reportDesign.setColumnAlias(hashColumnAlias
+									.get(aliasName));
+
+						} else if (hashRowAlias.containsKey(aliasName)) {
+							reportDesign.setRowAlias(hashRowAlias
+									.get(aliasName));							
 						}
+						designList.add(reportDesign);
+						logger.debug("ReportDesign object:"+reportDesign);
 					}
 				}
+			}
+
+			if (addToDashBoard) {
+				if (!checkDashBoardOverLoaded(report.getId())) {
+					report.setDashboardType((short) 1);
+				}
+			} else {
+				report.setDashboardType((short) 0);
 			}
 			report.setDesigns(designList);
 			report.setUser(user);
@@ -353,6 +175,71 @@ public class SaveReportAction extends CruxAction {
 			return "error";
 		}
 		return SUCCESS;
+	}
+
+	private String getAliasName(String aliasFunction) {
+		String aliasName = null;
+		if(aliasFunction.contains("(")){
+		String[] aliasFunctionArray = aliasFunction.split("\\(");
+		if (aliasFunctionArray.length > 1) {
+			aliasName = aliasFunctionArray[aliasFunctionArray.length - 1]
+					.split("\\)")[0];
+		} else {
+			aliasName = aliasFunctionArray[0];
+		}
+		} else {
+			aliasName = aliasFunction;
+		}
+		return aliasName;
+	}
+
+	private ArrayList<ReportDesignFunction> getReportDesignFunctionList(
+			String aliasFunction, ReportDesign reportDesign) throws CruxException {
+		boolean isRow = false;
+		boolean isAggregate = false;
+		ArrayList<Function> functionList = new ArrayList<Function>(
+				functionDAO.findAll());
+		ArrayList<ReportDesignFunction> reportDesignFunctionList = new ArrayList<ReportDesignFunction>();
+		if(aliasFunction.contains("(")){
+		String[] functionArray = aliasFunction.split("\\(");
+			for (int i = 0; i < functionArray.length - 1; i++) {
+				for (Function function : functionList) {
+					if (functionArray[i].equalsIgnoreCase(function
+							.getFunctionName())) {
+						reportDesignFunctionList.add(new ReportDesignFunction(
+								reportDesign, function));
+						if(function.isAggregateType()){						
+								isAggregate=true;
+						} else {						
+								isRow=true;
+							} 
+						if (isAggregate && isRow){
+								throw new CruxException("Aggregator functions should be applied to all Alias");
+							}
+						}
+					}
+				}
+			}
+		logger.debug("reportDesignFunctionList:"+reportDesignFunctionList);
+		return reportDesignFunctionList;
+	}
+
+	private boolean checkDashBoardOverLoaded(long id) throws CruxException {
+		boolean result = false;
+		ArrayList<Report> reportList = new ArrayList<Report>(
+				reportDAO.findAll());
+		for (Report report : reportList) {
+			if (report.getDashboardType() == (short) 1) {
+				if (id != report.getId()) {
+					result = true;
+					throw new CruxException("A report named '"
+							+ report.getName()
+							+ "' is already set to DashBoard."
+							+ " Cannot set  more than one Report to DashBoard");
+				}
+			}
+		}
+		return result;
 	}
 
 	private void populateRowAndColumnFilter(

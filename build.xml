@@ -36,7 +36,7 @@
 		into class files in the appropriate location in the build directory. -->
 	<target name="compile_src" depends="clean" description="Compile Java sources">
 		<mkdir dir="${build.home}/WEB-INF/classes" />
-		<javac srcdir="${source.home}" destdir="${build.home}/WEB-INF/classes" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" source="1.6" target="1.6">
+		<javac srcdir="${source.home}" destdir="${build.home}/WEB-INF/classes" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" includeantruntime="false" source="1.6" target="1.6">
 			<classpath>
 				<path>
 					<fileset dir="${lib.source.home}" />
@@ -95,7 +95,7 @@
 		into class files in the appropriate location in the build directory. -->
 	<target name="compile_test" depends="compile_src" description="Compile Java test">
 		<mkdir dir="${build.home}/WEB-INF/classes" />
-		<javac srcdir="${test.home}" destdir="${build.home}/WEB-INF/classes" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" source="1.6" target="1.6">
+		<javac srcdir="${test.home}" destdir="${build.home}/WEB-INF/classes" includeantruntime="false" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" source="1.6" target="1.6">
 			<classpath>
 				<path>
 					<fileset dir="${lib.source.home}" />

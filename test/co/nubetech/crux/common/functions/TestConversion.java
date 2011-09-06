@@ -21,60 +21,62 @@ import java.util.HashMap;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
 
+import co.nubetech.crux.functions.Conversion;
 import co.nubetech.crux.util.CruxException;
 
 public class TestConversion {
 
 	@Test
 	public void testExecuteWithLongValues() throws CruxException {
-		Conversion conversion = new Conversion(new HashMap<String, String>());
-		conversion
-				.setProperty(conversion.CLASS_NAME_PROPERTY, "java.lang.Long");
+		HashMap<String, String> properties = new HashMap<String, String>();
+		properties.put("class.name", "java.lang.Long");
+		Conversion conversion = new Conversion(properties);
+	
 		long result = (Long) conversion.execute(Bytes.toBytes(12l));
 		assertEquals(12l, result);
 	}
 
 	@Test
 	public void testExecuteWithStringValues() throws CruxException {
-		Conversion conversion = new Conversion(new HashMap<String, String>());
-		conversion.setProperty(conversion.CLASS_NAME_PROPERTY,
-				"java.lang.String");
+		HashMap<String, String> properties = new HashMap<String, String>();
+		properties.put("class.name", "java.lang.String");
+		Conversion conversion = new Conversion(properties);
 		String result = (String) conversion.execute(Bytes.toBytes("ABc"));
 		assertEquals("ABc", result);
 	}
 
 	@Test
 	public void testExecuteWithIntValues() throws CruxException {
-		Conversion conversion = new Conversion(new HashMap<String, String>());
-		conversion.setProperty(conversion.CLASS_NAME_PROPERTY,
-				"java.lang.Integer");
+		HashMap<String, String> properties = new HashMap<String, String>();
+		properties.put("class.name", "java.lang.Integer");
+		Conversion conversion = new Conversion(properties);
 		int result = (Integer) conversion.execute(Bytes.toBytes(12));
 		assertEquals(12, result);
 	}
 
 	@Test
 	public void testExecuteWithBooleanValues() throws CruxException {
-		Conversion conversion = new Conversion(new HashMap<String, String>());
-		conversion.setProperty(conversion.CLASS_NAME_PROPERTY,
-				"java.lang.Boolean");
+		HashMap<String, String> properties = new HashMap<String, String>();
+		properties.put("class.name", "java.lang.Boolean");
+		Conversion conversion = new Conversion(properties);
 		boolean result = (Boolean) conversion.execute(Bytes.toBytes(true));
 		assertEquals(true, result);
 	}
 
 	@Test
 	public void testExecuteWithFloatValues() throws CruxException {
-		Conversion conversion = new Conversion(new HashMap<String, String>());
-		conversion.setProperty(conversion.CLASS_NAME_PROPERTY,
-				"java.lang.Float");
+		HashMap<String, String> properties = new HashMap<String, String>();
+		properties.put("class.name", "java.lang.Float");
+		Conversion conversion = new Conversion(properties);
 		float result = (Float) conversion.execute(Bytes.toBytes(12.8f));
 		assertEquals(12.8, result, .1);
 	}
 
 	@Test
 	public void testExecuteWithDoubleValues() throws CruxException {
-		Conversion conversion = new Conversion(new HashMap<String, String>());
-		conversion.setProperty(conversion.CLASS_NAME_PROPERTY,
-				"java.lang.Double");
+		HashMap<String, String> properties = new HashMap<String, String>();
+		properties.put("class.name", "java.lang.Double");
+		Conversion conversion = new Conversion(properties);
 		double result = (Double) conversion.execute(Bytes.toBytes(12.8));
 		assertEquals(12.8, result, 0);
 	}

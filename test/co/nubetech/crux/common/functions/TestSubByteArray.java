@@ -17,20 +17,23 @@ package co.nubetech.crux.common.functions;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
 
+import co.nubetech.crux.functions.SubByteArray;
 import co.nubetech.crux.util.CruxException;
 
 public class TestSubByteArray {
 
 	@Test
 	public void testExecute() throws CruxException {
+		Map<String, String> properties = new HashMap<String, String>();
+		properties.put("offset", "4");
+		properties.put("length", "4");
 		SubByteArray subByteArray = new SubByteArray(
-				new HashMap<String, String>());
-		subByteArray.setProperty(subByteArray.OFFSET_PROPERTY, "4");
-		subByteArray.setProperty(subByteArray.LENGTH_PROPERTY, "4");
+				properties);
 		byte[] input = Bytes.add(Bytes.toBytes("abcd"), Bytes.toBytes(112));
 		byte[] result = subByteArray.execute(input);
 		assertTrue(Bytes.equals(Bytes.toBytes(112), result));
@@ -38,13 +41,13 @@ public class TestSubByteArray {
 
 	@Test(expected = CruxException.class)
 	public void testExecuteWrongParameter() throws CruxException {
+		Map<String, String> properties = new HashMap<String, String>();
+		properties.put("offset", "4");
+		properties.put("length", "5");
 		SubByteArray subByteArray = new SubByteArray(
-				new HashMap<String, String>());
-		subByteArray.setProperty(subByteArray.OFFSET_PROPERTY, "4");
-		subByteArray.setProperty(subByteArray.LENGTH_PROPERTY, "5");
+				properties);
 		byte[] input = Bytes.add(Bytes.toBytes("abcd"), Bytes.toBytes(112));
-		byte[] result = subByteArray.execute(input);
-
+		subByteArray.execute(input);
 	}
 
 }

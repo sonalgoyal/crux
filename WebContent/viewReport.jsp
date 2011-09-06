@@ -27,7 +27,7 @@
 var filter = false;
 </script>
 <br>
-<div dojoType="dijit.form.Form" id="getData" name="getData">
+<div dojoType="dijit.form.Form" id="getData" name="getData" method="post">
 			<input type="hidden" id="report.id" name="report.id" dojoType="dijit.form.TextBox" value='<s:property value="%{report.id}" />' />
 			<input type="hidden" id="mappingId" name="mappingId" dojoType="dijit.form.TextBox"  value='<s:property value="%{mappingId}" />'/>
 			<%int count=0; %>
@@ -60,17 +60,28 @@ var filter = false;
 			</tr>
 			<%count++; %>
 		</s:iterator>
+		
 		</table>
-		<br>
-			<button id="viewReportButton" dojoType="dijit.form.Button" onClick='populateData()' style="visibility: hidden">View Report</button>
+		<br>			
 		</div>
+		<table>
+  					<tr>
+   						 <td><button id="viewReportButton" dojoType="dijit.form.Button" onClick='populateData()' style="visibility: hidden;">View Report</button></td>
+    						<td>
+    						<div id="exportButton">
+						<button id="exportCSV" dojoType="dijit.form.Button" onClick='exportToCSV()'>Export to CSV</button>
+							</div>
+    						</td>
+  					</tr>
+		</table>
 <br>
 <div style="width: 800px;">
 <div id="tableNode"></div>
 </div>
-<div id="simplechart" style="width: 600px; height: 350px;"></div>
+<div id="simplechart" style="width: 700px; height: 350px;"></div>
 <br>
 <div id="legend"></div>
+
 <script>
 var chartType = "<%=request.getAttribute("chartType") %>";
 
@@ -81,7 +92,7 @@ dojo.require("dijit.form.Button");
 function showHelp(){
 	 window.open ('help/viewReportHelp.html', '', 'width=400,height=200,scrollbars=1');
 }
-
+document.getElementById("exportButton").style.visibility = "hidden";
  			function populateData() {
  				dojo.require('dojox.charting.widget.Chart2D');
  				dojo.require('dojox.charting.widget.Legend');
@@ -93,8 +104,7 @@ function showHelp(){
  				dojo.require("dojox.grid.DataGrid");
  				dojo.require("dojo.data.ItemFileWriteStore");
  				
-				document.body.appendChild(response.domNode);
-				response.show();
+				
 				clearResponse();
 				var getDataForm = dijit.byId("getData");
 				 xArray = [];
@@ -109,7 +119,8 @@ function showHelp(){
 						yArray.push(val[1]);
 					}
 				}
-				if (getDataForm.validate()) {				
+				if (getDataForm.validate()) {
+					showProgressIndicator();
 				var xhrArgs = {
 		                form: dojo.byId("getData"),
 		                url: "<s:url action='getDataAction'/>",
@@ -118,14 +129,19 @@ function showHelp(){
 		                	if(data.error.error){
 		                 		responseMessage("Error: "+data.error.message);
 		                     }else{
-		                    	 if(chartType!="Table"){
-		                    		 doPlot(data.dataList);
-		                    	 } else {
+		                    	 if(chartType=="Table"){
 		                    		 doPlotTable(data.dataList);
+		                    	 } else if(chartType=="csv"){
+		                    		 doPlotCSV(data.dataList);
+		                    	 } else {
+		                    		 doPlot(data.dataList);
 		                    	 }
 		                     }
+		                	hideProgressIndicator();
+		                	document.getElementById("exportButton").style.visibility = "visible";
 		                },
 		                error: function(error) {
+		                	hideProgressIndicator();
 		                	responseMessage("error:"+error);
 		                }
 				};
@@ -134,8 +150,14 @@ function showHelp(){
 				} else {
 					responseMessage("Please define filter value");
 				}
-				response.hide();
 			}	
+ 			
+ 			function exportToCSV(){
+ 				chartType = "csv";
+ 				dojo.addOnLoad(function(e) {
+ 	 				populateData();
+ 	 				});
+ 			}
  			
  			if(!filter){
  				dojo.addOnLoad(function(e) {
@@ -144,7 +166,49 @@ function showHelp(){
  			} else {
  				dojo.style("viewReportButton","visibility","visible");
  			}
-	
-	
+ 			
+ 			function doPlotCSV(valueList){
+ 				var dataList = [];
+ 				var nameList = xArray.concat(yArray);
+ 				var header = "";
+ 				var length = 0;
+ 				for ( var i = 0; i < nameList.length; i++) {
+ 					var results = dojox.json.query("..[?alias=\'" + nameList[i]
+ 							+ "\']..value", valueList);
+ 					dataList.push(results);
+ 					if (i==0){
+ 						header += nameList[i];
+ 					} else {
+ 						header += ','+nameList[i];
+ 					}
+ 					if(length<results.length){
+ 						length = results.length;
+ 					}
+ 				}
+
+ 				function getData(column) {
+ 					for ( var i = 0; i < nameList.length; i++) {
+ 						if (column == nameList[i])
+ 							return dataList[i];
+ 					}
+ 				}
+ 				
+ 				exportWindow = window.open("","ReportData","scrollbars=1");	
+ 				exportWindow.document.write(header+"<br>");
+ 				var csData = "";
+ 				for(var z =0;z<length;z++){
+ 					csData = "";
+ 					for ( var i = 0; i < nameList.length; i++) {
+ 						if (i==0){
+ 							csData += dataList[i][z];
+ 						} else {
+ 							csData += ','+dataList[i][z];
+ 						}
+ 						
+ 					}
+ 					exportWindow.document.write(csData+"<br>");
+ 				}
+ 			}
+		
 </script>
 <jsp:include page="footer.jsp" />

@@ -52,7 +52,7 @@ Note: In this method all data is inserted as String type.
 
 OR
 
-To put data as composite rowKey long stockId ,String date both concatenated :- 
+To put data as composite rowKey stockId(as dataType string), date(as dataType long) both concatenated :- 
 a.Create table in HBase. On the shell,
 
 create 'stockData1','price','spread','stats'

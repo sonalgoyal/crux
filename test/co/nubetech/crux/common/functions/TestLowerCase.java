@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import co.nubetech.crux.functions.LowerCase;
 import co.nubetech.crux.util.CruxException;
 
 public class TestLowerCase {
@@ -30,10 +31,11 @@ public class TestLowerCase {
 		assertEquals(result, "teststring");
 	}
 
-	@Test(expected = CruxException.class)
+	@Test
 	public void testExecuteWithNullValues() throws CruxException {
 		LowerCase substring = new LowerCase();
 		String result = (String) substring.execute(null);
+		assertEquals(result, null);
 	}
 
 }

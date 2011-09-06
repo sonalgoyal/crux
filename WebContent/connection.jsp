@@ -24,6 +24,7 @@
 <br>
 A connection defines the location of your HBase server. Please define the server and port. Please give a unique name to the connection so that you can use it throughout.
 <br>
+<br>
 <script>
 dojo.require("dijit.form.Form");
 dojo.require("dijit.form.Button");
@@ -205,7 +206,7 @@ function clearValues(){
 dojo.addOnLoad(function(e) {
 	var updateConnectionForm = dijit.byId("updateConnectionForm");    
     dojo.connect(updateConnectionForm, "onSubmit", function(e) {
-    	showProgressIndicator();
+    	
     	clearResponse();
     	e.preventDefault();
         
@@ -216,11 +217,13 @@ dojo.addOnLoad(function(e) {
         
         //alert(updateConnectionForm.isValid());
         if (updateConnectionForm.validate() && isEditValue == "true" && isAddValue == "false") { 
+        	showProgressIndicator();
         		var xhrArgs = {
                     form: dojo.byId("updateConnectionForm"),
                     url: "<s:url action='updateConnection'/>",
                     handleAs: "json",                    
                     load: function(data) {
+                    	 hideProgressIndicator(); 
                     	console.log("Data is  " + data);
                     	//alert(data.error);
                     	if(data.error.error){
@@ -234,6 +237,7 @@ dojo.addOnLoad(function(e) {
                     	}                    	
                     },
                     error: function(error) {
+                    	 hideProgressIndicator(); 
                         //We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
                          //docs server.
                          console.log("Error " + error);
@@ -242,11 +246,13 @@ dojo.addOnLoad(function(e) {
                 //Call the asynchronous xhrPost
               var deferred = dojo.xhrPost(xhrArgs);
          } else if (updateConnectionForm.validate() && isEditValue == "false" && isAddValue == "true") { 
+        	 showProgressIndicator();
         	 	var xhrArgs = {
                         form: dojo.byId("updateConnectionForm"),
                         url: "<s:url action='saveConnection'/>",
                         handleAs: "json",
                         load: function(data) {
+                        	 hideProgressIndicator(); 
                         	console.log("Data is  " + data);
                         	if(data.error.error){
                         		 responseMessage("Error: "+data.error.message);
@@ -259,6 +265,7 @@ dojo.addOnLoad(function(e) {
                         	}                           	
                         },
                         error: function(error) {
+                        	 hideProgressIndicator(); 
                             //We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
                              //docs server.
                              console.log("Error " + error);
@@ -269,7 +276,7 @@ dojo.addOnLoad(function(e) {
            } else {
         	   responseMessage("Please fill up the form with required and correct values.");
            }
-        hideProgressIndicator(); 
+       
     });  
 });
 
@@ -306,6 +313,7 @@ function deleteTrue() {
                 	url: "<s:url action='deleteConnection'/>",
                 	handleAs: "json",
                		load: function(data) {
+               			hideProgressIndicator();   		
                 		console.log("Data is  " + data);
                 		if(data.error.error){
                 		 responseMessage("Error: "+data.error.message);
@@ -317,11 +325,12 @@ function deleteTrue() {
                 		} 
                 	},
                 	error: function(error) {
+                		hideProgressIndicator();   		
                 		//alert("error:"+error);
                	 	}
 				};
 			var deferred = dojo.xhrPost(xhrArgs);
-			hideProgressIndicator();   		
+			
 		}  
     }else{
     	responseMessage("Please select a connection.");

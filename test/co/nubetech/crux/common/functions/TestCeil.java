@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import co.nubetech.crux.functions.Ceil;
 import co.nubetech.crux.util.CruxException;
 
 public class TestCeil {
@@ -28,8 +29,8 @@ public class TestCeil {
 	@Test
 	public void testExecuteWithCorrectValues() throws CruxException {
 		Map<String, String> properties = new HashMap<String, String>();
+		properties.put("valueType", "Double");
 		Ceil ceil = new Ceil(properties);
-		ceil.setProperty(ceil.VALUE_TYPE_PROPERTY, "Double");
 		Double result = (Double) ceil.execute("1.235".getBytes());
 		assertEquals(result, new Double(2.0));
 	}
