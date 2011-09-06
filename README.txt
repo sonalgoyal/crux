@@ -1,6 +1,6 @@
 Crux is a reporting application for HBase. Crux has been tested against
 
-1. Apache Hadoop 0.90.3 on Apache Hadoop 0.20.2 with Hadoop append.
+1. Apache HBase 0.90.3 on Apache Hadoop 0.20.2 with Hadoop append.
 2. Cloudera's distribution. CDH3 - Hadoop 0.20.2-CDH3u1
 
 
@@ -48,6 +48,11 @@ Join http://groups.google.com/group/cruxUsers to discuss crux features, issues a
 You can also report bugs and request features at https://github.com/sonalgoyal/crux/issues.
 Crux has built in help pages in the web interface. More info can also be found at http://www.nubetech.co/weblog
 
+Crux Documentation and user guide
+---------------------------------
+Crux features, guides and news is available at http://nubetech.co/category/crux-2. 
+Besides this, Crux has an extensive inbuilt guide per page to help you create your reports effortlessly.
+The mailing list is also a good source of information about Crux.
 
 Using Crux
 ---------- 
