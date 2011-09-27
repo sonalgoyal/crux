@@ -25,7 +25,6 @@ public class Round extends FunctionBase {
 
 	private final static Logger logger = Logger.getLogger(Round.class);
 
-	public String VALUE_TYPE_PROPERTY = "valueType";
 	String valueType;
 
 	public Round(Map<String, String> properties) {

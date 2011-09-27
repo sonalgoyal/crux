@@ -158,7 +158,7 @@ CREATE  TABLE IF NOT EXISTS `columnAlias` (
 `qualifier` VARCHAR(100) NOT NULL ,
 `alias` VARCHAR(100) NOT NULL ,
 PRIMARY KEY (`id`) , 
-UNIQUE INDEX `columnAlias_unique_keys` (`columnFamily`, `qualifier`) ,
+UNIQUE INDEX `columnAlias_unique_keys` (`mappingId`,`columnFamily`, `qualifier`) ,
 INDEX `fk_columnAlias_mappingId` (`mappingId` ASC) ,
 CONSTRAINT `fk_columnAlias_mappingId` 
 FOREIGN KEY (`mappingId`) 
@@ -201,7 +201,16 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION) ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `dashboard`
+-- -----------------------------------------------------
 
+CREATE  TABLE IF NOT EXISTS `dashboard` (
+`id` BIGINT(100) NOT NULL AUTO_INCREMENT,
+`indexNo` INT NOT NULL ,
+`columnNo`INT NOT NULL ,
+PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `report`
 -- -----------------------------------------------------
@@ -213,7 +222,7 @@ CREATE  TABLE IF NOT EXISTS report (
  `userId` BIGINT(100) NOT NULL ,
  `reportTypeId` BIGINT(100) NOT NULL ,
  `name` VARCHAR(100) NOT NULL,
- `dashboardType` TINYINT NOT NULL ,
+ `dashboardId` BIGINT,
  PRIMARY KEY (`id`) ,
  UNIQUE INDEX `report_unique_keys` (`userId`, `name`) ,
 INDEX `fk_report_userId` (`userId` ASC) ,
@@ -226,6 +235,12 @@ INDEX `fk_report_reportTypeId` (`reportTypeId` ASC),
 CONSTRAINT `fk_report_reportTypeId` 
 FOREIGN KEY (`reportTypeId`) 
 REFERENCES `reportType` (`id` )  
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION,
+INDEX `fk_report_dashboardId` (`dashboardId` ASC),
+CONSTRAINT `fk_report_dashboardId` 
+FOREIGN KEY (`dashboardId`) 
+REFERENCES `dashboard` (`id` )  
 ON DELETE NO ACTION 
 ON UPDATE NO ACTION) ENGINE = InnoDB;
 
@@ -437,6 +452,8 @@ FOREIGN KEY (`functionId`)
 REFERENCES `function` (`id` )  
 ON DELETE NO ACTION 
 ON UPDATE NO ACTION) ENGINE = InnoDB;
+
+
 -- -----------------------------------------------------
 -- insert queries
 -- -----------------------------------------------------
@@ -464,6 +481,8 @@ INSERT  INTO `reportType`(`id`,`type`) VALUES (7, 'ClusteredColumns');
 INSERT  INTO `reportType`(`id`,`type`) VALUES (8, 'StackedColumns');
 INSERT  INTO `reportType`(`id`,`type`) VALUES (9, 'StackedAreas');
 INSERT  INTO `reportType`(`id`,`type`) VALUES (10, 'StackedLines');
+INSERT  INTO `reportType`(`id`,`type`) VALUES (11, 'Spider');
+-- INSERT  INTO `reportType`(`id`,`type`) VALUES (12, 'Choropleth');
 
 -- these values are used directly by the server. So we should be very cautious about changing them.
 INSERT  INTO `filterType`(`id`,`type`) VALUES (1, 'Equals');

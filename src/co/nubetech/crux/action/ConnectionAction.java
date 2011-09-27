@@ -60,6 +60,7 @@ public class ConnectionAction extends CruxAction {
 	private Datastore datastore = new Datastore();
 	private User user = new User();
 	private Connection connection = new Connection();
+	public ServletContext context;
 	/*
 	 * private ConnectionProperty hostProperty = new ConnectionProperty(
 	 * CruxConstants.HBASE_HOST_PROPERTY); private ConnectionProperty

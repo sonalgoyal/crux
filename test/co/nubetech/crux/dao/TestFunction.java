@@ -16,12 +16,12 @@ public class TestFunction extends DBConnection {
 		functionDAO.session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
 				.getNewSession();
 		Statement stmt = getStatement();
-		stmt.executeUpdate("insert into functions values(99999,'sum','class.Sum',1)");
+		stmt.executeUpdate("insert into function values(99999,'sum','class.Sum',1)");
 		Function function = new Function("sum","class.Sum",(short)1);
 		function.setId(99999l);
 		assertEquals(functionDAO.findById(99999l), function);
 		functionDAO.session.close();
-		stmt.executeUpdate("delete from functions where id=99999");
+		stmt.executeUpdate("delete from function where id=99999");
 		closeConnection();
 	}
 }

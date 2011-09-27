@@ -17,7 +17,7 @@ public class TestFunctionTypeMapping extends DBConnection {
 		.getNewSession();
 		
 		Statement stmt = getStatement();
-		stmt.executeUpdate("insert into functions values(99999,'sum','class.Sum',1)");
+		stmt.executeUpdate("insert into function values(99999,'sum','class.Sum',1)");
 		stmt.executeUpdate("insert into functionTypeMapping values(99999, 99999, 1, 1)");
 		
 		ValueTypeDAO valueTypeDAO = new ValueTypeDAO();
@@ -36,7 +36,7 @@ public class TestFunctionTypeMapping extends DBConnection {
 		assertEquals(functionTypeMappingDAO.findById(99999l), functionTypeMapping);
 		
 		stmt.executeUpdate("delete from functionTypeMapping where id=99999");
-		stmt.executeUpdate("delete from functions where id=99999");
+		stmt.executeUpdate("delete from function where id=99999");
 		closeConnection();
 
 	}

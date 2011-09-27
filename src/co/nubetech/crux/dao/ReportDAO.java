@@ -153,7 +153,7 @@ public class ReportDAO {
 				foundReport.setName(report.getName());
 				foundReport.setReportType(report.getReportType());
 				foundReport.setUser(report.getUser());
-				foundReport.setDashboardType(report.getDashboardType());
+				foundReport.setDashboard(report.getDashboard());
 				return saveReport(foundReport);
 
 			}
@@ -171,6 +171,12 @@ public class ReportDAO {
 		return result;
 	}
 
+	public List<Report> findDashboardReports() {
+		System.out.println("session is " + session);
+		List<Report> result = session.createQuery("from Report as r where dashboardId != 0 order by r.dashboard.index")
+				.list();
+		return result;
+	}
 	public long saveReport(Report report) throws CruxException {
 		try {
 			transaction.begin();

@@ -23,6 +23,7 @@ import co.nubetech.crux.dao.MappingDAO;
 import co.nubetech.crux.dao.ReportDAO;
 import co.nubetech.crux.model.Mapping;
 import co.nubetech.crux.model.Report;
+import co.nubetech.crux.view.FilterAliasView;
 import co.nubetech.crux.view.ReportView;
 
 public class ViewReportListAction extends CruxAction {
@@ -32,6 +33,7 @@ public class ViewReportListAction extends CruxAction {
 	private final static Logger logger = Logger
 			.getLogger(co.nubetech.crux.action.ViewReportListAction.class);
 
+	protected ArrayList<FilterAliasView> filterViewList = new ArrayList<FilterAliasView>();
 	protected ReportDAO reportDAO = new ReportDAO();
 	private ArrayList<ReportView> reportList = new ArrayList<ReportView>();
 	protected ArrayList<Mapping> mappingList;
@@ -57,6 +59,13 @@ public class ViewReportListAction extends CruxAction {
 		this.mappingList = mappingList;
 	}
 	
+	public ArrayList<FilterAliasView> getFilterViewList() {
+		return filterViewList;
+	}
+
+	public void setFilterViewList(ArrayList<FilterAliasView> filterViewList) {
+		this.filterViewList = filterViewList;
+	}
 	public String displayReportList() {
 		long index = 0;
 		List<Report> reporArraytList = reportDAO.findAll();

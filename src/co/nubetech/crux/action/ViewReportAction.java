@@ -23,7 +23,6 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 
 import co.nubetech.crux.dao.MappingDAO;
-import co.nubetech.crux.dao.ReportDAO;
 import co.nubetech.crux.functions.Conversion;
 import co.nubetech.crux.functions.SubByteArray;
 import co.nubetech.crux.model.ColumnAlias;
@@ -204,6 +203,13 @@ public class ViewReportAction extends ViewReportListAction {
 			ArrayList<ReportDesign> reportDesignList = new ArrayList<ReportDesign>(
 					report.getDesigns());
 			
+			for (ReportDesign reportDesign : reportDesignList) {
+				String alias = (reportDesign.getColumnAlias() != null) ? reportDesign
+						.getColumnAlias().getAlias() : reportDesign
+						.getRowAlias().getAlias();
+				axisValues = axisValues + reportDesign.getMappingAxis() + ","
+						+ alias + ":";
+			}
 
 			if (cruxScanner != null) {
 				logger.debug("About to create dataList");
@@ -211,7 +217,8 @@ public class ViewReportAction extends ViewReportListAction {
 				ArrayList<SubByteArray> subByteArrayList = getSubByteArrayList(reportDesignList);
 				while ((result = cruxScanner.next()) != null) {
 					if (!result.isEmpty()) {
-						dataList.add(getCellList(reportDesignList, result,conversionList,subByteArrayList));
+						dataList.add(getCellList(reportDesignList, result,
+								conversionList, subByteArrayList));
 					}
 				}
 				logger.debug("DataList is populated closing scanner");
@@ -234,22 +241,23 @@ public class ViewReportAction extends ViewReportListAction {
 	}
 
 	private ArrayList<Cell> getCellList(
-			ArrayList<ReportDesign> reportDesignList, Result result,ArrayList<Conversion> conversionList,ArrayList<SubByteArray> subByteArrayList)
-			throws CruxException {
+			ArrayList<ReportDesign> reportDesignList, Result result,
+			ArrayList<Conversion> conversionList,
+			ArrayList<SubByteArray> subByteArrayList) throws CruxException {
 
 		byte[] rowKey = result.getRow();
 		if (rowKey == null) {
 			throw new CruxException("The result set is empty.");
 		}
 		ArrayList<Cell> cellList = new ArrayList<Cell>();
-		int i=0;
-		int j=0;
+		int i = 0;
+		int j = 0;
 		for (ReportDesign reportDesign : reportDesignList) {
 			if (reportDesign.getRowAlias() != null) {
 				RowAlias rowAlias = reportDesign.getRowAlias();
 				byte[] value = subByteArrayList.get(j).execute(rowKey);
-				cellList.add(new Cell(rowAlias.getAlias(), conversionList.get(i)
-						.execute(value)));
+				cellList.add(new Cell(rowAlias.getAlias(), conversionList
+						.get(i).execute(value)));
 				j++;
 			} else if (reportDesign.getColumnAlias() != null) {
 				ColumnAlias columnAlias = reportDesign.getColumnAlias();
@@ -257,52 +265,54 @@ public class ViewReportAction extends ViewReportListAction {
 						Bytes.toBytes(columnAlias.getColumnFamily()),
 						Bytes.toBytes(columnAlias.getQualifier()));
 				if (value != null) {
-					cellList.add(new Cell(columnAlias.getAlias(),  conversionList.get(i)
-							.execute(value)));
+					cellList.add(new Cell(columnAlias.getAlias(),
+							conversionList.get(i).execute(value)));
 				}
 			}
 			i++;
 		}
 		return cellList;
 	}
-	
-	private ArrayList<SubByteArray> getSubByteArrayList(ArrayList<ReportDesign> reportDesignList){
+
+	private ArrayList<SubByteArray> getSubByteArrayList(
+			ArrayList<ReportDesign> reportDesignList) {
 		ArrayList<SubByteArray> subByteArrayList = new ArrayList<SubByteArray>();
 		for (ReportDesign reportDesign : reportDesignList) {
 			if (reportDesign.getRowAlias() != null) {
 				RowAlias rowAlias = reportDesign.getRowAlias();
-				
+
 				HashMap<String, String> properties = new HashMap<String, String>();
 				properties.put("offset", getOffset(rowAlias) + "");
 				properties.put("length", getRowAliasLength(rowAlias) + "");
-				
+
 				subByteArrayList.add(new SubByteArray(properties));
-			} 
+			}
 		}
 		return subByteArrayList;
 	}
-	
-	private ArrayList<Conversion> getConversionList(ArrayList<ReportDesign> reportDesignList){
+
+	private ArrayList<Conversion> getConversionList(
+			ArrayList<ReportDesign> reportDesignList) {
 		ArrayList<Conversion> conversionList = new ArrayList<Conversion>();
 		for (ReportDesign reportDesign : reportDesignList) {
 			if (reportDesign.getRowAlias() != null) {
 				RowAlias rowAlias = reportDesign.getRowAlias();
-				
+
 				HashMap<String, String> properties = new HashMap<String, String>();
-				properties.put("class.name",rowAlias
-						.getValueType().getClassName());
-				
-				conversionList.add( new Conversion(properties));
-				
+				properties.put("class.name", rowAlias.getValueType()
+						.getClassName());
+
+				conversionList.add(new Conversion(properties));
+
 			} else if (reportDesign.getColumnAlias() != null) {
 				ColumnAlias columnAlias = reportDesign.getColumnAlias();
-					HashMap<String, String> properties = new HashMap<String, String>();
-					properties.put("class.name",columnAlias
-							.getValueType().getClassName());
-					conversionList.add( new Conversion(properties));
-				}
+				HashMap<String, String> properties = new HashMap<String, String>();
+				properties.put("class.name", columnAlias.getValueType()
+						.getClassName());
+				conversionList.add(new Conversion(properties));
 			}
-		
+		}
+
 		return conversionList;
 	}
 
@@ -324,7 +334,7 @@ public class ViewReportAction extends ViewReportListAction {
 		int length = 0;
 		if (!(rowAlias.getLength() == null || rowAlias.getLength() == 0)) {
 			length = rowAlias.getLength().intValue();
-		} 
+		}
 		return length;
 	}
 
@@ -333,23 +343,24 @@ public class ViewReportAction extends ViewReportListAction {
 			ArrayList<ColumnFilter> columnFilterList) {
 		for (RowAliasFilter rowFilter : rowFilterList) {
 			rowFilter.setValue(getValueForFilters(rowFilter.getRowAlias()
-					.getAlias(),rowFilter.getFilterType().getType()));
+					.getAlias(), rowFilter.getFilterType().getType()));
+			mappingDAO.session.setReadOnly(rowFilter, true);
 		}
 		for (ColumnFilter columnFilter : columnFilterList) {
 			columnFilter.setValue(getValueForFilters(columnFilter
-					.getColumnAlias().getAlias(),columnFilter.getFilterType().getType()));
+					.getColumnAlias().getAlias(), columnFilter.getFilterType()
+					.getType()));
+			mappingDAO.session.setReadOnly(columnFilter, true);
 		}
-		report.setRowAliasFilters(rowFilterList);
-		report.setColumnFilters(columnFilterList);
 	}
 
-	private String getValueForFilters(String alias,String filterType) {
+	private String getValueForFilters(String alias, String filterType) {
 		String result = "";
 		for (FilterAliasView aliasView : filterList) {
 			if (aliasView.getAlias().equals(alias)) {
-				if(aliasView.getFilterType().equals(filterType)){
-				result = aliasView.getValue();
-				break;
+				if (aliasView.getFilterType().equals(filterType)) {
+					result = aliasView.getValue();
+					break;
 				}
 			}
 		}

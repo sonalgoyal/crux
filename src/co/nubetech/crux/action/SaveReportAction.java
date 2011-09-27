@@ -25,6 +25,7 @@ import co.nubetech.crux.dao.FunctionDAO;
 import co.nubetech.crux.dao.UserDAO;
 import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.ColumnFilter;
+import co.nubetech.crux.model.Dashboard;
 import co.nubetech.crux.model.FilterType;
 import co.nubetech.crux.model.Function;
 import co.nubetech.crux.model.Mapping;
@@ -88,12 +89,12 @@ public class SaveReportAction extends ReportDesignAction {
 		} else {
 			try {
 				logger.debug("Report Posted: " + report);
-
 				reportDAO.save(report);
 			} catch (CruxException e) {
 				error.setMessage(e.getMessage());
 			} catch (Exception e) {
-				error.setMessage("Something Wrong has happened");
+				e.printStackTrace();
+				error.setMessage(e.getMessage());
 			}
 		}
 		if (error.isError()) {
@@ -149,20 +150,20 @@ public class SaveReportAction extends ReportDesignAction {
 
 						} else if (hashRowAlias.containsKey(aliasName)) {
 							reportDesign.setRowAlias(hashRowAlias
-									.get(aliasName));							
+									.get(aliasName));
 						}
 						designList.add(reportDesign);
-						logger.debug("ReportDesign object:"+reportDesign);
+						logger.debug("ReportDesign object:" + reportDesign);
 					}
 				}
 			}
 
 			if (addToDashBoard) {
 				if (!checkDashBoardOverLoaded(report.getId())) {
-					report.setDashboardType((short) 1);
+					report.setDashboard(getDashboardObject(report.getId()));
 				}
 			} else {
-				report.setDashboardType((short) 0);
+				report.setDashboard(null);
 			}
 			report.setDesigns(designList);
 			report.setUser(user);
@@ -177,16 +178,33 @@ public class SaveReportAction extends ReportDesignAction {
 		return SUCCESS;
 	}
 
+	public Dashboard getDashboardObject(long id) {
+		Dashboard result = null;
+		ArrayList<Report> reportList = new ArrayList<Report>(
+				reportDAO.findDashboardReports());
+		for (Report report : reportList) {
+			if (report.getDashboard() != null) {
+				if (id == report.getId()) {
+					result = report.getDashboard();
+				}
+			}
+		}
+		if (result == null) {
+			result = new Dashboard();
+		}
+		return result;
+	}
+
 	private String getAliasName(String aliasFunction) {
 		String aliasName = null;
-		if(aliasFunction.contains("(")){
-		String[] aliasFunctionArray = aliasFunction.split("\\(");
-		if (aliasFunctionArray.length > 1) {
-			aliasName = aliasFunctionArray[aliasFunctionArray.length - 1]
-					.split("\\)")[0];
-		} else {
-			aliasName = aliasFunctionArray[0];
-		}
+		if (aliasFunction.contains("(")) {
+			String[] aliasFunctionArray = aliasFunction.split("\\(");
+			if (aliasFunctionArray.length > 1) {
+				aliasName = aliasFunctionArray[aliasFunctionArray.length - 1]
+						.split("\\)")[0];
+			} else {
+				aliasName = aliasFunctionArray[0];
+			}
 		} else {
 			aliasName = aliasFunction;
 		}
@@ -194,48 +212,53 @@ public class SaveReportAction extends ReportDesignAction {
 	}
 
 	private ArrayList<ReportDesignFunction> getReportDesignFunctionList(
-			String aliasFunction, ReportDesign reportDesign) throws CruxException {
+			String aliasFunction, ReportDesign reportDesign)
+			throws CruxException {
 		boolean isRow = false;
 		boolean isAggregate = false;
 		ArrayList<Function> functionList = new ArrayList<Function>(
 				functionDAO.findAll());
 		ArrayList<ReportDesignFunction> reportDesignFunctionList = new ArrayList<ReportDesignFunction>();
-		if(aliasFunction.contains("(")){
-		String[] functionArray = aliasFunction.split("\\(");
+		if (aliasFunction.contains("(")) {
+			String[] functionArray = aliasFunction.split("\\(");
 			for (int i = 0; i < functionArray.length - 1; i++) {
 				for (Function function : functionList) {
 					if (functionArray[i].equalsIgnoreCase(function
 							.getFunctionName())) {
 						reportDesignFunctionList.add(new ReportDesignFunction(
 								reportDesign, function));
-						if(function.isAggregateType()){						
-								isAggregate=true;
-						} else {						
-								isRow=true;
-							} 
-						if (isAggregate && isRow){
-								throw new CruxException("Aggregator functions should be applied to all Alias");
-							}
+						if (function.isAggregateType()) {
+							isAggregate = true;
+						} else {
+							isRow = true;
+						}
+						if (isAggregate && isRow) {
+							throw new CruxException(
+									"Aggregator functions should be applied to all Alias");
 						}
 					}
 				}
 			}
-		logger.debug("reportDesignFunctionList:"+reportDesignFunctionList);
+		}
+		logger.debug("reportDesignFunctionList:" + reportDesignFunctionList);
 		return reportDesignFunctionList;
 	}
 
 	private boolean checkDashBoardOverLoaded(long id) throws CruxException {
 		boolean result = false;
+		int count = 0;
 		ArrayList<Report> reportList = new ArrayList<Report>(
-				reportDAO.findAll());
+				reportDAO.findDashboardReports());
 		for (Report report : reportList) {
-			if (report.getDashboardType() == (short) 1) {
+			if (report.getDashboard() != null) {
 				if (id != report.getId()) {
-					result = true;
-					throw new CruxException("A report named '"
-							+ report.getName()
-							+ "' is already set to DashBoard."
-							+ " Cannot set  more than one Report to DashBoard");
+					if (count >= 3) {
+						result = true;
+						throw new CruxException(
+								"Dashboard already have four reports.");
+					} else {
+						count++;
+					}
 				}
 			}
 		}
@@ -285,7 +308,7 @@ public class SaveReportAction extends ReportDesignAction {
 		for (ReportType reportTypes : result) {
 			logger.debug("reportType is: " + reportTypeName);
 			logger.debug("reportTypeObject is: " + reportTypes.getType());
-			if (reportTypeName.contains(reportTypes.getType())) {
+			if (reportTypeName.equals(reportTypes.getType())) {
 				reportTypeId = reportTypes.getId();
 			}
 		}

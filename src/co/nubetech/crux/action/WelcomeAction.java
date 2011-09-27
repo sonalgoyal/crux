@@ -45,7 +45,7 @@ public class WelcomeAction extends CruxAction {
 			ArrayList<Report> reportList = new ArrayList<Report>(
 					reportDAO.findAll());
 			for (Report report : reportList) {
-				if (report.getDashboardType() == (short) 1) {
+				if (report.getDashboard() != null) {
 					ifExists = true;
 				}
 			}

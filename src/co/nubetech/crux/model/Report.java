@@ -23,7 +23,7 @@ public class Report {
 	private User user;
 	private String name;
 	private ReportType reportType;
-	private short dashboardType;
+	private Dashboard dashboard;
 	private Collection<ReportDesign> designs = new ArrayList<ReportDesign>();
 	private Collection<RowAliasFilter> rowAliasFilters = new ArrayList<RowAliasFilter>();
 	private Collection<ColumnFilter> columnFilters = new ArrayList<ColumnFilter>();
@@ -33,15 +33,13 @@ public class Report {
 	}
 
 	public Report(User user, String name, ReportType reportType,
-			short isDashBoard) {
+			Dashboard dashboard) {
 		super();
 		this.user = user;
 		this.name = name;
 		this.reportType = reportType;
-		this.dashboardType = isDashBoard;
+		this.dashboard = dashboard;
 	}
-
-
 
 	public long getId() {
 		return id;
@@ -103,35 +101,32 @@ public class Report {
 		design.setReport(this);
 		designs.add(design);
 	}
-
 	
-	public short getDashboardType() {
-		return dashboardType;
+	public Dashboard getDashboard() {
+		return dashboard;
 	}
 
-	public void setDashboardType(short dashboardType) {
-		this.dashboardType = dashboardType;
+	public void setDashboard(Dashboard dashboard) {
+		this.dashboard = dashboard;
 	}
 
-	
-
-	@Override
-	public String toString() {
-		return "Report [id=" + id + ", user=" + user + ", name=" + name
-				+ ", reportType=" + reportType + ", isDashBoard=" + dashboardType
-				+ ", designs=" + designs + ", rowAliasFilters="
-				+ rowAliasFilters + ", columnFilters=" + columnFilters + "]";
+	public boolean onDashboard(){
+		boolean result = false;
+		if(this.getDashboard()!=null){
+			result=true;
+		}
+		return result;
 	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
 				+ ((columnFilters == null) ? 0 : columnFilters.hashCode());
+		result = prime * result
+				+ ((dashboard == null) ? 0 : dashboard.hashCode());
 		result = prime * result + ((designs == null) ? 0 : designs.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + dashboardType;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
 				+ ((reportType == null) ? 0 : reportType.hashCode());
@@ -155,14 +150,17 @@ public class Report {
 				return false;
 		} else if (!columnFilters.equals(other.columnFilters))
 			return false;
+		if (dashboard == null) {
+			if (other.dashboard != null)
+				return false;
+		} else if (!dashboard.equals(other.dashboard))
+			return false;
 		if (designs == null) {
 			if (other.designs != null)
 				return false;
 		} else if (!designs.equals(other.designs))
 			return false;
 		if (id != other.id)
-			return false;
-		if (dashboardType != other.dashboardType)
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -187,5 +185,12 @@ public class Report {
 		return true;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "Report [id=" + id + ", user=" + user + ", name=" + name
+				+ ", reportType=" + reportType + ", dashboard=" + dashboard
+				+ ", designs=" + designs + ", rowAliasFilters="
+				+ rowAliasFilters + ", columnFilters=" + columnFilters + "]";
+	}
+
 }

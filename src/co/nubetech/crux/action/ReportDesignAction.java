@@ -61,7 +61,6 @@ public class ReportDesignAction extends ViewReportListAction {
 	protected String axisValues = new String();
 	private String aliasName;
 	protected boolean addToDashBoard;
-	private ArrayList<FilterAliasView> filterViewList = new ArrayList<FilterAliasView>();
 	private ArrayList<DimensionAndMeasureView> dimensionAndMeasureViewList = new ArrayList<DimensionAndMeasureView>();
 	private ArrayList<FunctionView> functionViewList = new ArrayList<FunctionView>();
 	protected FunctionTypeMappingDAO functionTypeMappingDAO = new FunctionTypeMappingDAO();
@@ -290,7 +289,7 @@ public class ReportDesignAction extends ViewReportListAction {
 				;
 			}
 			reportType = report.getReportType().getType();
-			if (report.getDashboardType() == (short) 1) {
+			if (report.getDashboard() != null) {
 				addToDashBoard = true;
 			} else {
 				addToDashBoard = false;

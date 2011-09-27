@@ -22,7 +22,10 @@
 		<property name="connection.password">newpwd</property>
 
 		<!-- JDBC connection pool (use the built-in) -->
-		<property name="connection.pool_size">1</property>
+		<property name="hibernate.c3p0.min_size">2</property>
+		<property name="hibernate.c3p0.max_size">4</property>
+		<property name="hibernate.c3p0.timeout">240</property>
+		<property name="hibernate.c3p0.max_statements">20</property>
 
 		<!-- SQL dialect -->
 		<property name="dialect">org.hibernate.dialect.H2Dialect</property>

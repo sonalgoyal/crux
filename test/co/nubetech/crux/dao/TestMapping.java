@@ -465,7 +465,7 @@ public class TestMapping extends DBConnection {
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest1')");
 		stmt.executeUpdate("insert into rowAlias values(99999,99999,'aliasTest2',1,3)");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest')");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,99999,'x')");
 
 		MappingDAO mappingDAO = new MappingDAO();

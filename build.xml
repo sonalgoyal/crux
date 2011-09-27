@@ -19,6 +19,12 @@
 	</description>
 
 	<property file="build.properties" />
+	
+	<path id="cobertura.classpath">
+		  <fileset dir="${lib.source.home}" />
+			<fileset dir="${lib.test.home}" />
+		</path>
+	<taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
 
 	<!-- ==================== Clean Target ==================================== -->
 
@@ -123,6 +129,47 @@
 			</batchtest>
 		</junit>
 	</target>
+
+	<!-- ====================For Cobertura Instrument Target ================================== -->
+		<target name="instrument" depends="build">
+		<mkdir dir="${deploy.home}/instrumented-classes" />
+		  <cobertura-instrument todir="${deploy.home}/instrumented-classes">
+		    <fileset dir="${build.home}/WEB-INF/classes">
+		      <include name="**/*.class"/>
+		    </fileset>
+		  </cobertura-instrument>
+		</target>
+		
+		<!-- ==================== Run cobertura-test Target ================================== -->
+
+		<target name="cobertura-test" depends="instrument">
+			<junit fork="yes" haltonfailure="yes">
+				 <classpath location="${lib.test.home}/cobertura.jar"/>
+				 <classpath location="${deploy.home}/instrumented-classes"/>
+				<classpath>
+					<path>
+						<fileset dir="${lib.source.home}" />
+						<fileset dir="${lib.test.home}" />
+						<fileset dir="${lib.test.runTime.home}" />
+						<pathelement location="${build.home}/WEB-INF/classes" />
+					</path>
+				</classpath>
+				<formatter type="plain" usefile="false" />
+				<batchtest>
+					<fileset dir="${build.home}/WEB-INF/classes" includes="**/Test*.class" />
+				</batchtest>
+			</junit>
+		</target>
+	<!-- ==================== Run crux-report Target ================================== -->
+	<target name="crux-report" depends="cobertura-test">
+		<mkdir dir="${deploy.home}/cobertura" />
+	 <cobertura-report srcdir="${source.home}" destdir="${deploy.home}/cobertura"/>
+	</target>
+	
+	<!-- ==================== checkstyle ================================== -->
+	<!--	<checkstyle config="sun_checks.xml">
+			<fileset dir="${source.home}"/>
+	</checkstyle> -->
 
 
 </project>

@@ -25,6 +25,8 @@ public abstract class FunctionBase {
 	private final static Logger logger = Logger.getLogger(FunctionBase.class);
 
 	protected Map<String, String> properties;
+	public static final String VALUE_TYPE_PROPERTY = "valueType";
+	public static final String VALUE_RETURN_PROPERTY = "valueReturn";
 
 	public FunctionBase() {
 		// this.properties = new HashMap<String, String>();

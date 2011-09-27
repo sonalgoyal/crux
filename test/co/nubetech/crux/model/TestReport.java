@@ -104,4 +104,19 @@ public class TestReport {
 
 		assertTrue((report.hashCode()==report1.hashCode()));
 	}
+	
+	public void testIsDashboard(){
+		Report report1 = new Report();
+		report1.setId(0);
+		report1.setName("First Report");
+		report1.setDashboard(null);
+		
+		Report report = new Report();
+		report.setId(0);
+		report.setName(null);
+		report.setDashboard(new Dashboard());
+		
+		assertTrue(!report1.onDashboard());
+		assertTrue(report.onDashboard());
+	}
 }

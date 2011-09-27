@@ -22,10 +22,25 @@
 <br>
 <br>
 <jsp:include page="progress.jsp" />
+
 <script type="text/javascript" src="js/viewReport.js" ></script>
+<script type="text/javascript" src="js/d3/d3.js"></script>
+<script type="text/javascript" src="js/polymaps/polymaps.js"></script>
 <script type="text/javascript">
 var filter = false;
 </script>
+<style type="text/css">
+@import "js/polymaps/polyStyle.css";
+svg {
+  display: block;
+}
+
+circle {
+  stroke: black;
+  fill: brown;
+  fill-opacity: .5;
+}
+</style>
 <br>
 <div dojoType="dijit.form.Form" id="getData" name="getData" method="post">
 			<input type="hidden" id="report.id" name="report.id" dojoType="dijit.form.TextBox" value='<s:property value="%{report.id}" />' />
@@ -66,7 +81,7 @@ var filter = false;
 		</div>
 		<table>
   					<tr>
-   						 <td><button id="viewReportButton" dojoType="dijit.form.Button" onClick='populateData()' style="visibility: hidden;">View Report</button></td>
+   						 <td><button id="viewReportButton" dojoType="dijit.form.Button" onClick='populateData(false)' style="visibility: hidden;">View Report</button></td>
     						<td>
     						<div id="exportButton">
 						<button id="exportCSV" dojoType="dijit.form.Button" onClick='exportToCSV()'>Export to CSV</button>
@@ -77,12 +92,17 @@ var filter = false;
 <br>
 <div style="width: 800px;">
 <div id="tableNode"></div>
+<div id="mapNode"></div>
 </div>
-<div id="simplechart" style="width: 700px; height: 350px;"></div>
-<br>
-<div id="legend"></div>
-
-<script>
+<table align="center">
+	<tr>
+		<td><div id="simplechart"  style="width: 700px; height: 350px; float: center;"></div></td>
+	</tr>
+	<tr>
+		<td><div id="legend"></div></td>
+	</tr>
+</table>
+<script type="text/javascript">
 var chartType = "<%=request.getAttribute("chartType") %>";
 
 dojo.require("dijit.form.Form");
@@ -90,38 +110,42 @@ dojo.require("dijit.form.ValidationTextBox");
 dojo.require("dijit.form.Button");
 
 function showHelp(){
-	 window.open ('help/viewReportHelp.html', '', 'width=400,height=200,scrollbars=1');
+	 	window.open ('help/viewReportHelp.html', '', 'width=400,height=200,scrollbars=1');
 }
 document.getElementById("exportButton").style.visibility = "hidden";
- 			function populateData() {
- 				dojo.require('dojox.charting.widget.Chart2D');
- 				dojo.require('dojox.charting.widget.Legend');
- 				dojo.require('dojox.charting.DataSeries');
- 				dojo.require('dojox.charting.plot2d.Markers');
- 				dojo.require('dojox.charting.themes.ThreeD');
- 				dojo.require("dojox.json.query");
- 				dojo.require("dojox.charting.themes.Claro");
- 				dojo.require("dojox.grid.DataGrid");
- 				dojo.require("dojo.data.ItemFileWriteStore");
+ 			function populateData(isCsv) {
+ 					dojo.require('dojox.charting.widget.Chart2D');
+ 					dojo.require('dojox.charting.widget.Legend');
+ 					dojo.require('dojox.charting.DataSeries');
+ 					dojo.require('dojox.charting.plot2d.Markers');
+ 					dojo.require('dojox.charting.themes.ThreeD');
+ 					dojo.require("dojox.json.query");
+ 					dojo.require("dojox.charting.themes.Claro");
+ 					dojo.require("dojox.grid.DataGrid");
+ 					dojo.require("dojo.data.ItemFileWriteStore");
+ 					dojo.require("dojox.charting.widget.SelectableLegend");
  				
-				
-				clearResponse();
-				var getDataForm = dijit.byId("getData");
-				 xArray = [];
-				 yArray = [];
-				var values = "<%=request.getAttribute("axisValues")%>";
-				var axisValue = values.split(":");
-				for(var i=0;i<axisValue.length;i++){
-					var val = axisValue[i].split(",");
-					if(val[0]=="x"){
-						xArray.push(val[1]);
-					} else if(val[0]=="y"){
-						yArray.push(val[1]);
-					}
-				}
-				if (getDataForm.validate()) {
-					showProgressIndicator();
-				var xhrArgs = {
+ 					document.getElementById("mapNode").style.visibility = "hidden";
+					clearResponse();
+					var getDataForm = dijit.byId("getData");
+					var xList = [];
+					var yList = [];
+					var zList = [];
+					var values = "<%=request.getAttribute("axisValues")%>";
+					var axisValue = values.split(":");
+					for(var i=0;i<axisValue.length;i++){
+							var val = axisValue[i].split(",");
+							if(val[0]=="x"){
+								xList.push(val[1]);
+							} else if(val[0]=="y"){
+								yList.push(val[1]);
+							} else if(val[0]=="z"){
+								zList.push(val[1]);
+							}
+						}
+					if (getDataForm.validate()) {
+								showProgressIndicator();
+					var xhrArgs = {
 		                form: dojo.byId("getData"),
 		                url: "<s:url action='getDataAction'/>",
 		                handleAs: "json",
@@ -129,12 +153,15 @@ document.getElementById("exportButton").style.visibility = "hidden";
 		                	if(data.error.error){
 		                 		responseMessage("Error: "+data.error.message);
 		                     }else{
-		                    	 if(chartType=="Table"){
-		                    		 doPlotTable(data.dataList);
-		                    	 } else if(chartType=="csv"){
-		                    		 doPlotCSV(data.dataList);
-		                    	 } else {
-		                    		 doPlot(data.dataList);
+		                    	 if(isCsv){
+		                    		 doPlotCSV(xList,yList,data.dataList);
+		                    	 }else if(chartType=="Table"){
+		                    		 doPlotTable(xList,data.dataList,'tableNode');
+		                    	 }else if(chartType=="Choropleth"){
+		                    		 document.getElementById("mapNode").style.visibility = "visible";
+		                    		 doPlotMap(data.dataList);
+		                    	 }else {
+		                    		 doPlot(xList,yList,data.dataList,chartType,'simplechart','legend');
 		                    	 }
 		                     }
 		                	hideProgressIndicator();
@@ -153,9 +180,8 @@ document.getElementById("exportButton").style.visibility = "hidden";
 			}	
  			
  			function exportToCSV(){
- 				chartType = "csv";
  				dojo.addOnLoad(function(e) {
- 	 				populateData();
+ 	 				populateData(true);
  	 				});
  			}
  			
@@ -167,9 +193,9 @@ document.getElementById("exportButton").style.visibility = "hidden";
  				dojo.style("viewReportButton","visibility","visible");
  			}
  			
- 			function doPlotCSV(valueList){
+ 			function doPlotCSV(xList,yList,valueList){
  				var dataList = [];
- 				var nameList = xArray.concat(yArray);
+ 				var nameList = xList.concat(yList);
  				var header = "";
  				var length = 0;
  				for ( var i = 0; i < nameList.length; i++) {

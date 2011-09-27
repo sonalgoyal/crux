@@ -120,7 +120,7 @@
 		<many-to-one name="user" column="userId" class="User" lazy="false"/>
 		<many-to-one name="reportType" column="reportTypeId" class="ReportType"  lazy="false"/>
 		<property name="name" type="string" column="name" />
-		<property name="dashboardType" type="short" column="dashboardType" />
+		<many-to-one name="dashboard" column="dashboardId" class="Dashboard" cascade="all" lazy="false"/>
 		<bag name="rowAliasFilters" table="rowFilter" cascade="all"
 			inverse="true">
 			<key column="reportId" />
@@ -214,5 +214,12 @@
 		<many-to-one name="function" column="functionId" class="Function"  lazy="false"/>
 		<many-to-one name="valueType" column="valueTypeId" class="ValueType"  lazy="false"/>
 		<many-to-one name="returnValueType" column="returnValueTypeId" class="ValueType"  lazy="false"/>
+	</class>
+	<class name="Dashboard" table="dashboard" lazy="false">
+		<id name="id" >
+			<generator class="increment" />
+		</id>
+		<property name="index" type="int" column="indexNo" />
+		<property name="column" type="int" column="columnNo" />
 	</class>
 </hibernate-mapping>

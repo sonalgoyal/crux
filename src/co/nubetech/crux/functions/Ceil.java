@@ -25,7 +25,6 @@ public class Ceil extends FunctionBase {
 
 	private final static Logger logger = Logger.getLogger(Ceil.class);
 
-	public String VALUE_TYPE_PROPERTY = "valueType";
 	String valueType;
 	public Ceil(Map<String, String> properties) {
 		super();

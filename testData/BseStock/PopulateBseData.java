@@ -83,7 +83,7 @@ public class PopulateBseData {
 			br.close();
 			in.close();
 			fstream.close();
-			tester.close();
 		}
+		tester.close();
 	}
 }

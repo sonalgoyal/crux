@@ -114,6 +114,10 @@
 			method="getDashBoard">
 			<result name="success">/dashBoard.jsp</result>
 		</action>
+		<action name="saveDashBoard" class="co.nubetech.crux.action.DashBoardAction"
+			method="saveDashBoard">
+			<result type="json" />
+		</action>
 		<action name="viewReport" class="co.nubetech.crux.action.ViewReportAction"
 			method="viewReport">
 			<result name="success">/viewReport.jsp</result>

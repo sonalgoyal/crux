@@ -26,6 +26,7 @@ import org.hibernate.Session;
 import org.junit.Test;
 
 import co.nubetech.crux.model.ColumnFilter;
+import co.nubetech.crux.model.Dashboard;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
 import co.nubetech.crux.model.RowAliasFilter;
@@ -40,10 +41,11 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',null)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
-
+		
 		ReportDAO reportDAO = new ReportDAO();
+		try{
 		reportDAO.session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
 				.getNewSession();
 
@@ -58,7 +60,7 @@ public class TestReport extends DBConnection {
 		assertEquals(design.getId(), 99999l);
 		assertEquals(design.getReport().getId(), 99999l);
 		assertEquals(design.getMappingAxis(), "x");
-
+		} finally{
 		stmt.executeUpdate("delete from reportDesign where id=" + 99999);
 		stmt.executeUpdate("delete from report where id=" + 99999);
 		stmt.executeUpdate("delete from columnAlias where id=" + 99999);
@@ -66,6 +68,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("delete from connection where id=" + 99999);
 		reportDAO.session.close();
 		closeConnection();
+		}
 	}
 
 	@Test
@@ -87,12 +90,14 @@ public class TestReport extends DBConnection {
 
 		ColumnAliasDAO detail = new ColumnAliasDAO();
 		detail.session = session;
-
+		
+		Dashboard dashboard = new Dashboard(0,0);
+		
 		ReportDAO reportDAO = new ReportDAO();
 		Report report = new Report();
 		report.setName("reportTest");
 		report.setUser(user.findById(1l));
-		report.setDashboardType((short) 1);
+		report.setDashboard(dashboard);
 
 		ReportDesign design = new ReportDesign();
 		design.setMappingAxis("x");
@@ -116,7 +121,7 @@ public class TestReport extends DBConnection {
 			assertEquals(rs.getLong("userId"), 1l);
 			assertEquals(rs.getString("name"), "reportTest");
 			assertEquals(rs.getLong("reportTypeId"), 1l);
-			assertEquals(rs.getShort("isDashBoard"),1);
+			assertEquals(rs.getLong("dashboardId"),dashboard.getId());
 		}
 
 		rs.close();
@@ -136,6 +141,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("delete from columnAlias where id=" + 99999);
 		stmt.executeUpdate("delete from mapping where id=" + 99999);
 		stmt.executeUpdate("delete from connection where id=" + 99999);
+		stmt.executeUpdate("delete from dashboard where id=" + dashboard.getId());
 		reportDAO.session.close();
 		closeConnection();
 	}
@@ -148,7 +154,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',null)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		ReportDAO reportDAO = new ReportDAO();
@@ -292,7 +298,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',null)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		Session session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
@@ -349,7 +355,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',null)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		ReportDAO reportDAO = new ReportDAO();
@@ -399,7 +405,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99998,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamily','qualifier','alias')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',null)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		Session session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
@@ -468,7 +474,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',null)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		ReportDAO reportDAO = new ReportDAO();
@@ -522,7 +528,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',null)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
 
 		Session session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
@@ -686,7 +692,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
 		stmt.executeUpdate("insert into rowAlias values(99999,99999,'aliasTest',1,1)");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',null)");
 		stmt.executeUpdate("insert into rowFilter values(99999,99999,99999,1,'val')");
 		stmt.executeUpdate("insert into columnFilter values(99999,99999,99999,1,'val')");
 
@@ -733,7 +739,7 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
 		stmt.executeUpdate("insert into rowAlias values(99999,99999,'aliasTest',1,1)");
-		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',0)");
+		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',null)");
 		stmt.executeUpdate("insert into rowFilter values(99999,99999,99999,1,'val')");
 		stmt.executeUpdate("insert into columnFilter values(99999,99999,99999,1,'val')");
 
@@ -779,6 +785,177 @@ public class TestReport extends DBConnection {
 		stmt.executeUpdate("delete from mapping where id=" + 99999);
 		stmt.executeUpdate("delete from connection where id=" + 99999);
 		closeConnection();
+		session.close();
+	}
+	
+	@Test
+	public void testSaveReportWithAddToDashboard() throws Exception, CruxException {
+
+		Statement stmt = getStatement();
+		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
+		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
+		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
+
+		Session session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
+				.getNewSession();
+
+		UserDAO user = new UserDAO();
+		user.session = session;
+
+		ReportTypeDAO type = new ReportTypeDAO();
+		type.session = session;
+
+		ColumnAliasDAO detail = new ColumnAliasDAO();
+		detail.session = session;
+		
+		Dashboard dashboard = new Dashboard(0,0);
+		
+		ReportDAO reportDAO = new ReportDAO();
+		Report report = new Report();
+		report.setName("reportTest");
+		report.setUser(user.findById(1l));
+		report.setDashboard(dashboard);
+
+		ReportDesign design = new ReportDesign();
+		design.setMappingAxis("x");
+		design.setColumnAlias(detail.findById(99999l));
+		design.setReport(report);
+		report.setReportType(type.findById(1l));
+
+		ArrayList<ReportDesign> designs = new ArrayList<ReportDesign>();
+		designs.add(design);
+		report.setDesigns(designs);
+
+		reportDAO.session = session;
+		reportDAO.transaction = reportDAO.session.getTransaction();
+		long reportId = reportDAO.save(report);
+		long designId = design.getId();
+
+		ResultSet rs = stmt.executeQuery("select * from report where id="
+				+ reportId);
+
+		while (rs.next()) {
+			assertEquals(rs.getLong("userId"), 1l);
+			assertEquals(rs.getString("name"), "reportTest");
+			assertEquals(rs.getLong("reportTypeId"), 1l);
+			assertEquals(rs.getLong("dashboardId"),dashboard.getId());
+		}
+
+		rs.close();
+
+		ResultSet rs1 = stmt
+				.executeQuery("select * from reportDesign where id=" + designId);
+		while (rs1.next()) {
+			assertEquals(rs1.getLong("reportId"), reportId);
+			assertEquals(rs1.getLong("columnAliasId"), 99999l);
+			assertEquals(rs1.getString("mappingAxis"), "x");
+		}
+
+		rs1.close();
+
+		stmt.executeUpdate("delete from reportDesign where id=" + designId);
+		stmt.executeUpdate("delete from report where id=" + reportId);
+		stmt.executeUpdate("delete from columnAlias where id=" + 99999);
+		stmt.executeUpdate("delete from mapping where id=" + 99999);
+		stmt.executeUpdate("delete from connection where id=" + 99999);
+		stmt.executeUpdate("delete from dashboard where id=" + dashboard.getId());
+		reportDAO.session.close();
+		closeConnection();
+	}
+	
+	@Test
+	public void testSaveReportWithoutAddToDashboard() throws Exception, CruxException {
+
+		Statement stmt = getStatement();
+		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
+		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
+		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
+
+		Session session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
+				.getNewSession();
+
+		UserDAO user = new UserDAO();
+		user.session = session;
+
+		ReportTypeDAO type = new ReportTypeDAO();
+		type.session = session;
+
+		ColumnAliasDAO detail = new ColumnAliasDAO();
+		detail.session = session;
+		
+
+		
+		ReportDAO reportDAO = new ReportDAO();
+		Report report = new Report();
+		report.setName("reportTest");
+		report.setUser(user.findById(1l));
+		report.setDashboard(null);
+
+		ReportDesign design = new ReportDesign();
+		design.setMappingAxis("x");
+		design.setColumnAlias(detail.findById(99999l));
+		design.setReport(report);
+		report.setReportType(type.findById(1l));
+
+		ArrayList<ReportDesign> designs = new ArrayList<ReportDesign>();
+		designs.add(design);
+		report.setDesigns(designs);
+		long reportId =0;
+		long designId = 0;
+		
+		try{
+
+		reportDAO.session = session;
+		reportDAO.transaction = reportDAO.session.getTransaction();
+		reportId = reportDAO.save(report);
+		designId = design.getId();
+
+		ResultSet rs = stmt.executeQuery("select * from report where id="
+				+ reportId);
+
+		while (rs.next()) {
+			assertEquals(rs.getLong("userId"), 1l);
+			assertEquals(rs.getString("name"), "reportTest");
+			assertEquals(rs.getLong("reportTypeId"), 1l);
+			assertEquals(rs.getLong("dashboardId"), 0);
+		}
+
+		rs.close();
+
+		ResultSet rs1 = stmt
+				.executeQuery("select * from reportDesign where id=" + designId);
+		while (rs1.next()) {
+			assertEquals(rs1.getLong("reportId"), reportId);
+			assertEquals(rs1.getLong("columnAliasId"), 99999l);
+			assertEquals(rs1.getString("mappingAxis"), "x");
+		}
+
+		rs1.close();
+		} finally{
+			stmt.executeUpdate("delete from reportDesign where id=" + designId);
+			stmt.executeUpdate("delete from report where id=" + reportId);
+			stmt.executeUpdate("delete from columnAlias where id=" + 99999);
+			stmt.executeUpdate("delete from mapping where id=" + 99999);
+			stmt.executeUpdate("delete from connection where id=" + 99999);
+			reportDAO.session.close();
+			closeConnection();
+		}		
+	}
+	
+	@Test
+	public void testFindDashboardReports() throws Exception{
+		Session session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
+		.getNewSession();
+		ReportDAO reportDAO = new ReportDAO();
+		reportDAO.session = session;
+		ArrayList<Report> reportList = new ArrayList<Report>(reportDAO.findDashboardReports());
+		for(Report report:reportList){			
+			assertTrue(report.getDashboard()!=null);
+		}
+		
+			for(int i=1;i<reportList.size();i++){
+				assertTrue(reportList.get(i).getDashboard().getIndex()>=reportList.get(i-1).getDashboard().getIndex());
+		}
 		session.close();
 	}
 }

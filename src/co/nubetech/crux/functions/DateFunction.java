@@ -31,8 +31,6 @@ public class DateFunction extends FunctionBase {
 
 	private final static Logger logger = Logger.getLogger(DateFunction.class);
 
-	public String VALUE_TYPE_PROPERTY = "valueType";
-	public String VALUE_RETURN_PROPERTY = "valueReturn";
 	String valueType;
 	String valueReturn;
 	

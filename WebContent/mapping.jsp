@@ -108,7 +108,7 @@ dojo.addOnLoad(function(e) {
 		store: jsonStoreForMapping,
 		structure: layoutMapping,
 		selectionMode: 'single',
-		autoHeight:5
+		autoHeight:true
 	}, 'gridNodeForMapping');
 	gridForMapping.layout.setColumnVisibility(1,false);
 	gridForMapping.startup();
@@ -469,7 +469,7 @@ dojo.addOnLoad(function(e) {
 		store: jsonStoreForColumnAlias,
 		structure: layoutColumnAlias,
 		selectionMode: 'single',
-		autoHeight:5
+		autoHeight:true
 	}, 'gridNodeForColumnAlias');
 	gridForColumnAlias.layout.setColumnVisibility(0,false);
 	gridForColumnAlias.startup();
@@ -509,7 +509,7 @@ dojo.addOnLoad(function(e) {
 		store: jsonStoreForRowAlias,
 		structure: layoutRowAlias,
 		selectionMode: 'single',
-		autoHeight:5
+		autoHeight:true
 	}, 'gridNodeForRowAlias');
 	gridForRowAlias.layout.setColumnVisibility(0,false);
 	gridForRowAlias.startup();
