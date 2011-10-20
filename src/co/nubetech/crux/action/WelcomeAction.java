@@ -65,4 +65,28 @@ public class WelcomeAction extends CruxAction {
 		}
 	}
 
+	public ConnectionDAO getConnectionDAO() {
+		return connectionDAO;
+	}
+
+	public void setConnectionDAO(ConnectionDAO connectionDAO) {
+		this.connectionDAO = connectionDAO;
+	}
+
+	public MappingDAO getMappingDAO() {
+		return mappingDAO;
+	}
+
+	public void setMappingDAO(MappingDAO mappingDAO) {
+		this.mappingDAO = mappingDAO;
+	}
+
+	public ReportDAO getReportDAO() {
+		return reportDAO;
+	}
+
+	public void setReportDAO(ReportDAO reportDAO) {
+		this.reportDAO = reportDAO;
+	}
+
 }

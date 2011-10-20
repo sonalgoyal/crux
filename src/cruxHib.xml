@@ -120,6 +120,7 @@
 		<many-to-one name="user" column="userId" class="User" lazy="false"/>
 		<many-to-one name="reportType" column="reportTypeId" class="ReportType"  lazy="false"/>
 		<property name="name" type="string" column="name" />
+		<property name="numRecordsPerPage" column="numRecordsPerPage" />
 		<many-to-one name="dashboard" column="dashboardId" class="Dashboard" cascade="all" lazy="false"/>
 		<bag name="rowAliasFilters" table="rowFilter" cascade="all"
 			inverse="true">
@@ -132,7 +133,7 @@
 			<one-to-many class="ColumnFilter" />
 		</bag>
 		<bag name="designs" table="reportDesign" cascade="all"
-			inverse="true">
+			inverse="true" order-by="id asc">
 			<key column="reportId" />
 			<one-to-many class="ReportDesign" />
 		</bag>

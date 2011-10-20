@@ -1,5 +1,31 @@
-Instructions to download and populate stock data.
+Steps to export demo data in HBase
 
+1.Create tables in HBase
+
+hbase(main):006:0>  create 'stockDataComposite','price','spread','stats'
+hbase(main):007:0>  create 'stockDataSimple','data'   
+
+2.Now you need to run hadoop jobs to export data to HBase tables, before that you need to set HADOOP_HOME and HBASE_HOME
+a. In First step you need to add all jars in $HBASE_HOME/lib to HADOOP_CLASSPATH for that add following line to $HADOOP_HOME/bin/hadoop file
+
+HBASE_HOME=<path to HBase folder>
+# add Hbase libs to CLASSPATH
+for f in $HBASE_HOME/lib/*.jar; do
+  CLASSPATH=${CLASSPATH}:$f;
+done
+
+Note:- These lines will add hbase dependencies to your hadoop classpath each time you run hadoop, So later you can comment these lines when you dont require
+
+b. Now you need to start hadoop cluster and put exportComposite and exportSimple folders(kept parallel to this readme) to hdfs 
+$HADOOP_HOME/bin/hadoop fs -put exportSimple /
+$HADOOP_HOME/bin/hadoop fs -put exportComposite /
+
+$HADOOP_HOME/bin/hadoop jar $HBASE_HOME/hbase-0.90.3.jar import stockDataSimple /exportSimple
+$HADOOP_HOME/bin/hadoop jar $HBASE_HOME/hbase-0.90.3.jar import stockDataComposite /exportComposite
+
+Note:- Above process will load demo data in HBase If you want to load more data it can be done by following instructions given below.
+
+Instructions to download and populate stock data.
 1. Fetch stock BSE data from the BSE website for a particular date range by executing createTableData.py.
 For example:
 nube@nube-desktop:~$ cd <BseStock folder path>

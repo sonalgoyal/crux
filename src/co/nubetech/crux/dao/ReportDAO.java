@@ -154,6 +154,7 @@ public class ReportDAO {
 				foundReport.setReportType(report.getReportType());
 				foundReport.setUser(report.getUser());
 				foundReport.setDashboard(report.getDashboard());
+				foundReport.setNumRecordsPerPage(report.getNumRecordsPerPage());
 				return saveReport(foundReport);
 
 			}

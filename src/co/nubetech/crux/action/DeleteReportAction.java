@@ -56,6 +56,14 @@ public class DeleteReportAction extends CruxAction {
 		this.report = report;
 	}
 
+	public ReportDAO getReportDAO() {
+		return reportDAO;
+	}
+
+	public void setReportDAO(ReportDAO reportDAO) {
+		this.reportDAO = reportDAO;
+	}
+
 	public ArrayList<ReportView> getReportList() {
 		return reportList;
 	}

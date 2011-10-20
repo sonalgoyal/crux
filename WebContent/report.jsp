@@ -191,7 +191,7 @@ function deleteFalse(){
 <br />
 <br />
 <div id="addText" >
-No Report Defined. To add report click here <a style="background-color: white; 	padding:0px 0px 0px 0px;" href="<s:url action='getDesignPage'/>">Add</a>
+No report designed. Please <a style="background-color: white; 	padding:0px 0px 0px 0px;" href="<s:url action='getDesignPage'/>">add</a> a new report.
 </div>
 <div id="links" style="height: 80%;">
 <table>

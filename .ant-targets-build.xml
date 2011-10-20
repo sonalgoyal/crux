@@ -1,0 +1,6 @@
+build
+clean
+compile_src
+compile_test
+deploy
+jar

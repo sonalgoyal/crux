@@ -128,19 +128,19 @@
 			<interceptor-ref name="cruxDemoInterceptorStack"/>
 			<result type="json" />
 		</action>
+		<action name="findPreviewReportData" class="co.nubetech.crux.action.PreviewAction"
+			method="findPreviewReportData">
+			<result type="json" />
+		</action>
 		<action name="editReport" class="co.nubetech.crux.action.ReportDesignAction"
 			method="editReport">
 			<result name="success">/design.jsp</result>
 			<result name="error">/report.jsp</result>
 		</action>
-		<action name="getDataAction" class="co.nubetech.crux.action.ViewReportAction"
-			method="getDataAction">
+		<action name="findReportData" class="co.nubetech.crux.action.ViewReportAction"
+			method="findReportData">
 			<result type="json" />
-		</action>
-		<action name="getPreviewDataAction" class="co.nubetech.crux.action.PreviewAction"
-			method="getPreviewDataAction">
-			<result type="json" />
-		</action>
+		</action>		
 		<!-- Required for root namespace to work with Jetty -->
                <action name="">
                        <result type="chain">welcome</result>

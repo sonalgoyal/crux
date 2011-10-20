@@ -38,7 +38,7 @@ public class ViewReportListAction extends CruxAction {
 	private ArrayList<ReportView> reportList = new ArrayList<ReportView>();
 	protected ArrayList<Mapping> mappingList;
 	protected MappingDAO mappingDAO = new MappingDAO();
-	
+		
 	public ViewReportListAction() {
 
 	}
@@ -51,6 +51,23 @@ public class ViewReportListAction extends CruxAction {
 		this.reportList = reportList;
 	}
 
+	public ReportDAO getReportDAO() {
+		return reportDAO;
+	}
+
+	public void setReportDAO(ReportDAO reportDAO) {
+		this.reportDAO = reportDAO;
+	}
+	
+	public MappingDAO getMappingDAO() {
+		return mappingDAO;
+	}
+
+	public void setMappingDAO(MappingDAO mappingDAO) {
+		this.mappingDAO = mappingDAO;
+	}
+
+	
 	public ArrayList<Mapping> getMappingList() {
 		return mappingList;
 	}

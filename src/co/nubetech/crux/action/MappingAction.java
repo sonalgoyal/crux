@@ -78,6 +78,30 @@ public class MappingAction extends CruxAction {
 		this.error = error;
 	}
 
+	public MappingDAO getMappingDAO() {
+		return mappingDAO;
+	}
+
+	public void setMappingDAO(MappingDAO mappingDAO) {
+		this.mappingDAO = mappingDAO;
+	}
+
+	public ValueTypeDAO getValueTypeDAO() {
+		return valueTypeDAO;
+	}
+
+	public void setValueTypeDAO(ValueTypeDAO valueTypeDAO) {
+		this.valueTypeDAO = valueTypeDAO;
+	}
+
+	public ConnectionDAO getConnectionDAO() {
+		return connectionDAO;
+	}
+
+	public void setConnectionDAO(ConnectionDAO connectionDAO) {
+		this.connectionDAO = connectionDAO;
+	}
+
 	public RowAlias getRowAlias() {
 		return rowAlias;
 	}

@@ -15,12 +15,14 @@ public class TestReport {
 		report.setName("Report");
 		report.setReportType(reportType);
 		report.setUser(user);
+		report.setNumRecordsPerPage(25l);
 
 		Report report1 = new Report();
 		report1.setId(0);
 		report1.setName("Report");
 		report1.setReportType(reportType);
 		report1.setUser(user);
+		report1.setNumRecordsPerPage(25l);
 
 		assertTrue(report.equals(report1));
 	}
@@ -35,12 +37,14 @@ public class TestReport {
 		report.setName(null);
 		report.setReportType(reportType);
 		report.setUser(user);
+		report.setNumRecordsPerPage(0);
 
 		Report report1 = new Report();
 		report1.setId(0);
 		report1.setName(null);
 		report1.setReportType(reportType);
 		report1.setUser(user);
+		report1.setNumRecordsPerPage(0);
 
 		assertTrue(report.equals(report1));
 	}
@@ -55,12 +59,14 @@ public class TestReport {
 		report.setName("Report");
 		report.setReportType(reportType);
 		report.setUser(user);
+		report.setNumRecordsPerPage(24);
 
 		Report report1 = new Report();
 		report1.setId(0);
 		report1.setName(null);
 		report1.setReportType(reportType);
 		report1.setUser(user);
+		report1.setNumRecordsPerPage(25);
 
 		assertTrue(!report.equals(report1));
 	}
@@ -75,12 +81,14 @@ public class TestReport {
 		report.setName("Report");
 		report.setReportType(reportType);
 		report.setUser(user);
-
+		report.setNumRecordsPerPage(25);
+		
 		Report report1 = new Report();
 		report1.setId(0);
 		report1.setName("Report");
 		report1.setReportType(reportType);
 		report1.setUser(user);
+		report1.setNumRecordsPerPage(25);
 
 		assertTrue((report.hashCode()==report1.hashCode()));
 	}
@@ -95,12 +103,14 @@ public class TestReport {
 		report.setName(null);
 		report.setReportType(reportType);
 		report.setUser(user);
+		report.setNumRecordsPerPage(0);
 
 		Report report1 = new Report();
 		report1.setId(0);
 		report1.setName(null);
 		report1.setReportType(reportType);
 		report1.setUser(user);
+		report1.setNumRecordsPerPage(0);
 
 		assertTrue((report.hashCode()==report1.hashCode()));
 	}

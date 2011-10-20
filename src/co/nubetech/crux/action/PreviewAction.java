@@ -32,7 +32,7 @@ public class PreviewAction extends SaveReportAction {
 		this.error = error;
 	}
 
-	public String getPreviewDataAction() {
+	public String findPreviewReportData() {
 		try {
 			String toReturn = populateReport();
 			if (!toReturn.equals("error")) {

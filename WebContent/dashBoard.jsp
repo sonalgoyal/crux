@@ -21,7 +21,6 @@
 <jsp:include page="progress.jsp" />
 <%@ page import="org.apache.struts2.json.JSONUtil"%>
 <div align="center" style="color:#FF0000"><s:property value='%{error.message}'/></div>
-<script type="text/javascript" src="js/viewReport.js"></script>
   <script type="text/javascript">
   dojo.require("dojox.widget.Portlet");
   dojo.require("dojox.layout.GridContainerLite");
@@ -29,6 +28,7 @@
   dojo.require("dijit.form.TextBox");
   dojo.require("dijit.form.Button");
   
+  <%@ include file="js/viewReport.js" %>
   function showHelp(){
 		 window.open ('help/dashboardHelp.html', '', 'width=600,scrollbars=1');
 	}
@@ -229,13 +229,14 @@
 					 }
 				 form.containerNode.appendChild(dojo.create("br"));
 	   		   }
+	      form.containerNode.appendChild(dojo.create("br"));
 	      if(emptyFilter){
 	    	  var button = new dijit.form.Button({
 					id: 'button_'+i,
 					label: "View Report",
 		            onClick: function() {
 		            	var x = this.id.substring(7, this.id.length);
-		            	 populateData('form'+x,'chartType'+x,'div'+x,'legend'+x); 
+		            	 populateData(false,'form'+x,'chartType'+x,'div'+x,'legend'+x); 
 		            }
 		        },
 		        document.createElement("button"));
@@ -245,7 +246,7 @@
 	     // alert(reportList[i].dashboard.column+","+reportList[i].dashboard.index);
 	      gridContainer.addChild(portlet,reportList[i].dashboard.column);
 	      if (!emptyFilter){
-		      populateData('form'+i,'chartType'+i,'div'+i,'legend'+i);
+		      populateData(false,'form'+i,'chartType'+i,'div'+i,'legend'+i);
 	      }
 	  	}
 	 	 gridContainer.startup();
@@ -277,68 +278,7 @@
 		 	};
 		 var deferred = dojo.xhrPost(xhrArgs);
     }
-  
-  function populateData(formId,chartTypeId,divId,legendId) {
-		dojo.require('dojox.charting.widget.Chart2D');
-		dojo.require('dojox.charting.widget.Legend');
-		dojo.require('dojox.charting.DataSeries');
-		dojo.require('dojox.charting.plot2d.Markers');
-		dojo.require('dojox.charting.themes.ThreeD');
-		dojo.require("dojox.json.query");
-		dojo.require("dojox.charting.themes.Claro");
-		dojo.require("dojox.grid.DataGrid");
-		dojo.require("dojo.data.ItemFileWriteStore");
-		dojo.require("dojox.charting.widget.SelectableLegend");
-	
-		clearResponse();
-		var getDataForm = dijit.byId(formId);
-		var xList = [];
-		var yList = [];
-		var zList = [];
-		var chartType = document.getElementById(chartTypeId).value;
-		
-		if (getDataForm.validate()) {
-					showProgressIndicator();
-		var xhrArgs = {
-          form: dojo.byId(formId),
-          url: "<s:url action='getDataAction'/>",
-          handleAs: "json",
-          load: function(data) {
-          	if(data.error.error){
-           		responseMessage("Error: "+data.error.message);
-               }else{
-            	    var values = data.axisValues;
-					var axisValue = values.split(":");
-					for(var i=0;i<axisValue.length;i++){
-							var val = axisValue[i].split(",");
-							if(val[0]=="x"){
-								xList.push(val[1]);
-							} else if(val[0]=="y"){
-								yList.push(val[1]);
-							} else if(val[0]=="z"){
-								zList.push(val[1]);
-							}
-						} 
-              	 if(chartType=="Table"){
-              		 doPlotTable(xList,data.dataList,divId);
-              	  }else {
-              		 doPlot(xList,yList,data.dataList,chartType,divId,legendId);
-              	 }
-               }
-          	hideProgressIndicator();
-          },
-          error: function(error) {
-          	hideProgressIndicator();
-          	responseMessage("error:"+error);
-          }
-	};
-	var deferred = dojo.xhrPost(xhrArgs);
-
-	} else {
-		responseMessage("Please define filter value");
-	}
-}
-  
+    
   </script>    
         <style type="text/css">
             @import "js/dojo/dojox/widget/Portlet/Portlet.css";

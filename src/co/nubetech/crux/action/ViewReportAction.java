@@ -50,7 +50,6 @@ public class ViewReportAction extends ViewReportListAction {
 
 	private Report report = new Report();
 	private String axisValues = new String();
-	private String chartType = new String();
 	private ArrayList<FilterAliasView> filterList = new ArrayList<FilterAliasView>();
 	private long mappingId;
 	private ArrayList<ArrayList> dataList = new ArrayList<ArrayList>();
@@ -100,14 +99,6 @@ public class ViewReportAction extends ViewReportListAction {
 		this.axisValues = axisValues;
 	}
 
-	public String getChartType() {
-		return chartType;
-	}
-
-	public void setChartType(String chartType) {
-		this.chartType = chartType;
-	}
-
 	public CruxError getError() {
 		return error;
 	}
@@ -125,20 +116,13 @@ public class ViewReportAction extends ViewReportListAction {
 			logger.debug("Report To View: " + report);
 			ArrayList<ReportDesign> reportDesignList = new ArrayList<ReportDesign>(
 					report.getDesigns());
-			for (ReportDesign reportDesign : reportDesignList) {
-				String alias = (reportDesign.getColumnAlias() != null) ? reportDesign
-						.getColumnAlias().getAlias() : reportDesign
-						.getRowAlias().getAlias();
-				axisValues = axisValues + reportDesign.getMappingAxis() + ","
-						+ alias + ":";
-			}
 			mappingId = (reportDesignList.get(0).getColumnAlias() != null) ? reportDesignList
 					.get(0).getColumnAlias().getMapping().getId()
 					: reportDesignList.get(0).getRowAlias().getMapping()
 							.getId();
-			chartType = report.getReportType().getType();
+		
 			getFilterAliasView();
-			logger.debug("xAxis: " + axisValues + " chartType: " + chartType);
+			logger.debug("xAxis: " + axisValues);
 
 		} catch (CruxException e) {
 			error.setMessage("Error: " + e.getMessage());
@@ -162,7 +146,7 @@ public class ViewReportAction extends ViewReportListAction {
 		}
 	}
 
-	public String getDataAction() {
+	public String findReportData() {
 		try {
 			report = reportDAO.findById(report.getId());
 			ArrayList<RowAliasFilter> rowFilterList = new ArrayList<RowAliasFilter>(
@@ -179,8 +163,9 @@ public class ViewReportAction extends ViewReportListAction {
 				isValidType(columnFilter.getValue(), columnFilter
 						.getColumnAlias().getValueType());
 			}
+			logger.debug("Calling getData function in ViewReportAction.class");
 			dataList = getData(report, mappingDAO.findById(mappingId));
-
+			logger.debug("Returning Success");
 		} catch (CruxException e) {
 			e.printStackTrace();
 			error.setMessage(e.getMessage());
@@ -209,6 +194,7 @@ public class ViewReportAction extends ViewReportListAction {
 						.getRowAlias().getAlias();
 				axisValues = axisValues + reportDesign.getMappingAxis() + ","
 						+ alias + ":";
+				logger.debug("AxisValues:"+axisValues);
 			}
 
 			if (cruxScanner != null) {

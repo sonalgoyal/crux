@@ -13,11 +13,6 @@
 -- * See the License for the specific language governing permissions and limitations under the License.
 -- ----------------------------------------------------------------------------------------------------------
 
-
-CREATE DATABASE `crux`;
-
-USE `crux`;
-
 -- -----------------------------------------------------
 -- Table `datastore`
 -- -----------------------------------------------------
@@ -223,6 +218,7 @@ CREATE  TABLE IF NOT EXISTS report (
  `reportTypeId` BIGINT(100) NOT NULL ,
  `name` VARCHAR(100) NOT NULL,
  `dashboardId` BIGINT,
+ `numRecordsPerPage` BIGINT DEFAULT 0,
  PRIMARY KEY (`id`) ,
  UNIQUE INDEX `report_unique_keys` (`userId`, `name`) ,
 INDEX `fk_report_userId` (`userId` ASC) ,

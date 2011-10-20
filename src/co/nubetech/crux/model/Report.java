@@ -24,6 +24,7 @@ public class Report {
 	private String name;
 	private ReportType reportType;
 	private Dashboard dashboard;
+	private long numRecordsPerPage;
 	private Collection<ReportDesign> designs = new ArrayList<ReportDesign>();
 	private Collection<RowAliasFilter> rowAliasFilters = new ArrayList<RowAliasFilter>();
 	private Collection<ColumnFilter> columnFilters = new ArrayList<ColumnFilter>();
@@ -47,6 +48,14 @@ public class Report {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public long getNumRecordsPerPage() {
+		return numRecordsPerPage;
+	}
+
+	public void setNumRecordsPerPage(long numRecordsPerPage) {
+		this.numRecordsPerPage = numRecordsPerPage;
 	}
 
 	public Collection<RowAliasFilter> getRowAliasFilters() {
@@ -117,6 +126,16 @@ public class Report {
 		}
 		return result;
 	}
+
+	
+	@Override
+	public String toString() {
+		return "Report [id=" + id + ", user=" + user + ", name=" + name
+				+ ", reportType=" + reportType + ", dashboard=" + dashboard
+				+ ", designs=" + designs + ", rowAliasFilters="
+				+ rowAliasFilters + ", columnFilters=" + columnFilters + ", numRecordsPerPage="+ numRecordsPerPage + "]";
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -128,6 +147,8 @@ public class Report {
 		result = prime * result + ((designs == null) ? 0 : designs.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ (int) (numRecordsPerPage ^ (numRecordsPerPage >>> 32));
 		result = prime * result
 				+ ((reportType == null) ? 0 : reportType.hashCode());
 		result = prime * result
@@ -167,6 +188,8 @@ public class Report {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
+		if (numRecordsPerPage != other.numRecordsPerPage)
+			return false;
 		if (reportType == null) {
 			if (other.reportType != null)
 				return false;
@@ -183,14 +206,6 @@ public class Report {
 		} else if (!user.equals(other.user))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Report [id=" + id + ", user=" + user + ", name=" + name
-				+ ", reportType=" + reportType + ", dashboard=" + dashboard
-				+ ", designs=" + designs + ", rowAliasFilters="
-				+ rowAliasFilters + ", columnFilters=" + columnFilters + "]";
 	}
 
 }

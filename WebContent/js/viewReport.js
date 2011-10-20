@@ -22,6 +22,91 @@ var xAxislabels = [];
 var simpleChartDiv=[];
 var chartArray = [];
 var legendDiv;
+
+function populateData(isCsv,formId,chartTypeId,divId,legendId) {
+		dojo.require('dojox.charting.widget.Chart2D');
+		dojo.require('dojox.charting.widget.Legend');
+		dojo.require('dojox.charting.DataSeries');
+		dojo.require('dojox.charting.plot2d.Markers');
+		dojo.require('dojox.charting.themes.ThreeD');
+		dojo.require("dojox.json.query");
+		dojo.require("dojox.charting.themes.Claro");
+		dojo.require("dojox.grid.DataGrid");
+		dojo.require("dojo.data.ItemFileWriteStore");
+		dojo.require("dojox.charting.widget.SelectableLegend");
+
+	clearResponse();
+	var getDataForm = dijit.byId(formId);
+	var xList = [];
+	var yList = [];
+	var zList = [];
+	var chartType = document.getElementById(chartTypeId).value;
+	if (getDataForm.validate()) {
+				showProgressIndicator();
+	var xhrArgs = {
+        form: dojo.byId(formId),
+        url: "<s:url action='findReportData'/>",
+        handleAs: "json",
+        load: function(data) {
+        	if(data.error.error){
+         		responseMessage("Error: "+data.error.message);
+             }else{
+            	    var values = data.axisValues;
+						var axisValue = values.split(":");
+						for(var i=0;i<axisValue.length;i++){
+								var val = axisValue[i].split(",");
+								if(val[0]=="x"){
+									xList.push(val[1]);
+								} else if(val[0]=="y"){
+									yList.push(val[1]);
+								} else if(val[0]=="z"){
+									zList.push(val[1]);
+								}
+						    } 
+            	 if(isCsv){
+            		 doPlotCSV(xList,yList,data.dataList);
+            	 }else if(chartType=="Table"){
+            		 doPlotTable(xList,data.dataList,divId);
+            	 }else if(chartType=="Choropleth"){
+            		 document.getElementById("mapNode").style.visibility = "visible";
+            		 doPlotMap(data.dataList);
+            	 }else {
+            		 doPlot(xList,yList,data.dataList,chartType,divId,legendId);
+            	 }
+             }
+        	hideProgressIndicator();
+        	dojo.publish("fetchedData");
+        },
+        error: function(error) {
+        	hideProgressIndicator();
+        	responseMessage("error:"+error);
+        }
+	};
+	var deferred = dojo.xhrPost(xhrArgs);
+	} else {
+	responseMessage("Please define filter value");
+	}
+}	
+
+function populatePie(valueList) {
+		
+		var xResults = dojox.json.query("..[?alias=\'" + xArray[0]
+				+ "\']..value", valueList);
+		var yResults = dojox.json.query("..[?alias=\'" + yArray[0]
+		+ "\']..value", valueList);		
+		d3 = [];
+		d1= [];		
+		for(var i=0;i<yResults.length;i++){
+			var data = new Object();
+			data.y=yResults[i];
+			data.legend=xResults[i];
+			d1.push(data);
+		}
+		d3.push(d1);
+		
+	}
+
+
 function populate(valueList) {
 	var dataList = [];
 	var nameList = xArray.concat(yArray);
@@ -90,6 +175,7 @@ function populate(valueList) {
 		}
 	}
 
+
 	makeCharts = function() {
 			
 			var cruxChart = new dojox.charting.Chart2D(simpleChartDiv[simpleChartDiv.length-1]);
@@ -117,7 +203,11 @@ function populate(valueList) {
 					for ( var i = 0; i < d3.length; i++) {
 						cruxChart.addSeries(yArray[i], d3[i]);
 					}
-					 var magnify = new dojox.charting.action2d.Magnify(cruxChart, "default");
+					if(charts=='Pie'){
+						new dojox.charting.action2d.MoveSlice(cruxChart, "default");
+					} else {
+						var magnify = new dojox.charting.action2d.Magnify(cruxChart, "default");
+					}
 					 var tip = new dojox.charting.action2d.Tooltip(cruxChart, "default");
 				} else {
 						cruxChart.addPlot("default", {
@@ -169,7 +259,11 @@ function populate(valueList) {
 		chartDivCheck(chartDiv);
 		simpleChartDiv.push(chartDiv);
 		legendDiv=legendDivId;
-		populate(dataList);
+		if(charts='Pie'){
+			populatePie(dataList);
+		} else {
+			populate(dataList);
+		}
 		dojo.ready(makeCharts);
 	}
 

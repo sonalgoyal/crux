@@ -56,7 +56,6 @@ public class ConnectionAction extends CruxAction {
 	private UserDAO userDAO = new UserDAO();
 	private ConnectionDAO connectionDAO = new ConnectionDAO();
 	private MappingDAO mappingDAO = new MappingDAO();
-
 	private Datastore datastore = new Datastore();
 	private User user = new User();
 	private Connection connection = new Connection();
@@ -91,6 +90,14 @@ public class ConnectionAction extends CruxAction {
 
 	public Connection getConnection() {
 		return connection;
+	}
+
+	public ConnectionDAO getConnectionDAO() {
+		return connectionDAO;
+	}
+
+	public void setConnectionDAO(ConnectionDAO connectionDAO) {
+		this.connectionDAO = connectionDAO;
 	}
 
 	/*

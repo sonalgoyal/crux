@@ -81,8 +81,24 @@ public class ReportDesignAction extends ViewReportListAction {
 		this.functionViewList = functionViewList;
 	}
 
+	public ReportTypeDAO getReportTypeDAO() {
+		return reportTypeDAO;
+	}
+
+	public void setReportTypeDAO(ReportTypeDAO reportTypeDAO) {
+		this.reportTypeDAO = reportTypeDAO;
+	}
+
 	public void setAliasName(String aliasName) {
 		this.aliasName = aliasName;
+	}
+
+	public ValueFilterTypeDAO getValueFilterTypeDAO() {
+		return valueFilterTypeDAO;
+	}
+
+	public void setValueFilterTypeDAO(ValueFilterTypeDAO valueFilterTypeDAO) {
+		this.valueFilterTypeDAO = valueFilterTypeDAO;
 	}
 
 	public CruxError getError() {
@@ -91,6 +107,15 @@ public class ReportDesignAction extends ViewReportListAction {
 
 	public void setError(CruxError error) {
 		this.error = error;
+	}
+
+	public FunctionTypeMappingDAO getFunctionTypeMappingDAO() {
+		return functionTypeMappingDAO;
+	}
+
+	public void setFunctionTypeMappingDAO(
+			FunctionTypeMappingDAO functionTypeMappingDAO) {
+		this.functionTypeMappingDAO = functionTypeMappingDAO;
 	}
 
 	public ArrayList<FilterType> getFilterTypeList() {

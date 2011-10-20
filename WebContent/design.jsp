@@ -80,12 +80,12 @@ circle {
 	dojo.require("dojox.grid.DataGrid");
 	dojo.require("dojo.data.ItemFileWriteStore");
 	dojo.require("dijit.Dialog");
+	dojo.require("dijit.form.NumberTextBox");
 	var dimensionList;
 	var measuresList ;
 	var xAxis;
 	var yAxis;
 	var zAxis;
-	var chartType;
 	function showHelp(){
 		 window.open ('help/designHelp.html', '', 'width=600,scrollbars=1');
 	}
@@ -101,20 +101,24 @@ circle {
 			 clearNodes(zAxis,true);
 	 		 document.getElementById("ybutton").style.visibility = "hidden";
 			 document.getElementById("zbutton").style.visibility = "hidden";
+			 document.getElementById("recordsPerPage").style.visibility = "visible";
+			 
 	 	} else if(value=="Choropleth"){
 		 	 dojo.style("zAxis","visibility","visible");
 			 dojo.style("yAxis","visibility","visible");
 			 dijit.byId("xAxis").set("title","Latitude");
 			 dijit.byId("yAxis").set("title","Longitude");
+			 document.getElementById("recordsPerPage").style.visibility = "hidden";
+			 
    		} else {
 			 document.getElementById("zbutton").style.visibility = "hidden";
 			 dojo.style("zAxis","visibility","hidden");
 			 dojo.style("yAxis","visibility","visible");
 			 dijit.byId("xAxis").set("title","X-Axis");
 			 dijit.byId("yAxis").set("title","Y-Axis");
+			 document.getElementById("recordsPerPage").style.visibility = "hidden";
 		}
 		 clearResponse();
-		 chartType=value;
 	}
  
  	function preview(){
@@ -146,9 +150,9 @@ circle {
 		var xAxisPane = new dijit.TitlePane({title: "X-Axis", open: true}, "xAxis");
 		var yAxisPane = new dijit.TitlePane({title: "Y-Axis", open: true}, "yAxis");
 		var zAxisPane = new dijit.TitlePane({title: "Data", open: true}, "zAxis");
-	 	xAxis = new dojo.dnd.Source("xAxisNode");
-	 	yAxis = new dojo.dnd.Source("yAxisNode");
-	 	zAxis = new dojo.dnd.Source("zAxisNode");
+	 	xAxis = new dojo.dnd.Source("xAxis");
+	 	yAxis = new dojo.dnd.Source("yAxis");
+	 	zAxis = new dojo.dnd.Source("zAxis");
 	 	xAxis.parent = dojo.query("#xAxisNode tbody")[0];
 		yAxis.parent = dojo.query("#yAxisNode tbody")[0];
 		zAxis.parent = dojo.query("#zAxisNode tbody")[0];
@@ -178,6 +182,7 @@ circle {
                  		for(var i=0; i < data.filterTypeList.length; ++i){
                  		filter_box.addOption({value: data.filterTypeList[i].type, label: data.filterTypeList[i].type});                     		
                  		}
+                 		dojo.publish("filterPopulated");
                   }
               } ,
               error: function(error) {
@@ -510,21 +515,23 @@ circle {
 				}
 
 			function getValuesFromPane(paneId){
-				var array=[];	
-				var table = document.getElementById(paneId);
-				var tableCells = table.getElementsByTagName("td");	
-				for(var i=0;i<tableCells.length;i++){
-					array.push(tableCells[i].innerHTML);
-				}
-				return array;
+					var array=[];	
+					var table = document.getElementById(paneId);
+					var tableCells = table.getElementsByTagName("div");	
+					for(var i=0;i<tableCells.length;i++){
+							array.push(tableCells[i].childNodes[0].nodeValue);
+						}
+						
+					return array;
 				}
 			function getDataFromHBase() {
 				var getDataForm = dijit.byId("saveReportForm");
+				var chartType = dijit.byId("reportType").get("value");
 				if (getDataForm.validate()) {
 						showProgressIndicator();
 						var xhrArgs = {
 	                		form: dojo.byId("saveReportForm"),
-	               			 url: "<s:url action='getPreviewDataAction'/>",
+	               			 url: "<s:url action='findPreviewReportData'/>",
 	               			 handleAs: "json",
 	                		 load: function(data) {
 	                				if(data.error.error){
@@ -740,10 +747,11 @@ circle {
 	     			dojo.forEach(items, function(selectedItem) {
 	    	 		dijit.byId('alias').set('value',grid.store.getValues(selectedItem, 'alias'));
 	    			 dijit.byId('value').set('value',grid.store.getValues(selectedItem, 'value'));
-	    			 var typeFilter = grid.store.getValues(selectedItem,'filterType');
-	    			 setTimeout(function (typeFilter) {
-	    				 dijit.byId('filterType').set('value',typeFilter);
-	    	 			},500,typeFilter);
+	    			 this.typeFilter = grid.store.getValues(selectedItem,'filterType');
+                     this.handle=dojo.subscribe("filterPopulated",this,function(){
+	    	 				 dijit.byId('filterType').set('value',typeFilter);
+	    	 				 dojo.unsubscribe(this.handle);
+	    	 			});
 	     			});
 	    		 dijit.byId('isEdit').set('value',"true");
 	     		 document.getElementById("addFilter").style.visibility = "visible"; 
@@ -825,13 +833,14 @@ circle {
 	}
 	
 	function isValidSaveForm(xArray,yArray){
+		var chartType = dijit.byId("reportType").get("value");
 		var isValid = true;
 		if(chartType=="Table"){
 			if(xArray.length==0)	{
 				responseMessage("Please drag and drop appropriate alias to define Columns for your report");
 				isValid=false;
 			}
-		} else if(value=="Choropleth"){
+		} else if(chartType=="Choropleth"){
 			if(xArray.length>1 || yArray.length>1 || zArray.length>1){
 				responseMessage("Invalid data for Latitude or Longitude or Data. Please add only one Alias to these Panes");
 				isValid=false;
@@ -921,21 +930,15 @@ circle {
 						<td align="left" rowspan="2">
 						<table frame="border">
 							<tr>	<td width="150px" align="center">
-										<table id="dimensionList" class="container">
-											<tbody align="center">
-												<tr>
-													<td width="150px"><b>Dimensions</b></td>
-												</tr>
-											</tbody>
-										</table>
+										<div id="dimensionList" class="container" style="float:center;" align="center">
+											<b>Dimensions</b>
+										</div>
+											
+										
 							<br />
-										<table id="measuresList" class="container">
-											<tbody align="center">
-												<tr>
-													<td width="150px"><b>Measures</b><td>
-												</tr>
-											</tbody>
-										</table>
+										<div id="measuresList" class="container" style="float:center;" align="center">
+													<b>Measures</b>
+										</div>
 							</table></td>
 						<td align="center">
 							<table id="reportTypeTable" style="visibility: hidden;">
@@ -945,7 +948,15 @@ circle {
 										dojoType="dijit.form.Select" onchange='changed(this.value)'>
 									</select> <br />
 									</td>
-								</tr>
+									
+									<td>									
+									 <div id="recordsPerPage">
+									&nbsp; Records per Page: &nbsp;
+									<input id="numRecordsPerPage" name="report.numRecordsPerPage" dojoType="dijit.form.NumberTextBox" style="width:52px" />
+									 </div> 
+									</td> 
+									
+									</tr>
 							</table></td>
 					</tr>
 					<tr>
@@ -957,9 +968,6 @@ circle {
 											<div id="xAxis" style="width: 100%">
 												<table id="xAxisNode" width=100% height=100%>
 													<tbody align="center">
-														<tr height=100%>
-															<th width=100%></th>
-														</tr>
 													</tbody>
 												</table>
 											</div></td>
@@ -967,9 +975,6 @@ circle {
 											<div id="yAxis" style="width: 100%">
 												<table id="yAxisNode" width=100% height=100%>
 													<tbody align="center">
-														<tr height=100%>
-															<th width=100%></th>
-														</tr>
 													</tbody>
 												</table>
 											</div>
