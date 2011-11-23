@@ -1,49 +1,44 @@
-Steps to import demo data in HBase
+Steps to export demo data in HBase
 
-1. Create demo tables in HBase
+1.Create tables in HBase
 
 hbase(main):006:0>  create 'stockDataComposite','price','spread','stats'
 hbase(main):007:0>  create 'stockDataSimple','data'   
 
-2. Now run hadoop jobs to export data to HBase tables. To run the jobs, please set HADOOP_HOME and HBASE_HOME
+2.Now you need to run hadoop jobs to export data to HBase tables, before that you need to set HADOOP_HOME and HBASE_HOME
+a. In First step you need to add all jars in $HBASE_HOME/lib to HADOOP_CLASSPATH for that add following line to $HADOOP_HOME/bin/hadoop file
 
-export HBASE_HOME=<path to HBase>
-export HADOOP_HOME=<path to hadoop>
-
-a. Add all jars in $HBASE_HOME/lib to HADOOP_CLASSPATH. Add following line to $HADOOP_HOME/bin/hadoop
-
+HBASE_HOME=<path to HBase folder>
 # add Hbase libs to CLASSPATH
 for f in $HBASE_HOME/lib/*.jar; do
   CLASSPATH=${CLASSPATH}:$f;
 done
 
-Note:- These lines will add hbase dependencies to your hadoop classpath. When your hbase is populated, you can comment these lines so that your hadoop classpath is not altered.
+Note:- These lines will add hbase dependencies to your hadoop classpath each time you run hadoop, So later you can comment these lines when you dont require
 
-b. Now copy exportComposite and exportSimple folders(kept parallel to this readme) to hdfs and run the jobs 
+b. Now you need to start hadoop cluster and put exportComposite and exportSimple folders(kept parallel to this readme) to hdfs 
 $HADOOP_HOME/bin/hadoop fs -put exportSimple /
 $HADOOP_HOME/bin/hadoop fs -put exportComposite /
 
 $HADOOP_HOME/bin/hadoop jar $HBASE_HOME/hbase-0.90.3.jar import stockDataSimple /exportSimple
 $HADOOP_HOME/bin/hadoop jar $HBASE_HOME/hbase-0.90.3.jar import stockDataComposite /exportComposite
 
-Above process will load demo data in HBase.
+Note:- Above process will load demo data in HBase If you want to load more data it can be done by following instructions given below.
 
-
-If you want to understand how the above data was created, please read on. The following section provides details on the
-scripts used to create the above data. It can also be helpful if you want to load more data or work with a different date range.
-
-To download and populate stock data.
-
+Instructions to download and populate stock data.
 1. Fetch stock BSE data from the BSE website for a particular date range by executing createTableData.py.
+For example:
+nube@nube-desktop:~$ cd <BseStock folder path>
+
+nube@nube-desktop:~/crux/BseStock$ ls
+createTableData.py  downloadBseData.py  PopulateBseData.java  README.txt  stockIdsList.txt
 
 nube@nube-desktop:~/crux/BseStock$ ./createTableData.py
 
-The above script runs with default arguments and downloads a prespecified stock list in given date range. 
-
-If you need, you can specify arguments like in example done below. 
+Note:- if you execute above command default value will be considered for arguments specified. Else you can specify arguments like in example done below. 
 
  Arguments required are 
-a. filePath to a file which has the list of stockIds. Data for these stocks will be downloaded. Sample is stockIdsList.txt
+a. filePath to a file which has the list of stockIds. Data for these stocks will be downloaded. 
 b. startDate in MM/dd/yyyy format
 c. endDate in MM/dd/yyyy format
 d. outputPath where these files will be saved after download.
@@ -51,69 +46,61 @@ d. outputPath where these files will be saved after download.
 nube@nube-desktop:~/crux/BseStock$ ./createTableData.py ./stockIdsList.txt 01/06/2011 05/06/2011 output
 
 The above command will fetch files for all stockIds listed in stockIdsList.txt kept parallel to script in BseStock folder. 
-The files will be copied to output directory. Each stock's data will be saved with the name of the stockIds. 
-Then script concatenates stockId with date(yyyyMMdd), which can be used later as the rowkey while loading.
+The files will be copied to 'downloadedFiles' named folder in same directory from where you run script, Each stock's data will be saved with the name of the stockIds. Then script run manipulation function on downloaded data so that it can concatenate stockId with date(yyyyMMdd), which can be used later as the rowkey while loading.
 
-2. We now want to save this data in HBase. Let us create a table in HBase stockData with column families price, spread and stats
+3. We now want to save this data in HBase. Let us create a table in HBase stockData with column families price, spread and stats
 
 On the hbase shell, this can be done as follows:
 create 'stockDataSimple','data'
 
-3. Now that the data is downloaded and prepared, we are ready to import it into HBase.
+4. Now that the data is downloaded and prepared, we are ready to import it into HBase.
 
-please set HADOOP_HOME and HBASE_HOME
+a. In First step you need to add all jars in $HBASE_HOME/lib to HADOOP_CLASSPATH for that add following line to $HADOOP_HOME/bin/hadoop file
 
-export HBASE_HOME=<path to HBase>
-export HADOOP_HOME=<path to hadoop>
-
-a. Add all jars in $HBASE_HOME/lib to HADOOP_CLASSPATH. Add following line to $HADOOP_HOME/bin/hadoop
-
+HBASE_HOME=<path to HBase folder>
 # add Hbase libs to CLASSPATH
 for f in $HBASE_HOME/lib/*.jar; do
   CLASSPATH=${CLASSPATH}:$f;
 done
 
-Note:- These lines will add hbase dependencies to your hadoop classpath. When your hbase is populated, you can comment these lines so that your hadoop classpath is not altered.
+Note:- These lines will add hbase dependencies to your hadoop classpath each time you run hadoop, So later you can comment these lines when you dont require
 
-b. Load data in hbase:
+6. Load data in hbase:-
 
-To put data as strings, 
+To put data as rowKey string :- 
 
-- Run importtsv command through hadoop to prepare data for bulk load in HBase
+a. Run importtsv command through hadoop to prepare data for bulk load in HBase(First set HBASE_HOME)
 
-$HADOOP_HOME/bin/hadoop jar $HBASE_HOME/hbase-0.90.3.jar importtsv -Dimporttsv.columns=HBASE_ROW_KEY,data:openPrice,data:highPrice,data:lowPrice,data:closePrice,data:wap,data:numShares,data:numTrades,data:turnOver,data:highLow,data:closeOpen -Dimporttsv.separator=","  -Dimporttsv.bulk.output=outputHBase stockDataSimple output
+$HADOOP_HOME/bin/hadoop jar $HBASE_HOME/hbase-0.90.3.jar importtsv -Dimporttsv.columns=HBASE_ROW_KEY,data:openPrice,data:highPrice,data:lowPrice,data:closePrice,data:wap,data:numShares,data:numTrades,data:turnOver,data:highLow,data:closeOpen -Dimporttsv.separator=","  -Dimporttsv.bulk.output=outputHBase stockDataSimple /user/nube/hbaseData/
 
 -Dimporttsv.columns is format of table.
 -Dimporttsv.separator is to define separator in dataFile
 -Dimporttsv.bulk.output is to define outputPath for this job
 stockDataSimple is tablename for which we are preparing data
-output is the full path to the directory where files generated by createTableData.py are kept
+/user/nube/hbaseData/ this define inputPath (is the path to the directory where files generated by createTableData.py is kept).
 
-- Run completebulkload command through hadoop to load data in HBase
+b.Run completebulkload command through hadoop to load data in HBase
 $HADOOP_HOME/bin/hadoop jar $HBASE_HOME/hbase-0.90.3.jar completebulkload /user/nube/outputHBase stockDataSimple
 
-/user/nube/outputHBase is output of importtsv
-stockData is tablename where we want to insert data.
+/user/nube/outputHBase this define inputPath(is output of above step).
+stockData is tablename where we wanna insert data.
 Note: In this method all data is inserted as String type.
 
 OR
 
-To put data as composite rowKey stockId(as dataType string), date(as dataType long) both concatenated. 
-In this step all data inserted in table stockDataComposite is Float type except rowkey as composite key, 
-numShares and numTrades as long types
- 
-a. Create table in HBase. On the shell,
+To put data as composite rowKey stockId(as dataType string), date(as dataType long) both concatenated :- 
+a.Create table in HBase. On the shell,
 
 create 'stockDataComposite','price','spread','stats'
 
-b. Execute java program PopulateBseData.java, first compile by adding hbase-0.90.3.jar, hadoop-core-0.20.2.jar to classpath of java.
+b.Execute java program PopulateBseData.java, first compile by adding hbase-0.90.3.jar, hadoop-core-0.20.2.jar to claspath of java.
  
 nube@nube-desktop:~/project/crux/BseStock$ export CLASSPATH=$CLASSPATH:../hadoop-0.20.2/hadoop-0.20.2-core.jar:../hbase-0.90.3/hbase-0.90.3.jar
 nube@nube-desktop:~/project/crux/BseStock$ javac PopulateBseData.java
  
-To run, you need to add more jars to java classpath - commons-logging-1.1.1.jar, zookeeper-3.3.2.jar and log4j-1.2.16.jar
-This code takes one argument - the location where the downloaded data from the python script is kept.
+Once compiled to run this program you need to add few more jars to java classpath they are commons-logging-1.1.1.jar, zookeeper-3.3.2.jar and log4j-1.2.16.jar, this code takes one argument inputpath i.e. outputPath of step 1 in this README.
+Note:in this step all data inserted in table stockDataComposite as Float type except rowkey as composite key, numShares and numTrades as long type.
 
 nube@nube-desktop:~/project/crux/BseStock$ java PopulateBseData ./output 
 
-output is the path to the directory where files generated by createTableData.py is kept.
+inputPath: is the path to the directory where files generated by createTableData.py is kept.
