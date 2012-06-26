@@ -1,0 +1,329 @@
+body {
+  text-rendering: optimizeLegibility;
+}
+
+svg {
+  display: block;
+  overflow: hidden;
+}
+
+code, tt, pre {
+  font-family: Courier;
+}
+
+p + p {
+  text-indent: 2em;
+  margin-top: -1.5em;
+}
+
+form p + p {
+  text-indent: 0;
+}
+
+.top {
+  padding-top: 15px;
+}
+
+.top a {
+  margin-right: 20px;
+}
+
+.top a, a.bold {
+  font-weight: bold;
+  line-height: 100%;
+}
+
+.blurb {
+    font-size: 22px;
+}
+.light, .sidebar, .sidebar h4, .blurb, .credits, #copy {
+    font-family: "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Arial,Helvetica,sans-serif;
+    font-weight: 300;
+}
+img.ex {
+    border: 0 none;
+    height: 140px;
+    margin-bottom: 2px;
+    margin-right: 2px;
+    padding: 0;
+    width: 140px;
+}
+.logo img, .logo svg, img.ex {
+    float: left;
+}
+.svg .logo img {
+    display: none;
+}
+.logo .poly {
+    fill: none;
+    stroke: black;
+}
+.logo .maps {
+    fill: black;
+    stroke: none;
+}
+.hi {
+    background: none repeat scroll 0 0 #FFFF99;
+}
+.sidebar {
+    position: absolute;
+}
+.sidebar h4 {
+    color: #AAAAAA;
+    text-align: right;
+}
+.sidebar ul {
+    list-style-type: none;
+    margin-right: 0;
+    text-align: right;
+}
+.credits {
+    background: -moz-linear-gradient(center top , rgba(255, 255, 255, 0), #FFFFFF 30%) repeat scroll 0 0 transparent;
+    bottom: 0;
+    padding-bottom: 1em;
+    padding-top: 2em;
+    position: fixed;
+}
+dl.function dt, dl.function i {
+    font-family: Courier;
+}
+dl.function i {
+    color: #993366;
+}
+div#map {
+    background: none repeat scroll 0 0 #EEEEEE;
+    border: 4px solid #CCCCCC;
+    height: 500px;
+    position: relative;
+}
+#copy {
+    color: #999999;
+    font-size: 12px;
+    height: 1em;
+}
+.compass .back {
+    fill: #EEEEEE;
+    fill-opacity: 0.8;
+}
+.compass .fore {
+    stroke: #999999;
+    stroke-width: 1.5px;
+}
+.compass rect.back.fore {
+    fill: #999999;
+    fill-opacity: 0.3;
+    shape-rendering: crispedges;
+    stroke: #EEEEEE;
+    stroke-width: 1px;
+}
+.compass .direction {
+    fill: none;
+}
+.compass .chevron {
+    fill: none;
+    stroke: #999999;
+    stroke-width: 5px;
+}
+.compass .zoom .chevron {
+    stroke-width: 4px;
+}
+.compass .active .chevron, .compass .chevron.active {
+    stroke: #FFFFFF;
+}
+.compass.active .active .direction {
+    fill: #999999;
+}
+.syntax pre {
+    margin-top: 0;
+    overflow: hidden;
+}
+.hll {
+    background-color: #FFFFCC;
+}
+.c {
+    color: #999988;
+    font-style: italic;
+}
+.err {
+    background-color: #E3D2D2;
+    color: #A61717;
+}
+.k {
+    font-weight: bold;
+}
+.o {
+    font-weight: bold;
+}
+.cm {
+    color: #999988;
+    font-style: italic;
+}
+.cp {
+    color: #999999;
+    font-weight: bold;
+}
+.c1 {
+    color: #999988;
+    font-style: italic;
+}
+.cs {
+    color: #999999;
+    font-style: italic;
+    font-weight: bold;
+}
+.gd {
+    background-color: #FFDDDD;
+    color: #000000;
+}
+.ge {
+    font-style: italic;
+}
+.gr {
+    color: #AA0000;
+}
+.gh {
+    color: #999999;
+}
+.gi {
+    background-color: #DDFFDD;
+    color: #000000;
+}
+.go {
+    color: #888888;
+}
+.gp {
+    color: #555555;
+}
+.gs {
+    font-weight: bold;
+}
+.gu {
+    color: #AAAAAA;
+}
+.gt {
+    color: #AA0000;
+}
+.kc {
+    font-weight: bold;
+}
+.kd {
+    font-weight: bold;
+}
+.kn {
+    font-weight: bold;
+}
+.kp {
+    font-weight: bold;
+}
+.kr {
+    font-weight: bold;
+}
+.kt {
+    color: #445588;
+    font-weight: bold;
+}
+.m {
+    color: #009999;
+}
+.s {
+    color: #BB8844;
+}
+.na {
+    color: #008080;
+}
+.nb {
+    color: #999999;
+}
+.nc {
+    color: #445588;
+    font-weight: bold;
+}
+.no {
+    color: #008080;
+}
+.ni {
+    color: #800080;
+}
+.ne {
+    color: #990000;
+    font-weight: bold;
+}
+.nf {
+    color: #990000;
+    font-weight: bold;
+}
+.nn {
+    color: #555555;
+}
+.nt {
+    color: #000080;
+}
+.nv {
+    color: #008080;
+}
+.ow {
+    font-weight: bold;
+}
+.w {
+    color: #BBBBBB;
+}
+.mf {
+    color: #009999;
+}
+.mh {
+    color: #009999;
+}
+.mi {
+    color: #009999;
+}
+.mo {
+    color: #009999;
+}
+.sb {
+    color: #BB8844;
+}
+.sc {
+    color: #BB8844;
+}
+.sd {
+    color: #BB8844;
+}
+.s2 {
+    color: #BB8844;
+}
+.se {
+    color: #BB8844;
+}
+.sh {
+    color: #BB8844;
+}
+.si {
+    color: #BB8844;
+}
+.sx {
+    color: #BB8844;
+}
+.sr {
+    color: #808000;
+}
+.s1 {
+    color: #BB8844;
+}
+.ss {
+    color: #BB8844;
+}
+.bp {
+    color: #999999;
+}
+.vc {
+    color: #008080;
+}
+.vg {
+    color: #008080;
+}
+.vi {
+    color: #008080;
+}
+.il {
+    color: #009999;
+}
