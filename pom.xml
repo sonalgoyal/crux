@@ -184,18 +184,18 @@
           			<autocommit>true</autocommit>
 	  			<url>jdbc:mysql://localhost:3306/crux</url>
           			<username>root</username>
-          			<password>newpwd</password>
+          			<password>qwerty</password>
         		</configuration>
-        		<executions>
+        		<!--executions>
           			<execution>
 	   			 <id>drop</id>
             			<phase>process-test-resources</phase>
            			 <goals>
               				<goal>execute</goal>
             			</goals>
-           		 <!-- specific configuration for this execution -->
+           		 < specific configuration for this execution >
             			<configuration>
-              			<!-- specify your SQL commands, can be all of the following configurations -->
+              			< specify your SQL commands, can be all of the following configurations >
                				<sqlCommand>drop database if exists testCrux</sqlCommand>
                				<onError>continue</onError>
             			</configuration>
@@ -206,9 +206,9 @@
            			 <goals>
             				  <goal>execute</goal>
            			 </goals>
-            			 <!-- specific configuration for this execution -->
+            			 < specific configuration for this execution >
             			<configuration>
-              				<!-- specify your SQL commands, can be all of the following configurations -->
+              				< specify your SQL commands, can be all of the following configurations >
                				<sqlCommand>create database testCrux</sqlCommand>
                				<onError>continue</onError>
             			</configuration>
@@ -219,9 +219,9 @@
            			 <goals>
              			 <goal>execute</goal>
             			 </goals>
-            			<!-- specific configuration for this execution -->
+            			< specific configuration for this execution >
            			 <configuration>
-              			<!-- specify your SQL commands, can be all of the following configurations -->
+              			< specify your SQL commands, can be all of the following configurations >
              			<url>jdbc:mysql://localhost:3306/testCrux</url>
              			 <srcFiles>
                 			<srcFile>${basedir}/db/schema.sql</srcFile>
@@ -229,7 +229,7 @@
               			 <onError>continue</onError>
             			</configuration>
          		 </execution>
-       		</executions>
+       		</executions -->
       		</plugin>
 		   <plugin>
        			 <groupId>org.codehaus.mojo</groupId>
@@ -276,5 +276,6 @@
       			</plugin>
 
            </plugins>
+           <finalName>crux</finalName>
     	</build>
 </project>
