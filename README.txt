@@ -79,24 +79,27 @@ For example,
 
 # Extra Java CLASSPATH elements.  Optional.
 # export HBASE_CLASSPATH=
-export HBASE_CLASSPATH="/home/nube/crux.jar"
+export HBASE_CLASSPATH="/home/crux/target/crux.jar"
 
-Restart hbase. 
+Restart hbase 
+Go to Hbase home/bin and then enter start-hbase.sh 
+Then start hbase shell. 
 This is needed as Crux has built in filters which work on the server side to select the data you choose. 
 
-d. Drop the war in tomcat/webapps and start tomcat.  
-e. Go to http://machine:8080/crux and define your connection, mapping and report.
+d. Drop the war in tomcat/webapps and start tomcat by going to tomcat home/bin and enter startup.sh  
+e. Go to http://localhost:8080/crux and define your connection, mapping and report.
 
 Instructions to build crux with MVN
 -----------------------------------
 A. Update hibernate.cfg.xml(crux/src/main/resources/ & crux/src/test/resources/) with your MySQL connection.url, connection.username and connection.password.
 B. Update pom.xml define configurations(driver, url, username, password) for sql-maven-plugin.
-D. Download struts2-fullhibernatecore-plugin-1.4-GA.jar, and add to your local repository by executing command given below.
-	mvn install:install-file -DgroupId=com.google.code -DartifactId=struts2-fullhibernatecore-plugin -Dversion=1.4-GA -Dpackaging=jar 
-	-Dfile=< path/to/struts2-fullhibernatecore-plugin-1.4-GA.jar >
-C. Build and create war:
-	mvn install
-	(crux-version.war and crux-vesion.jar is created in crux/build/)
+C. Download struts2-fullhibernatecore-plugin-2.2.2-GA.jar , and add to your local repository by executing command given below.
+	mvn install:install-file -DgroupId=com.google.code -DartifactId=struts2-fullhibernatecore-plugin -Dversion=2.2.2-GA -Dpackaging=jar 
+	-Dfile=< path/to/struts2-fullhibernatecore-plugin-2.2.2-GA.jar >
+D. Build and create war:
+	Go to the directory where pom.xml is stored and then enter the following command
+	mvn install -DskipTests(in order to skip tests)
+	(crux.war and crux.jar is created in crux/target/)
 	
 
 Instructions to run test cases of crux with MVN
