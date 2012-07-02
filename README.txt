@@ -93,7 +93,8 @@ Instructions to build crux with MVN
 -----------------------------------
 A. Update hibernate.cfg.xml(crux/src/main/resources/ & crux/src/test/resources/) with your MySQL connection.url, connection.username and connection.password.
 B. Update pom.xml define configurations(driver, url, username, password) for sql-maven-plugin.
-C. Download struts2-fullhibernatecore-plugin-2.2.2-GA.jar , and add to your local repository by executing command given below.
+C. Download struts2-fullhibernatecore-plugin-2.2.2-GA.jar from http://code.google.com/p/full-hibernate-plugin-for-struts2/downloads/detail?name=struts2-fullhibernatecore-plugin-2.2.2-GA.jar&can=2&q=
+	and add to your local repository by executing command given below.
 	mvn install:install-file -DgroupId=com.google.code -DartifactId=struts2-fullhibernatecore-plugin -Dversion=2.2.2-GA -Dpackaging=jar 
 	-Dfile=< path/to/struts2-fullhibernatecore-plugin-2.2.2-GA.jar >
 D. Build and create war:

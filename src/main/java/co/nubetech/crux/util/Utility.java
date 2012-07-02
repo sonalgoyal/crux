@@ -42,7 +42,7 @@ public class Utility {
 			conf.set("hbase.zookeeper.quorum", host);
 			conf.set("hbase.zookeeper.property.clientPort", port);
 		}
-		logger.debug("Returning Configuration: " + conf);
+		logger.debug("Returning Configuration: ");
 		return conf;
 	}
 

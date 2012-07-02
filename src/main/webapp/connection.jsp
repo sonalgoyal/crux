@@ -355,13 +355,13 @@ function testPattern(value, constraints) {
 	var length = hbaseRestServerPropertyValue.length;
 	
 	var regExp = new RegExp("[a-zA-Z0-9.-]+:[0-9]");
+	var returnValue = true;
 	
-	for(i=0;i<length;i++){
+	for( i=0; i<length; i++){
 		//hbaseRestServerPropertyValue[i].match(regExp)
 		if(regExp.test(hbaseRestServerPropertyValue[i])){
 			var integerValue = hbaseRestServerPropertyValue[i].split(":")[1];
-			if (integerValue == parseInt(integerValue) && integerValue.length < 5) {}
-			else{
+			if (integerValue != parseInt(integerValue)) {
 				returnValue = false;
 			}
 		}else{

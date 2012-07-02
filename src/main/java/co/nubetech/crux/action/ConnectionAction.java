@@ -177,6 +177,7 @@ public class ConnectionAction extends CruxAction {
 		} catch (CruxException e) {
 			error.setMessage(e.getMessage());
 		} catch (Exception e) {
+			e.printStackTrace();
 			error.setMessage("Something Wrong has happened");
 		}
 		initializeConnections(); // for dataGrid updation.
@@ -199,6 +200,7 @@ public class ConnectionAction extends CruxAction {
 			// servletContext.setAttribute(CruxConstants.HBASE_POOL, pool);
 
 		} catch (CruxException e) {
+			e.printStackTrace();
 			error.setMessage(e.getMessage());
 		} catch (Exception e) {
 			error.setMessage("Something Wrong has happened");
@@ -297,6 +299,7 @@ public class ConnectionAction extends CruxAction {
 			}
 
 		} catch (CruxException e) {
+			e.printStackTrace();
 			error.setMessage(e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
