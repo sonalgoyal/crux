@@ -224,9 +224,9 @@ public class TestHBaseFacade {
 		connection = new Connection();
 		ConnectionProperty connectionProperty = new ConnectionProperty();
 		connectionProperty.setProperty(CruxConstants.HBASE_ZOOKEEPER_PROPERTY);
-		logger.debug("Port is: " + TEST_UTIL.getZkCluster().getClientPort());
+		logger.debug("Port is: " + TEST_UTIL.getConfiguration().get("hbase.zookeeper.property.clientPort"));
 		connectionProperty.setValue("localhost:"
-				+ TEST_UTIL.getZkCluster().getClientPort());
+				+ TEST_UTIL.getConfiguration().get("hbase.zookeeper.property.clientPort"));
 		connection.addProperty(connectionProperty);
 
 		pool = new HBaseConnectionPool(factory);

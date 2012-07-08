@@ -64,7 +64,7 @@ Prerequisies:
 - A running MySQL instance
 - A servlet container like Tomcat.
 - Java installed. We used JDK 1.6
-- MVN
+- Maven
 
 Once you have the prerequisites
 
@@ -73,7 +73,7 @@ a. Create database for crux in MySQL
 	use crux;
 Run the schema (crux/db/schema.sql) file in MySQL. On mysql prompt, source <path to file>/schema.sql
 This creates the schema required for saving the report definitions.  
-b. Build crux(See instructions to build crux with MVN). 
+b. Build crux(See instructions to build crux with Maven). 
 c. Copy crux.jar to HBase Home/lib or edit HBase home/conf/hbase-env.sh and add the jars location to the file. 
 For example,
 
@@ -89,7 +89,7 @@ This is needed as Crux has built in filters which work on the server side to sel
 d. Drop the war in tomcat/webapps and start tomcat by going to tomcat home/bin and enter startup.sh  
 e. Go to http://localhost:8080/crux and define your connection, mapping and report.
 
-Instructions to build crux with MVN
+Instructions to build crux with Maven
 -----------------------------------
 A. Update hibernate.cfg.xml(crux/src/main/resources/ & crux/src/test/resources/) with your MySQL connection.url, connection.username and connection.password.
 B. Update pom.xml and define db configurations(driver, url, username, password specified under properties section).
@@ -97,13 +97,18 @@ C. Download struts2-fullhibernatecore-plugin-2.2.2-GA.jar from http://code.googl
 	and add to your local repository by executing command given below.
 	mvn install:install-file -DgroupId=com.google.code -DartifactId=struts2-fullhibernatecore-plugin -Dversion=2.2.2-GA -Dpackaging=jar 
 	-Dfile=< path/to/struts2-fullhibernatecore-plugin-2.2.2-GA.jar >
-D. Build and create war:
-	Go to the directory where pom.xml is stored and then enter the following command
+D. Crux can be built against HBase 0.90.3(default) or against HBase 0.92.1. 
+	Crux artifacts crux.war and crux.jar are created in crux/target/
+	
+	To build and create war against 0.90.3:
+	Go to the base directory where pom.xml is located and enter
 	mvn install -DskipTests(in order to skip tests) or mvn install to run tests and create war
-	(crux.war and crux.jar is created in crux/target/)
+		
+	For 0.92.1
+	mvn -Dhbase92 install
 	
 
-Instructions to run test cases of crux with MVN
+Instructions to run test cases of crux with Maven
 -----------------------------------------------
 mvn test
 

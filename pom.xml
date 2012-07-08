@@ -41,8 +41,7 @@
 			<activation>
 				<activeByDefault>true</activeByDefault>
 				<property>
-					<name>hadoop.profile</name>
-					<value>22</value>
+					<name>apacheHbase90</name>
 				</property>
 			</activation>
 			<properties>
@@ -81,23 +80,78 @@
 				</dependency>
 			</dependencies>
 		</profile>
+		<profile>
+			<id>cdh4</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>cdh4</name>
+				</property>
+			</activation>
+			<properties>
+				<hbase.version>0.92.1-cdh4.0.0b2</hbase.version>
+				<hadoop.version>0.23.1-cdh4.0.0b2</hadoop.version>
+				<slf4j.version>1.5.8</slf4j.version>
+			</properties>
+			<repositories>
+		<repository>
+			<id>Cloudera</id>
+			<name>Cloudera Repository</name>
+			<url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+		</repository>
+		</repositories>
+			<dependencies>
+				<dependency>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase</artifactId>
+					<version>${hbase.version}</version>
+					<exclusions>
+						<exclusion>
+							<groupId>org.slf4j</groupId>
+							<artifactId>slf4j-api</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>org.slf4j</groupId>
+							<artifactId>slf4j-log4j12</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase</artifactId>
+					<version>${hbase.version}</version>
+					<classifier>tests</classifier>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-extras</artifactId>
+					<version>${hadoop.version}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-hdfs-test</artifactId>
+					<version>${hadoop.version}</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
 	</profiles>
 
 	<dependencies>
 		<dependency>
-							<groupId>org.slf4j</groupId>
-							<artifactId>slf4j-api</artifactId>
-							<version>${slf4j.version}</version>	
-							<scope>runtime</scope>
-							
-							
-						
-			</dependency>
-			<dependency>	<groupId>org.slf4j</groupId>
-							<artifactId>slf4j-log4j12</artifactId>
-							<version>${slf4j.version}</version>	
-							<scope>runtime</scope>
-						</dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
 		<dependency>
 			<groupId>commons-pool</groupId>
 			<artifactId>commons-pool</artifactId>
@@ -136,7 +190,7 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.17</version>
 			<scope>runtime,test</scope>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-c3p0</artifactId>
