@@ -131,6 +131,13 @@
 				</dependency>
 				<dependency>
 					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-common</artifactId>
+					<version>${hadoop.version}</version>
+					<classifier>tests</classifier>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.hadoop</groupId>
 					<artifactId>hadoop-test</artifactId>
 					<version>${hadoop.test.version}</version>
 					<scope>test</scope>
@@ -139,6 +146,13 @@
 					<groupId>org.apache.hadoop</groupId>
 					<artifactId>hadoop-hdfs</artifactId>
 					<version>${hadoop.version}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-hdfs</artifactId>
+					<version>${hadoop.version}</version>
+					<classifier>tests</classifier>
 					<scope>test</scope>
 				</dependency>				
 			</dependencies>
