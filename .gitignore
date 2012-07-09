@@ -1,6 +1,4 @@
-.classpath
-.project
-.settings/
+.metadata/
 branches/
 build/
 deploy/
