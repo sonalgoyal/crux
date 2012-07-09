@@ -89,8 +89,9 @@
 				</property>
 			</activation>
 			<properties>
-				<hbase.version>0.92.1-cdh4.0.0b2</hbase.version>
-				<hadoop.version>0.23.1-cdh4.0.0b2</hadoop.version>
+				<hbase.version>0.92.1-cdh4.0.1</hbase.version>
+				<hadoop.version>2.0.0-cdh4.0.1</hadoop.version>
+				<hadoop.test.version>2.0.0-mr1-cdh4.0.1</hadoop.test.version>
 				<slf4j.version>1.5.8</slf4j.version>
 			</properties>
 			<repositories>
@@ -125,16 +126,21 @@
 				</dependency>
 				<dependency>
 					<groupId>org.apache.hadoop</groupId>
-					<artifactId>hadoop-extras</artifactId>
+					<artifactId>hadoop-common</artifactId>
 					<version>${hadoop.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-test</artifactId>
+					<version>${hadoop.test.version}</version>
 					<scope>test</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.hadoop</groupId>
-					<artifactId>hadoop-hdfs-test</artifactId>
+					<artifactId>hadoop-hdfs</artifactId>
 					<version>${hadoop.version}</version>
 					<scope>test</scope>
-				</dependency>
+				</dependency>				
 			</dependencies>
 		</profile>
 	</profiles>
