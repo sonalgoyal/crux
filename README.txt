@@ -104,8 +104,8 @@ D. Crux can be built against HBase 0.90.3(default) or against HBase 0.92.1.
 	Go to the base directory where pom.xml is located and enter
 	mvn install -DskipTests(in order to skip tests) or mvn install to run tests and create war
 		
-	For 0.92.1
-	mvn -Dhbase92 install
+	For CDH4
+	mvn -Dcdh4 install
 	
 
 Instructions to run test cases of crux with Maven
