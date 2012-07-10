@@ -1,3 +1,7 @@
+.externalToolBuilders/
+.classpath
+.project
+.settings/
 .metadata/
 branches/
 build/
