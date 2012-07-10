@@ -8,3 +8,4 @@ build/
 deploy/
 tags/
 target/
+WebContent/META-INF/MANIFEST.MF
