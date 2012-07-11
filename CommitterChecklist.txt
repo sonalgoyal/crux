@@ -1,0 +1,61 @@
+1. HBase: http://hbase.apache.org/ For an Overview and http://hbase.apache.org/book/quickstart.html for installation. Install HBase version 0.90.3 for now, standalone version from the link http://archive.apache.org/dist/hbase/hbase-0.90.3/. You will have to add the following to conf/hbase-site.xml :
+
+<configuration>
+  <property>
+    <name>hbase.rootdir</name>
+    <value>file:///<yourhome>/hbase</value>
+  </property>
+</configuration>
+
+Now run the hbase shell. 
+
+Create test table 
+hbase(main):003:0> create 'test', 'cf'
+0 row(s) in 1.2200 seconds
+hbase(main):003:0> list 'test'
+..
+1 row(s) in 0.0550 seconds
+hbase(main):004:0> put 'test', 'row1', 'cf:a', 'value1'
+0 row(s) in 0.0560 seconds
+hbase(main):005:0> put 'test', 'row2', 'cf:b', 'value2'
+0 row(s) in 0.0370 seconds
+hbase(main):006:0> put 'test', 'row3', 'cf:c', 'value3'
+0 row(s) in 0.0450 seconds
+
+Do some scan 
+
+hbase(main):007:0> scan 'test'
+ROW        COLUMN+CELL
+row1       column=cf:a, timestamp=1288380727188, value=value1
+row2       column=cf:b, timestamp=1288380738440, value=value2
+row3       column=cf:c, timestamp=1288380747365, value=value3
+3 row(s) in 0.0590 seconds.
+
+2. Download Apache Tomcat(7.0.29) from http://tomcat.apache.org/download-70.cgi
+
+3. Setup MySQL Server on your machine. This should be through sudo apt-get install mysql-client mysql-server 
+
+4. Install maven2 on you system through sudo apt-get install maven2
+
+5. Create account on git and fork crux from https://github.com/sonalgoyal/crux.
+Now clone you fork .
+Run the following command git clone https://github.com/username/crux.git
+
+6. Remember to 
+ 
+git remote add upstream https://github.com/sonalgoyal/crux.git
+# Assigns the original repo to a remote called "upstream"
+ 
+git fetch upstream
+
+For further help on git, Go to the following link : https://help.github.com/articles/fork-a-repo
+
+7. 
+Follow the Crux README.txt to setup Crux. 
+
+8. Install eclipse . Go to Window -> Preferences -> Server -> Runtime Environment and then click on Add.
+Select Apache Tomcat v7.0 . Then select the place where you have installed apache-tomcat 7.0.29 and then Select Finish .
+
+9. Next go to Help -> Eclipse Marketplace and then Search Maven and then install Maven Integration for Eclipse WTP.
+
+10. Now go to File -> New -> Other -> Maven -> Maven Project and select crux.
