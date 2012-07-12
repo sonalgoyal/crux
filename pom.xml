@@ -28,12 +28,21 @@
 	</developers>
 	<properties>
 		<compileSource>1.6</compileSource>
-		<database.host>localhost</database.host>
-		<database.port>3306</database.port>
-		<database.name>crux</database.name>
-		<database.testDbName>testCrux</database.testDbName>
-		<database.user>root</database.user>
-		<database.password>root</database.password>
+		<database.host>${host}</database.host>
+		<database.port>${port}</database.port>
+		<database.name>${name}</database.name>
+		<database.testDbName>${testDbName}</database.testDbName>
+		<database.user>${user}</database.user>
+		<database.password>${password}</database.password>
+		<commons-pool>1.5.6</commons-pool>
+		<mockito-core>1.8.5</mockito-core>
+		<struts2-fullhibernatecore-plugin>2.2.2-GA</struts2-fullhibernatecore-plugin>
+		<struts2-core>2.2.3</struts2-core>
+		<struts2-json-plugin>2.2.3</struts2-json-plugin>
+		<struts2-json-plugin>4.10</struts2-json-plugin>
+		<mysql-connector-java>5.1.17</mysql-connector-java>
+		<hibernate-c3p0></hibernate-c3p0>
+		<maven-compiler-plugin.version></maven-compiler-plugin.version>
 	</properties>
 	<profiles>
 		<profile>
@@ -265,6 +274,7 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>8.0.1.v20110908</version>
 				<configuration>
+				     <webApp>${basedir}/target/crux.war</webApp>
 					<webAppSourceDirectory>${basedir}/src/staticfiles</webAppSourceDirectory>
 					<webAppConfig>
 						<contextPath>/</contextPath>
@@ -287,9 +297,9 @@
 				<configuration>
 					<driver>com.mysql.jdbc.Driver</driver>
 					<autocommit>true</autocommit>
-					<url>jdbc:mysql://${database.host}:${database.port}/${database.name}</url>
-					<username>${database.user}</username>
-					<password>${database.password}</password>
+					<url>jdbc:mysql://${host}:${port}/${name}</url>
+					<username>${user}</username>
+					<password>${password}</password>
 				</configuration>
 				<executions>
 					<execution>
@@ -353,6 +363,21 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!--plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>tomcat-maven-plugin</artifactId>
+                <configuration>
+                   <warFile>${basedir}/target/crux.war</warFile>
+                </configuration>
+            </plugin-->
+            <!--plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>maven-jetty-plugin</artifactId>
+                 <version>6.1.7</version>
+                <configuration>
+                  
+                </configuration>
+            </plugin-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -373,6 +398,24 @@
 					</execution>
 				</executions>
 			</plugin>
+			 <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <version>1.0-alpha-1</version>
+            <executions>
+                <execution>
+                    <phase>initialize</phase>
+                    <goals>
+                        <goal>read-project-properties</goal>
+                    </goals>
+                    <configuration>
+                        <files>
+                            <file>${basedir}/hibernate.properties</file>
+                        </files>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
 
 		</plugins>
 		<finalName>crux</finalName>
