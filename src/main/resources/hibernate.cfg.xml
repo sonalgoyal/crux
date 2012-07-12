@@ -17,9 +17,9 @@
 
 		<!-- Database connection settings -->
 		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="connection.url">jdbc:mysql://localhost:3306/crux</property>
-		<property name="connection.username">root</property>
-		<property name="connection.password">root</property>
+		<property name="connection.url">jdbc:mysql://${host}:${port}/${name}</property>
+		<property name="connection.username">${user}</property>
+		<property name="connection.password">${password}</property>
 		
 		<!-- JDBC connection pool (use the built-in) -->
 		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
