@@ -34,15 +34,25 @@
 		<database.testDbName>${testDbName}</database.testDbName>
 		<database.user>${user}</database.user>
 		<database.password>${password}</database.password>
-		<commons-pool>1.5.6</commons-pool>
-		<mockito-core>1.8.5</mockito-core>
-		<struts2-fullhibernatecore-plugin>2.2.2-GA</struts2-fullhibernatecore-plugin>
-		<struts2-core>2.2.3</struts2-core>
-		<struts2-json-plugin>2.2.3</struts2-json-plugin>
-		<struts2-json-plugin>4.10</struts2-json-plugin>
-		<mysql-connector-java>5.1.17</mysql-connector-java>
-		<hibernate-c3p0></hibernate-c3p0>
-		<maven-compiler-plugin.version></maven-compiler-plugin.version>
+		<commons-pool.version>1.5.6</commons-pool.version>
+		<mockito-core.version>1.8.5</mockito-core.version>
+		<struts2-fullhibernatecore-plugin.version>2.2.2-GA</struts2-fullhibernatecore-plugin.version>
+		<struts2-core.version>2.2.3</struts2-core.version>
+		<struts2-json-plugin.version>2.2.3</struts2-json-plugin.version>
+		<junit.version>4.10</junit.version>
+		<mysql-connector-java.version>5.1.17</mysql-connector-java.version>
+		<hibernate-c3p0.version>3.6.7.Final</hibernate-c3p0.version>
+		<ehcache-core.version>2.4.5</ehcache-core.version>
+		<hibernate-validator.version>3.1.0.GA</hibernate-validator.version>
+		<hibernate-commons-annotations.version>3.2.0.Final</hibernate-commons-annotations.version>
+		<hibernate-core.version>3.6.7.Final</hibernate-core.version>
+		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+		<jetty-maven-plugin.version>8.0.1.v20110908</jetty-maven-plugin.version>
+		<sql-maven-plugin.version>1.5</sql-maven-plugin.version>
+		<mysql-connector-java.version>5.1.17</mysql-connector-java.version>
+		<cobertura-maven-plugin.version>2.5.1</cobertura-maven-plugin.version>
+		<maven-jar-plugin.version>2.3.2</maven-jar-plugin.version>
+		<properties-maven-plugin.version>1.0-alpha-1</properties-maven-plugin.version>
 	</properties>
 	<profiles>
 		<profile>
@@ -184,70 +194,70 @@
 		<dependency>
 			<groupId>commons-pool</groupId>
 			<artifactId>commons-pool</artifactId>
-			<version>1.5.6</version>
+			<version>${commons-pool.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>1.8.5</version>
+			<version>${mockito-core.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code</groupId>
 			<artifactId>struts2-fullhibernatecore-plugin</artifactId>
-			<version>2.2.2-GA</version>
+			<version>${struts2-fullhibernatecore-plugin.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.struts</groupId>
 			<artifactId>struts2-core</artifactId>
-			<version>2.2.3</version>
+			<version>${struts2-core.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.struts</groupId>
 			<artifactId>struts2-json-plugin</artifactId>
-			<version>2.2.3</version>
+			<version>${struts2-json-plugin.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.10</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.17</version>
+			<version>${mysql-connector-java.version}</version>
 			<scope>runtime,test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-c3p0</artifactId>
-			<version>3.6.7.Final</version>
+			<version>${hibernate-c3p0.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache-core</artifactId>
-			<version>2.4.5</version>
+			<version>${ehcache-core.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>3.1.0.GA</version>
+			<version>${hibernate-validator.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-commons-annotations</artifactId>
-			<version>3.2.0.Final</version>
+			<version>${hibernate-commons-annotations.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>3.6.7.Final</version>
+			<version>${hibernate-core.version}</version>
 		</dependency>
 	</dependencies>
 	<repositories>
@@ -262,7 +272,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
 					<source>${compileSource}</source>
 					<target>${compileSource}</target>
@@ -272,7 +282,7 @@
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>8.0.1.v20110908</version>
+				<version>${jetty-maven-plugin.version}</version>
 				<configuration>
 				     <webApp>${basedir}/target/crux.war</webApp>
 					<webAppSourceDirectory>${basedir}/src/staticfiles</webAppSourceDirectory>
@@ -285,12 +295,12 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>sql-maven-plugin</artifactId>
-				<version>1.5</version>
+				<version>${sql-maven-plugin.version}</version>
 				<dependencies>
 					<dependency>
 						<groupId>mysql</groupId>
 						<artifactId>mysql-connector-java</artifactId>
-						<version>5.1.17</version>
+						<version>${mysql-connector-java.version}</version>
 					</dependency>
 				</dependencies>
 				<!-- common configuration shared by all executions -->
@@ -349,7 +359,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.5.1</version>
+				<version>${cobertura-maven-plugin.version}</version>
 				<configuration>
 					<!--instrumentation> <ignores> <ignore>com.example.boringcode.*</ignore> 
 						</ignores> <excludes> <exclude>com/example/dullcode/**/*.class</exclude> 
@@ -370,18 +380,11 @@
                    <warFile>${basedir}/target/crux.war</warFile>
                 </configuration>
             </plugin-->
-            <!--plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>maven-jetty-plugin</artifactId>
-                 <version>6.1.7</version>
-                <configuration>
-                  
-                </configuration>
-            </plugin-->
+            
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>${maven-jar-plugin.version}</version>
 				<configuration>
 					<excludes>
 						<exclude>*.xml</exclude>
@@ -401,7 +404,7 @@
 			 <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>properties-maven-plugin</artifactId>
-            <version>1.0-alpha-1</version>
+            <version>${properties-maven-plugin.version}</version>
             <executions>
                 <execution>
                     <phase>initialize</phase>
