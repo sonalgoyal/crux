@@ -26,6 +26,7 @@
 			<interceptor-ref name="demoInterceptor"/>
 		</interceptor-stack>
 		</interceptors>
+		<default-action-ref name="welcome"/>
 		<action name="welcome" class="co.nubetech.crux.action.WelcomeAction"
 			method="welcome">
 			<result name="dashboard" type="chain">getDashBoard</result>

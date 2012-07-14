@@ -41,17 +41,17 @@
 		<struts2-json-plugin.version>2.2.3</struts2-json-plugin.version>
 		<junit.version>4.10</junit.version>
 		<mysql-connector-java.version>5.1.17</mysql-connector-java.version>
+		<hibernate-core.version>3.6.7.Final</hibernate-core.version>
 		<hibernate-c3p0.version>3.6.7.Final</hibernate-c3p0.version>
 		<ehcache-core.version>2.4.5</ehcache-core.version>
 		<hibernate-validator.version>3.1.0.GA</hibernate-validator.version>
 		<hibernate-commons-annotations.version>3.2.0.Final</hibernate-commons-annotations.version>
-		<hibernate-core.version>3.6.7.Final</hibernate-core.version>
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
 		<jetty-maven-plugin.version>8.0.1.v20110908</jetty-maven-plugin.version>
 		<sql-maven-plugin.version>1.5</sql-maven-plugin.version>
-		<mysql-connector-java.version>5.1.17</mysql-connector-java.version>
 		<cobertura-maven-plugin.version>2.5.1</cobertura-maven-plugin.version>
 		<maven-jar-plugin.version>2.3.2</maven-jar-plugin.version>
+		<maven-resources-plugin.version>2.5</maven-resources-plugin.version>
 		<properties-maven-plugin.version>1.0-alpha-1</properties-maven-plugin.version>
 	</properties>
 	<profiles>
@@ -114,12 +114,12 @@
 				<slf4j.version>1.5.8</slf4j.version>
 			</properties>
 			<repositories>
-		<repository>
-			<id>Cloudera</id>
-			<name>Cloudera Repository</name>
-			<url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
-		</repository>
-		</repositories>
+				<repository>
+					<id>Cloudera</id>
+					<name>Cloudera Repository</name>
+					<url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+				</repository>
+			</repositories>
 			<dependencies>
 				<dependency>
 					<groupId>org.apache.hbase</groupId>
@@ -173,7 +173,7 @@
 					<version>${hadoop.version}</version>
 					<classifier>tests</classifier>
 					<scope>test</scope>
-				</dependency>				
+				</dependency>
 			</dependencies>
 		</profile>
 	</profiles>
@@ -234,7 +234,7 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-c3p0</artifactId>
 			<version>${hibernate-c3p0.version}</version>
-			<scope>runtime</scope>
+			<scope>runtime,test</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
@@ -246,13 +246,13 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>${hibernate-validator.version}</version>
-			<scope>runtime</scope>
+			<scope>runtime,test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-commons-annotations</artifactId>
 			<version>${hibernate-commons-annotations.version}</version>
-			<scope>runtime</scope>
+			<scope>runtime,test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -284,7 +284,6 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jetty-maven-plugin.version}</version>
 				<configuration>
-				     <webApp>${basedir}/target/crux.war</webApp>
 					<webAppSourceDirectory>${basedir}/src/staticfiles</webAppSourceDirectory>
 					<webAppConfig>
 						<contextPath>/</contextPath>
@@ -321,7 +320,7 @@
 						<!-- specific configuration for this execution -->
 						<configuration>
 							<!-- specify your SQL commands, can be all of the following configurations -->
-							<sqlCommand>drop database if exists ${database.testDbName}</sqlCommand>
+							<sqlCommand>drop database if exists ${testDbName}</sqlCommand>
 							<onError>continue</onError>
 						</configuration>
 					</execution>
@@ -334,7 +333,7 @@
 						<!-- specific configuration for this execution -->
 						<configuration>
 							<!-- specify your SQL commands, can be all of the following configurations -->
-							<sqlCommand>create database if not exists ${database.testDbName}</sqlCommand>
+							<sqlCommand>create database if not exists ${testDbName}</sqlCommand>
 							<onError>continue</onError>
 						</configuration>
 					</execution>
@@ -347,7 +346,7 @@
 						<!-- specific configuration for this execution -->
 						<configuration>
 							<!-- specify your SQL commands, can be all of the following configurations -->
-							<url>jdbc:mysql://${database.host}:${database.port}/${database.testDbName}</url>
+							<url>jdbc:mysql://${host}:${port}/${testDbName}</url>
 							<srcFiles>
 								<srcFile>${basedir}/db/schema.sql</srcFile>
 							</srcFiles>
@@ -373,14 +372,10 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!--plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>tomcat-maven-plugin</artifactId>
-                <configuration>
-                   <warFile>${basedir}/target/crux.war</warFile>
-                </configuration>
-            </plugin-->
-            
+			<!--plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>tomcat-maven-plugin</artifactId> 
+				<configuration> <warFile>${basedir}/target/crux.war</warFile> </configuration> 
+				</plugin -->
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -401,26 +396,51 @@
 					</execution>
 				</executions>
 			</plugin>
-			 <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>properties-maven-plugin</artifactId>
-            <version>${properties-maven-plugin.version}</version>
-            <executions>
-                <execution>
-                    <phase>initialize</phase>
-                    <goals>
-                        <goal>read-project-properties</goal>
-                    </goals>
-                    <configuration>
-                        <files>
-                            <file>${basedir}/hibernate.properties</file>
-                        </files>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven-resources-plugin.version}</version>
+				<configuration>
+					<!-- specify UTF-8, ISO-8859-1 or any other file encoding -->
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>${properties-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+						<configuration>
+							<files>
+								<file>${basedir}/hibernate.properties</file>
+							</files>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
 		</plugins>
 		<finalName>crux</finalName>
+		<filters>
+			<filter>hibernate.properties</filter>
+		</filters>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
 	</build>
 </project>
