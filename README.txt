@@ -88,7 +88,11 @@ Then start hbase shell.
 This is needed as Crux has built in filters which work on the server side to select the data you choose. 
 
 d. Drop the war in tomcat/webapps and start tomcat by going to tomcat home/bin and enter startup.sh  
+Alternatively, just run mvn jetty:run in Crux home.
+
 e. Go to http://localhost:8080/crux and define your connection, mapping and report.
+
+
 
 Instructions to build crux with Maven
 -----------------------------------
@@ -115,9 +119,7 @@ mvn test
 
 Instructions to set up the dev environment in Eclipse
 -------------------------------------------------
-After copying crux in your eclipse project, please add all jars from crux/lib_test/ and
-crux/lib_test/run_time/ to your eclipse java build path libraries.
-
+Add the Maven dependencies through the Eclipse m2e plugin and you should be good to go. Please refer to committer's checklist.txt for further details 
 
 Crux Limitations
 ----------------
