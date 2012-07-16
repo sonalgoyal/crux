@@ -31,7 +31,7 @@ public class PopulateBseData {
 		Configuration conf = new Configuration();
 		conf.set("hbase.zookeeper.quorum", "localhost");
 		conf.set("hbase.zookeeper.property.clientPort", "2181");
-		hTable = new HTable(conf, "stockData1");
+		hTable = new HTable(conf, "stockDataComposite");
 	}
 
 	public void putRow(byte[] row, byte[] column, byte[] qaul, byte[] value)
