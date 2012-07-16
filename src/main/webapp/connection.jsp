@@ -62,10 +62,11 @@ function updateConnectionViewList(data){
 		document.getElementById("gridNode").style.visibility = "hidden";
 		document.getElementById("linksForConnection").style.visibility = "hidden";
     	showConnectionForm();
-	} else{
+	}
+        else{
 		document.getElementById("gridNode").style.visibility = "visible";
 		document.getElementById("linksForConnection").style.visibility = "visible";
-    	dijit.byId("gridNode").selection.clear();  
+    	        dijit.byId("gridNode").selection.clear();  
 	}
 	//alert("deleted");
 	for(var i=0;i<data.connectionViewList.length;i++){
