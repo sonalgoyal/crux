@@ -52,11 +52,10 @@ Once you have the prerequisite
 -
 a. Create database for crux in MySQL
 
-    
-    create databse crux;
-    use crux;
-    Run the schema (crux/db/schema.sql) file in MySQL. On mysql prompt, 
-    source ${CRUX_HOME}/db/schema.sql
+ <code> mysql>create databse crux;</code><br>
+  <code>mysql>use crux;</code><br>
+   Run the schema (crux/db/schema.sql) file in MySQL. On mysql prompt, <br>
+  <code>mysql>source ${CRUX_HOME}/db/schema.sql</code>
    
   
   This creates the schema required for saving the report definitions.
@@ -65,15 +64,16 @@ b. Build crux(See instructions to build crux with Maven).
 
 c. Copy crux.jar to ${HBASE_HOME}/lib or edit ${HBASE_HOME}/conf/hbase-env.sh and add the jars location to the file.
 
-    For example,
-    # Extra Java CLASSPATH elements Optional
-    # export HBASE_CLASSPATH=
-    export HBASE_CLASSPATH="/home/crux/target/crux.jar"
-    Restart hbase 
-    Go to Hbase home/bin and then enter start-hbase.sh 
-    $ HBASE_HOME/bin/start-hbase.sh
-    Then start hbase shell. 
-    $ HBASE_HOME/bin/hbase shell
+  For example,<br>
+  # Extra Java CLASSPATH elements Optional<br>
+  # export HBASE_CLASSPATH=<br>
+<code>export HBASE_CLASSPATH="/home/crux/target/crux.jar"</code><br>
+  Restart hbase <br>
+  Go to Hbase home/bin and then enter start-hbase.sh <br>
+  <code>  $ HBASE_HOME/bin/start-hbase.sh</code><br>
+  Then start hbase shell. <br>
+  <code>  $ HBASE_HOME/bin/hbase shell</code>
+  
     
    This is needed as Crux has built in filters which work on the   server side to select the data you choose. 
 
@@ -103,8 +103,8 @@ mvn install:install-file -DgroupId=com.google.code -DartifactId=struts2-fullhibe
 <b> To build and create war against 0.90.3</b><br>
  Go to the base directory where pom.xml is located and enter<br>
  
-    mvn install -DskipTests(in order to skip tests) or 
-    mvn install to run 
+   <code> mvn install -DskipTests</code> (in order to skip tests) or <br>
+  <code>  mvn install to run </code><br>
    tests and create war
 
 For CDH4
