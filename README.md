@@ -25,7 +25,7 @@ Crux Design
 -
 - Crux uses the <b>HBase Java client API</b>, which is a fully featured way to access HBase. There are other clients available for HBase, for example Rest, Thrift and Avro. At the time of writing Crux, these clients do not expose the complete conditional querying capability needed by Crux. Then there are batch clients like Map Reduce, Hive handler, Pig and Cascading. These are great for performing batch analysis using HBase data. However, a reporting application needs faster response time than the batch nature of these. Crux thus uses the HBase Java Client API.
 
-- Crux also uses <b>mySQL</b> to store the mapping of HBase schemas, connections and reports. The front end is built using Ajax, Dojo, Struts, with Hibernate. Crux uses open source software and comes with Apache License.
+- Crux also uses <b>MYSQL</b> to store the mapping of HBase schemas, connections and reports. The front end is built using Ajax, Dojo, Struts, with Hibernate. Crux uses open source software and comes with Apache License.
 
 Crux Mailing List, Issue Reporting and Support 
 -
@@ -54,7 +54,7 @@ a. Create database for crux in MySQL
 
     
     create databse crux;
-    use crux;<br>
+    use crux;
     Run the schema (crux/db/schema.sql) file in MySQL. On mysql prompt, 
     source ${CRUX_HOME}/db/schema.sql
    
