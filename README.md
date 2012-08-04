@@ -78,9 +78,11 @@ c. Copy crux.jar to ${HBASE_HOME}/lib or edit ${HBASE_HOME}/conf/hbase-env.sh an
    This is needed as Crux has built in filters which work on the   server side to select the data you choose. 
 
 d. Drop the war in tomcat/webapps and start tomcat by going to  tomcat home/bin and enter startup.sh 
+
     $apache-tomcat-home/bin/startup.sh
  
-  Alternatively, just run 
+  Alternatively, just run
+  
     CRUX_HOME$ mvn jetty:run 
 
 e. Go to <a href=http://localhost:8080/crux>http://localhost:8080/crux</a> and define your connection, mapping and report.
@@ -91,12 +93,16 @@ Instructions to build crux with Maven
 <ol>
 <li> Update hibernate.properties(crux/) with your MySQL host, port, dbname, testDbName, user and password.</li>
 <li>Download struts2-fullhibernatecore-plugin-2.2.2-GA.jar from <a href=http://code.google.com/p/full-hibernate-plugin-for-struts2/downloads/detail?name=struts2-fullhibernatecore-plugin-2.2.2-GA.jar&can=2&q=>http://code.google.com/p/full-hibernate-plugin-for-struts2/downloads/detail?name=struts2-fullhibernatecore-plugin-2.2.2-GA.jar&can=2&q=</a>and add to your local repository by executing command given below.<br><br>
-    	mvn install:install-file -DgroupId=com.google.code -DartifactId=struts2-fullhibernatecore-plugin -Dversion=2.2.2-GA -Dpackaging=jar 
-	-Dfile=< path/to/struts2-fullhibernatecore-plugin-2.2.2-GA.jar ></li>
+
+<code>    
+mvn install:install-file -DgroupId=com.google.code -DartifactId=struts2-fullhibernatecore-plugin -Dversion=2.2.2-GA -Dpackaging=jar -Dfile=${PATH_TO_struts2-fullhibernatecore-plugin-2.2.2-GA.jar} 
+</code>    
+</li>
 <li> Crux can be built against HBase 0.90.3(default) or against HBase 0.92.1. Crux artifacts crux.war and crux.jar are created in crux/target/</li></ol>
 
 <b> To build and create war against 0.90.3</b><br>
  Go to the base directory where pom.xml is located and enter<br>
+ 
     mvn install -DskipTests(in order to skip tests) or 
     mvn install to run 
    tests and create war
@@ -112,7 +118,7 @@ Instructions to run test cases of crux with Maven
 Instructions to set up the dev environment in Eclipse
 -
 - Add the Maven dependencies through the Eclipse m2e plugin and you should be good to go. 
-- Please refer to committer's checklist.txt for further details 
+- Please refer to <a href=https://github.com/sonalgoyal/crux/blob/master/CommitterChecklist.txt>https://github.com/sonalgoyal/crux/blob/master/CommitterChecklist.txt</a> for further details 
 
 Crux Limitations
 -
