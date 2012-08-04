@@ -37,6 +37,7 @@ Using Crux
 -
 - Using Crux, one can query HBase tables and create reports to  analyze results. 
 - To do this, there are a few simple steps.
+
 Prerequisies:
 -
   - A running HBase
