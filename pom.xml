@@ -53,6 +53,7 @@
 		<maven-jar-plugin.version>2.3.2</maven-jar-plugin.version>
 		<maven-resources-plugin.version>2.5</maven-resources-plugin.version>
 		<properties-maven-plugin.version>1.0-alpha-1</properties-maven-plugin.version>
+		<project.version></project.version>
 	</properties>
 	<profiles>
 		<profile>
@@ -97,7 +98,7 @@
 					<version>${hadoop.version}</version>
 					<scope>test</scope>
 				</dependency>
-			</dependencies>
+			 </dependencies>			
 		</profile>
 		<profile>
 			<id>cdh4</id>
@@ -174,11 +175,11 @@
 					<classifier>tests</classifier>
 					<scope>test</scope>
 				</dependency>
-			</dependencies>
+			</dependencies>			
 		</profile>
 	</profiles>
-
-	<dependencies>
+    
+    <dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -270,7 +271,7 @@
 
 	<build>
 		<plugins>
-			<plugin>
+		  <plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
@@ -423,7 +424,27 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                 <configuration>
+                  <archive>
+                   <manifestEntries>
+                    <version>${project.version}</version>
+                   </manifestEntries>
+                 </archive>
+               </configuration>
+           </plugin>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                              <descriptors>
+                                 <descriptor>assembly.xml</descriptor>
+                              </descriptors>
+                            </configuration>
+                    </plugin>
+          
 		</plugins>
 		<finalName>crux</finalName>
 		<filters>
