@@ -60,7 +60,7 @@ a. Create database for crux in MySQL
   
   This creates the schema required for saving the report definitions.
 
-b. Build crux(See instructions to build crux with Maven). 
+b. Build crux(See instructions to build crux with Maven). Or download the tar appropriate fro your Hbase version from the github downloads link.
 
 c. Copy crux.jar to ${HBASE_HOME}/lib or edit ${HBASE_HOME}/conf/hbase-env.sh and add the jars location to the file.
 
