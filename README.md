@@ -2,8 +2,8 @@ Crux is a reporting application for HBase.
 -
 <h5>Crux has been Tested Against</h5>
 <ol>
- <li> CDH4</li>
- <li>Cloudera's distribution. CDH3 - Hadoop 0.20.2-CDH3u5</li>
+ <li>Cloudera's distribution CDH4</li>
+ <li>Cloudera's distribution CDH3 - Hadoop 0.20.2-CDH3u5</li>
  <li>Apache HBase 0.92.1</li>
  <li>Apache HBase 0.90.3 on Apache Hadoop 0.20.2 with Hadoop  append.</li>
 </ol>
@@ -25,7 +25,7 @@ Crux Design
 -
 - Crux uses the <b>HBase Java client API</b>, which is a fully featured way to access HBase. There are other clients available for HBase, for example Rest, Thrift and Avro. At the time of writing Crux, these clients do not expose the complete conditional querying capability needed by Crux. Then there are batch clients like Map Reduce, Hive handler, Pig and Cascading. These are great for performing batch analysis using HBase data. However, a reporting application needs faster response time than the batch nature of these. Crux thus uses the HBase Java Client API.
 
-- Crux also uses <b>MYSQL</b> to store the mapping of HBase schemas, connections and reports. The front end is built using Ajax, Dojo, Struts, with Hibernate. Crux uses open source software and comes with Apache License.
+- Crux also uses <b>MySQL</b> to store the mapping of HBase schemas, connections and reports. The front end is built using Ajax, Dojo, Struts, with Hibernate. Crux uses open source software and comes with Apache License.
 
 Crux Mailing List, Issue Reporting and Support 
 -
@@ -52,9 +52,9 @@ Once you have the prerequisite
 -
 a. Create database for crux in MySQL
 
- <code> mysql>create databse crux;</code><br>
+  <code> mysql>create databse crux;</code><br>
   <code>mysql>use crux;</code><br>
-   Run the schema (crux/db/schema.sql) file in MySQL. On mysql prompt, <br>
+  Create schema by running crux/db/schema.sql file in MySQL prompt, <br>
   <code>mysql>source ${CRUX_HOME}/db/schema.sql</code>
    
   
@@ -65,9 +65,10 @@ b. Build crux(See instructions to build crux with Maven). Or download the tar ap
 c. Copy crux.jar to ${HBASE_HOME}/lib or edit ${HBASE_HOME}/conf/hbase-env.sh and add the jars location to the file.
 
   For example,<br>
-  # Extra Java CLASSPATH elements Optional<br>
+  
+<code># Extra Java CLASSPATH elements Optional<br>
   # export HBASE_CLASSPATH=<br>
-<code>export HBASE_CLASSPATH="/home/crux/target/crux.jar"</code><br>
+  export HBASE_CLASSPATH="/home/crux/target/crux.jar"</code><br>
   Restart hbase <br>
   Go to Hbase home/bin and then enter start-hbase.sh <br>
   <code>  $ HBASE_HOME/bin/start-hbase.sh</code><br>
@@ -87,7 +88,7 @@ d. Drop the war in tomcat/webapps and start tomcat by going to  tomcat home/bin 
 
 e. Go to <a href=http://localhost:8080/crux>http://localhost:8080/crux</a> and define your connection, mapping and report.
 
-Instructions to build crux with Maven
+Instructions to build Crux with Maven
 -
 
 <ol>
@@ -104,8 +105,8 @@ mvn install:install-file -DgroupId=com.google.code -DartifactId=struts2-fullhibe
  Go to the base directory where pom.xml is located and enter<br>
  
    <code> mvn install -DskipTests</code> (in order to skip tests) or <br>
-  <code>  mvn install to run </code><br>
-   tests and create war
+  <code>  mvn install  </code><br>
+   to run tests and create war
 
 For CDH4
 -
@@ -115,7 +116,7 @@ For CDH3
 -
 	CRUX_HOME$mvn -Dcdh3 install
 
-Instructions to run test cases of crux with Maven
+Instructions to run test cases of Crux with Maven
 -
     CRUX_HOME$ mvn test
 
