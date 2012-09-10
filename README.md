@@ -3,7 +3,7 @@ Crux is a reporting application for HBase.
 <h5>Crux has been Tested Against</h5>
 <ol>
  <li> CDH4</li>
- <li>Cloudera's distribution. CDH3 - Hadoop 0.20.2-CDH3u1</li>
+ <li>Cloudera's distribution. CDH3 - Hadoop 0.20.2-CDH3u5</li>
  <li>Apache HBase 0.92.1</li>
  <li>Apache HBase 0.90.3 on Apache Hadoop 0.20.2 with Hadoop  append.</li>
 </ol>
@@ -60,7 +60,7 @@ a. Create database for crux in MySQL
   
   This creates the schema required for saving the report definitions.
 
-b. Build crux(See instructions to build crux with Maven). Or download the tar appropriate fro your Hbase version from the github downloads link.
+b. Build crux(See instructions to build crux with Maven). Or download the tar appropriate for your HBase version from the github downloads link.
 
 c. Copy crux.jar to ${HBASE_HOME}/lib or edit ${HBASE_HOME}/conf/hbase-env.sh and add the jars location to the file.
 
@@ -98,7 +98,7 @@ Instructions to build crux with Maven
 mvn install:install-file -DgroupId=com.google.code -DartifactId=struts2-fullhibernatecore-plugin -Dversion=2.2.2-GA<br> -Dpackaging=jar -Dfile=${PATH_TO_struts2-fullhibernatecore-plugin-2.2.2-GA.jar} 
 </code>    
 </li>
-<li> Crux can be built against HBase 0.90.3(default) or against HBase 0.92.1. Crux artifacts crux.war and crux.jar are created in crux/target/</li></ol>
+<li> Crux can be built against HBase 0.90.3(default), HBase 0.90.6 or against HBase 0.92.1. Crux artifacts crux.war and crux.jar are created in crux/target/</li></ol>
 
 <b> To build and create war against 0.90.3</b><br>
  Go to the base directory where pom.xml is located and enter<br>
@@ -110,6 +110,10 @@ mvn install:install-file -DgroupId=com.google.code -DartifactId=struts2-fullhibe
 For CDH4
 -
     CRUX_HOME$ mvn -Dcdh4 install
+    
+For CDH3
+-
+	CRUX_HOME$mvn -Dcdh3 install
 
 Instructions to run test cases of crux with Maven
 -

@@ -177,6 +177,57 @@
 				</dependency>
 			</dependencies>			
 		</profile>
+		<profile>
+			<id>cdh3</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>cdh3</name>
+				</property>
+			</activation>
+			<properties>
+				<hbase.version>0.90.6-cdh3u5</hbase.version>
+				<hadoop.version>0.20.2-cdh3u5</hadoop.version>
+				<slf4j.version>1.5.8</slf4j.version>
+			</properties>
+			<repositories>
+				<repository>
+					<id>Cloudera</id>
+					<name>Cloudera Repository</name>
+					<url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+				</repository>
+			</repositories>
+			<dependencies>
+				<dependency>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase</artifactId>
+					<version>${hbase.version}</version>
+					<exclusions>
+						<exclusion>
+							<groupId>org.slf4j</groupId>
+							<artifactId>slf4j-api</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>org.slf4j</groupId>
+							<artifactId>slf4j-log4j12</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase</artifactId>
+					<version>${hbase.version}</version>
+					<classifier>tests</classifier>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-test</artifactId>
+					<version>${hadoop.version}</version>
+					<scope>test</scope>
+				</dependency>
+			 </dependencies>			
+		</profile>
 	</profiles>
     
     <dependencies>
