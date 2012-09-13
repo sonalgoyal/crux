@@ -52,7 +52,7 @@ Once you have the prerequisite
 -
 a. Create database for crux in MySQL
 
-  <code> mysql>create databse crux;</code><br>
+  <code>mysql>create databse crux;</code><br>
   <code>mysql>use crux;</code><br>
   Create schema by running crux/db/schema.sql file in MySQL prompt, <br>
   <code>mysql>source ${CRUX_HOME}/db/schema.sql</code>
