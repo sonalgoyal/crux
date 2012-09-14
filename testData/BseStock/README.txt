@@ -1,12 +1,12 @@
-Steps to export demo data in HBase
+Steps to populate demo data in HBase
 
 1.Create tables in HBase
 
 hbase(main):006:0>  create 'stockDataComposite','price','spread','stats'
 hbase(main):007:0>  create 'stockDataSimple','data'   
 
-2.Now you need to run hadoop jobs to export data to HBase tables, before that you need to set HADOOP_HOME and HBASE_HOME
-a. In First step you need to add all jars in $HBASE_HOME/lib to HADOOP_CLASSPATH for that add following line to $HADOOP_HOME/bin/hadoop file before the command
+2.Run hadoop jobs to export data to HBase tables. You will need to set HADOOP_HOME and HBASE_HOME
+a. Add all jars in $HBASE_HOME/lib to HADOOP_CLASSPATH. To do so, add following line to $HADOOP_HOME/bin/hadoop file before the command
  <exec "$JAVA" $JAVA_HEAP_MAX $HADOOP_OPTS -classpath "$CLASSPATH" $CLASS "$@" >
 
 HBASE_HOME=<path to HBase folder>
@@ -15,10 +15,11 @@ for f in $HBASE_HOME/lib/*.jar; do
   CLASSPATH=${CLASSPATH}:$f;
 done
 
-Note:- These lines will add hbase dependencies to your hadoop classpath each time you run hadoop, So later you can comment these lines when you dont require
+Note: These lines will add hbase dependencies to your hadoop classpath each time you run hadoop.
+So later you can comment these lines when you dont require
 
 b. Now you need to start hadoop cluster and put exportComposite and exportSimple folders(kept parallel to this readme) to hdfs 
-Go to your HADOOP_HOME and enter the following commands.
+This can be done by running the following from $HADOOP_HOME
 
 $bin/hadoop fs -put ~/crux/testData/BseStock/exportSimple /
 $bin/hadoop fs -put ~/crux/testData/BseStock/exportComposite /
@@ -100,7 +101,7 @@ b.Run completebulkload command through hadoop to load data in HBase
 $HADOOP_HOME/bin/hadoop jar $HBASE_HOME/hbase-0.90.3.jar completebulkload /user/nube/outputHBase stockDataSimple
 
 /user/nube/outputHBase this define inputPath(is output of above step (A)).
-stockData is tablename where we wanna insert data.
+stockData is tablename where we want to insert data.
 Note: In this method all data is inserted as String type.
 
 OR
