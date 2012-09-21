@@ -66,6 +66,7 @@
 		<many-to-one name="datastore" column="datastoreId" class="Datastore" lazy="false" />
 		<property name="name" type="string" column="name" />
 		<property name="className" type="string" column="className" />
+		<property name="promotedValueClassName" type="string" column="promotedValueClassName" />
 		<property name="numeric" type="boolean" column="isNumeric" />
 	</class>
 	
@@ -223,4 +224,18 @@
 		<property name="index" type="int" column="indexNo" />
 		<property name="column" type="int" column="columnNo" />
 	</class>
+	<class name="GroupBy" table="groupBy" lazy="false">
+		<id name="id" >
+			<generator class="increment" />
+		</id>
+		<property name="ascending" type="boolean" column="boolean" />
+		<many-to-one name="rowAlias" column="rowAliasId" class="RowAlias"  lazy="false"/>
+	</class>
+	<class name="GroupBys" table="groupBys" lazy="false">
+		<id name="id" >
+			<generator class="increment" />
+		</id>
+		<many-to-one name="report" column="reportId" class="Report"  lazy="false"/>
+	</class>
+	
 </hibernate-mapping>

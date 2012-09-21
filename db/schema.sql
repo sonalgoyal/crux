@@ -449,6 +449,47 @@ REFERENCES `function` (`id` )
 ON DELETE NO ACTION 
 ON UPDATE NO ACTION) ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `group bys`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `groupBys` ;
+
+CREATE  TABLE IF NOT EXISTS `groupBys` (
+`id` BIGINT(100) NOT NULL AUTO_INCREMENT,
+`reportId` BIGINT(100) NOT NULL,
+PRIMARY KEY (`id`) , 
+UNIQUE INDEX `groupBys_unique_keys` (`reportId`) ,
+CONSTRAINT `fk_groupBys_reportId` 
+FOREIGN KEY (`reportId`) 
+REFERENCES `report` (`id` )  
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION
+) ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `group by`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `groupBy` ;
+
+CREATE  TABLE IF NOT EXISTS `groupBy` (
+`id` BIGINT(100) NOT NULL AUTO_INCREMENT,
+`groupBysId` BIGINT(100) NOT NULL,
+`rowAliasId` BIGINT(100) NOT NULL,
+`ascending` BOOLEAN NOT NULL,
+PRIMARY KEY (`id`) , 
+UNIQUE INDEX `groupBy_unique_keys` (`groupBysId`, `rowAliasId`) ,
+CONSTRAINT `fk_groupBy_rowAliasId` 
+FOREIGN KEY (`rowAliasId`) 
+REFERENCES `rowAlias` (`id` ),
+CONSTRAINT `fk_groupBy_groupBysId` 
+FOREIGN KEY (`groupBysId`) 
+REFERENCES `groupBys` (`id` ) 
+ON DELETE NO ACTION 
+ON UPDATE NO ACTION 
+) ENGINE = InnoDB;
+
+
+
 
 -- -----------------------------------------------------
 -- insert queries

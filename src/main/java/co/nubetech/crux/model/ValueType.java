@@ -20,6 +20,7 @@ public class ValueType {
 	private Datastore datastore;
 	private String name;
 	private String className;
+	private String promotedValueClassName;
 	private boolean numeric;
 
 	public ValueType() {
@@ -27,12 +28,13 @@ public class ValueType {
 	}
 
 	public ValueType(long id, Datastore datastore, String name,
-			String className, boolean isNumeric) {
+			String className, String promotedValueClassName, boolean isNumeric) {
 		super();
 		this.id = id;
 		this.datastore = datastore;
 		this.name = name;
 		this.className = className;
+		this.promotedValueClassName = promotedValueClassName;
 		this.numeric = isNumeric;
 	}
 
@@ -76,13 +78,31 @@ public class ValueType {
 		this.numeric = numeric;
 	}
 
+	/**
+	 * @return the promotedValueClassName
+	 */
+	public String getPromotedValueClassName() {
+		return promotedValueClassName;
+	}
+
+	/**
+	 * @param promotedValueClassName the promotedValueClassName to set
+	 */
+	public void setPromotedValueClassName(String promotedValueClassName) {
+		this.promotedValueClassName = promotedValueClassName;
+	}
+
 	@Override
 	public String toString() {
 		return "ValueType [id=" + id + ", datastore=" + datastore + ", name="
-				+ name + ", className=" + className + ", isNumeric=" + numeric
+				+ name + ", className=" + className + ",promotedValueClassName=" 
+				+ promotedValueClassName + ", isNumeric=" + numeric
 				+ "]";
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -94,41 +114,66 @@ public class ValueType {
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + (numeric ? 1231 : 1237);
+		result = prime
+				* result
+				+ ((promotedValueClassName == null) ? 0
+						: promotedValueClassName.hashCode());
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof ValueType)) {
 			return false;
+		}
 		ValueType other = (ValueType) obj;
 		if (className == null) {
-			if (other.className != null)
+			if (other.className != null) {
 				return false;
-		} else if (!className.equals(other.className))
+			}
+		} else if (!className.equals(other.className)) {
 			return false;
+		}
 		if (datastore == null) {
-			if (other.datastore != null)
+			if (other.datastore != null) {
 				return false;
-		} else if (!datastore.equals(other.datastore))
+			}
+		} else if (!datastore.equals(other.datastore)) {
 			return false;
-		if (id != other.id)
+		}
+		if (id != other.id) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
-		if (numeric != other.numeric)
+		}
+		if (numeric != other.numeric) {
 			return false;
+		}
+		if (promotedValueClassName == null) {
+			if (other.promotedValueClassName != null) {
+				return false;
+			}
+		} else if (!promotedValueClassName.equals(other.promotedValueClassName)) {
+			return false;
+		}
 		return true;
 	}
 
-	
+		
 	
 	
 
