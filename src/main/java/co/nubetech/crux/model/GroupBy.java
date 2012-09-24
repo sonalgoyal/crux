@@ -2,7 +2,6 @@ package co.nubetech.crux.model;
 
 public class GroupBy {
 	private long id;
-	private boolean ascending;
 	private RowAlias alias;
 	
 	
@@ -11,9 +10,8 @@ public class GroupBy {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public GroupBy(long id, boolean ascending, RowAlias alias) {
+	public GroupBy(long id, RowAlias alias) {
 		this.id = id;
-		this.ascending = ascending;
 		this.alias = alias;
 	}
 	
@@ -28,18 +26,6 @@ public class GroupBy {
 	 */
 	public void setId(long id) {
 		this.id = id;
-	}
-	/**
-	 * @return the ascending
-	 */
-	public boolean isAscending() {
-		return ascending;
-	}
-	/**
-	 * @param ascending the ascending to set
-	 */
-	public void setAscending(boolean ascending) {
-		this.ascending = ascending;
 	}
 	/**
 	 * @return the alias
@@ -62,7 +48,6 @@ public class GroupBy {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((alias == null) ? 0 : alias.hashCode());
-		result = prime * result + (ascending ? 1231 : 1237);
 		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
@@ -89,9 +74,6 @@ public class GroupBy {
 		} else if (!alias.equals(other.alias)) {
 			return false;
 		}
-		if (ascending != other.ascending) {
-			return false;
-		}
 		if (id != other.id) {
 			return false;
 		}
@@ -103,10 +85,7 @@ public class GroupBy {
 	 */
 	@Override
 	public String toString() {
-		return "GroupBy [id=" + id + ", ascending=" + ascending + ", alias="
-				+ alias + "]";
+		return "GroupBy [id=" + id + ", alias=" + alias + "]";
 	}
-	
-	
 	
 }

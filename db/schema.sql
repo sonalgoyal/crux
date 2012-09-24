@@ -475,7 +475,6 @@ CREATE  TABLE IF NOT EXISTS `groupBy` (
 `id` BIGINT(100) NOT NULL AUTO_INCREMENT,
 `groupBysId` BIGINT(100) NOT NULL,
 `rowAliasId` BIGINT(100) NOT NULL,
-`ascending` BOOLEAN NOT NULL,
 PRIMARY KEY (`id`) , 
 UNIQUE INDEX `groupBy_unique_keys` (`groupBysId`, `rowAliasId`) ,
 CONSTRAINT `fk_groupBy_rowAliasId` 
@@ -487,8 +486,6 @@ REFERENCES `groupBys` (`id` )
 ON DELETE NO ACTION 
 ON UPDATE NO ACTION 
 ) ENGINE = InnoDB;
-
-
 
 
 -- -----------------------------------------------------

@@ -13,14 +13,12 @@ public class TestGroupBy {
 		RowAlias alias = new RowAlias();
 		alias.setId(100l);
 		groupBy.setRowAlias(alias);
-		groupBy.setAscending(false);
 		
 		GroupBy groupBy1 = new GroupBy();
 		groupBy1.setId(1l);
 		RowAlias alias1 = new RowAlias();
 		alias1.setId(100l);
 		groupBy1.setRowAlias(alias1);
-		groupBy1.setAscending(false);
 		
 		assertEquals(groupBy, groupBy1);
 	}
@@ -32,14 +30,12 @@ public class TestGroupBy {
 		RowAlias alias = new RowAlias();
 		alias.setId(100l);
 		groupBy.setRowAlias(alias);
-		groupBy.setAscending(false);
 		
 		GroupBy groupBy1 = new GroupBy();
 		groupBy1.setId(2l);
 		RowAlias alias1 = new RowAlias();
 		alias1.setId(100l);
 		groupBy1.setRowAlias(alias1);
-		groupBy1.setAscending(false);
 		
 		assertFalse(groupBy.equals(groupBy1));
 	}
@@ -51,14 +47,12 @@ public class TestGroupBy {
 		RowAlias alias = new RowAlias();
 		alias.setId(100l);
 		groupBy.setRowAlias(alias);
-		groupBy.setAscending(false);
 		
 		GroupBy groupBy1 = new GroupBy();
 		groupBy1.setId(1l);
 		RowAlias alias1 = new RowAlias();
 		alias1.setId(100l);
 		groupBy1.setRowAlias(alias1);
-		groupBy1.setAscending(false);
 		
 		assertEquals(groupBy.hashCode(), groupBy1.hashCode());
 	}

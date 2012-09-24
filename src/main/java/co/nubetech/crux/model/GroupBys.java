@@ -91,10 +91,6 @@ public class GroupBys {
 	@Override
 	public String toString() {
 		return "GroupBys [id=" + id + ", groupBy=" + groupBy + "]";
-	}
-	
-	
-	
-	
+	}	
 
 }
