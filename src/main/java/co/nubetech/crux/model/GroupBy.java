@@ -1,43 +1,76 @@
+/**
+ * Copyright 2011 Nube Technologies
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed
+ * under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
 package co.nubetech.crux.model;
 
 public class GroupBy {
 	private long id;
 	private RowAlias alias;
-	
+	private int order;
 	
 	public GroupBy() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	public GroupBy(long id, RowAlias alias) {
+
+	public GroupBy(long id, RowAlias alias, int order) {
+		super();
 		this.id = id;
 		this.alias = alias;
+		this.order = order;
 	}
-	
+
 	/**
 	 * @return the id
 	 */
 	public long getId() {
 		return id;
 	}
+
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(long id) {
 		this.id = id;
 	}
+
 	/**
 	 * @return the alias
 	 */
-	public RowAlias getRowAlias() {
+	public RowAlias getAlias() {
 		return alias;
 	}
+
 	/**
 	 * @param alias the alias to set
 	 */
-	public void setRowAlias(RowAlias alias) {
+	public void setAlias(RowAlias alias) {
 		this.alias = alias;
+	}
+
+	/**
+	 * @return the order
+	 */
+	public int getOrder() {
+		return order;
+	}
+
+	/**
+	 * @param order the order to set
+	 */
+	public void setOrder(int order) {
+		this.order = order;
 	}
 
 	/* (non-Javadoc)
@@ -49,6 +82,7 @@ public class GroupBy {
 		int result = 1;
 		result = prime * result + ((alias == null) ? 0 : alias.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + order;
 		return result;
 	}
 
@@ -77,6 +111,9 @@ public class GroupBy {
 		if (id != other.id) {
 			return false;
 		}
+		if (order != other.order) {
+			return false;
+		}
 		return true;
 	}
 
@@ -85,7 +122,9 @@ public class GroupBy {
 	 */
 	@Override
 	public String toString() {
-		return "GroupBy [id=" + id + ", alias=" + alias + "]";
+		return "GroupBy [id=" + id + ", alias=" + alias + ", order=" + order
+				+ "]";
 	}
 	
+		
 }

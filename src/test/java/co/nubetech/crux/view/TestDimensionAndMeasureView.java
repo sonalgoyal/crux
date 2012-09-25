@@ -18,7 +18,7 @@ public class TestDimensionAndMeasureView {
 		
 		Datastore dataStore = new Datastore();
 		
-		ValueType valueType = new ValueType(1,dataStore,"Type",null,isNumeric);
+		ValueType valueType = new ValueType(1,dataStore,"Type",null,null,isNumeric);
 		
 		rowAlias.setAlias("row");
 		rowAlias.setValueType(valueType);
@@ -39,7 +39,7 @@ public class TestDimensionAndMeasureView {
 		
 		Datastore dataStore = new Datastore();
 		
-		ValueType valueType = new ValueType(1,dataStore,"Type",null,isNumeric);
+		ValueType valueType = new ValueType(1,dataStore,"Type",null,null, isNumeric);
 		
 		
 		rowAlias.setAlias("row1");

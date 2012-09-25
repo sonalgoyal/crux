@@ -23,8 +23,10 @@ public class TestFunctionView {
 		dataStore.setId(1212);
 		dataStore.setName("DataStore");
 		
-		ValueType valueType = new ValueType(1,dataStore,"Type","class2",true);
-		ValueType returnValueType = new ValueType(2,dataStore,"ReturnType","class3",false);
+		ValueType valueType = new ValueType(1,dataStore,"Type","class2",
+				"className1", true);
+		ValueType returnValueType = new ValueType(2,dataStore,"ReturnType","class3",
+				"className1", false);
 		
 		FunctionTypeMapping functionTypeMapping = new FunctionTypeMapping(function,
 				                                             valueType,returnValueType);

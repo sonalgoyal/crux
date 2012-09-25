@@ -26,6 +26,20 @@ public class ValueType {
 	public ValueType() {
 
 	}
+	
+	/*
+	 * By default, set promoted value type as classname
+	 */
+	public ValueType(long id, Datastore datastore, String name,
+			String className, boolean isNumeric) {
+		super();
+		this.id = id;
+		this.datastore = datastore;
+		this.name = name;
+		this.className = className;
+		this.promotedValueClassName = className;
+		this.numeric = isNumeric;
+	}
 
 	public ValueType(long id, Datastore datastore, String name,
 			String className, String promotedValueClassName, boolean isNumeric) {

@@ -136,9 +136,12 @@ public class TestReportDesignAction {
 		datastore.setId(90);
 		datastore.setName("DataStore");
 				
-		ValueType valueType1 = new ValueType(501, datastore, "valueTypeOne", "classValueType1", false);
-		ValueType valueType2 = new ValueType(502, datastore, "valueTypeTwo", "classValueType2", false);
-		ValueType valueType3 = new ValueType(503, datastore, "valueTypeThree", "classValueType3", false);
+		ValueType valueType1 = new ValueType(501, datastore, "valueTypeOne", "classValueType1", 
+				"className1", false);
+		ValueType valueType2 = new ValueType(502, datastore, "valueTypeTwo", "classValueType2", 
+				"className1", false);
+		ValueType valueType3 = new ValueType(503, datastore, "valueTypeThree", "classValueType3", 
+				"className1", false);
 		
 		FilterType filterType1 = new FilterType(701, "filterTypeOne");
 		FilterType filterType2 = new FilterType(702, "filterTypeTwo");

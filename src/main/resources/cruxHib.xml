@@ -228,14 +228,19 @@
 		<id name="id" >
 			<generator class="increment" />
 		</id>
-		<property name="ascending" type="boolean" column="boolean" />
-		<many-to-one name="rowAlias" column="rowAliasId" class="RowAlias"  lazy="false"/>
+		<many-to-one name="rowAlias" column="rowAliasId" class="RowAlias"  lazy="false"/>	
+		<property name="order" column="order" type="int" lazy="false" />	
 	</class>
 	<class name="GroupBys" table="groupBys" lazy="false">
 		<id name="id" >
 			<generator class="increment" />
 		</id>
 		<many-to-one name="report" column="reportId" class="Report"  lazy="false"/>
+		<list name="groupBy" table="groupBy" cascade="all">
+			<key column="groupBy"/>
+			<list-index column="order"/>  
+			<element type="GroupBy"></element>
+		</list>
 	</class>
 	
 </hibernate-mapping>
