@@ -16,8 +16,8 @@ package co.nubetech.crux.model;
 
 public class GroupBy {
 	private long id;
-	private RowAlias alias;
-	private int order;
+	private RowAlias rowAlias;
+	private int position;
 	
 	public GroupBy() {
 		super();
@@ -27,8 +27,8 @@ public class GroupBy {
 	public GroupBy(long id, RowAlias alias, int order) {
 		super();
 		this.id = id;
-		this.alias = alias;
-		this.order = order;
+		this.rowAlias = alias;
+		this.position = order;
 	}
 
 	/**
@@ -46,31 +46,31 @@ public class GroupBy {
 	}
 
 	/**
-	 * @return the alias
+	 * @return the rowAlias
 	 */
-	public RowAlias getAlias() {
-		return alias;
+	public RowAlias getRowAlias() {
+		return rowAlias;
 	}
 
 	/**
-	 * @param alias the alias to set
+	 * @param rowAlias the rowAlias to set
 	 */
-	public void setAlias(RowAlias alias) {
-		this.alias = alias;
+	public void setRowAlias(RowAlias alias) {
+		this.rowAlias = alias;
 	}
 
 	/**
-	 * @return the order
+	 * @return the position
 	 */
-	public int getOrder() {
-		return order;
+	public int getPosition() {
+		return position;
 	}
 
 	/**
-	 * @param order the order to set
+	 * @param position the position to set
 	 */
-	public void setOrder(int order) {
-		this.order = order;
+	public void setPosition(int order) {
+		this.position = order;
 	}
 
 	/* (non-Javadoc)
@@ -80,9 +80,9 @@ public class GroupBy {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((alias == null) ? 0 : alias.hashCode());
+		result = prime * result + ((rowAlias == null) ? 0 : rowAlias.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + order;
+		result = prime * result + position;
 		return result;
 	}
 
@@ -101,17 +101,17 @@ public class GroupBy {
 			return false;
 		}
 		GroupBy other = (GroupBy) obj;
-		if (alias == null) {
-			if (other.alias != null) {
+		if (rowAlias == null) {
+			if (other.rowAlias != null) {
 				return false;
 			}
-		} else if (!alias.equals(other.alias)) {
+		} else if (!rowAlias.equals(other.rowAlias)) {
 			return false;
 		}
 		if (id != other.id) {
 			return false;
 		}
-		if (order != other.order) {
+		if (position != other.position) {
 			return false;
 		}
 		return true;
@@ -122,7 +122,7 @@ public class GroupBy {
 	 */
 	@Override
 	public String toString() {
-		return "GroupBy [id=" + id + ", alias=" + alias + ", order=" + order
+		return "GroupBy [id=" + id + ", rowAlias=" + rowAlias + ", position=" + position
 				+ "]";
 	}
 	

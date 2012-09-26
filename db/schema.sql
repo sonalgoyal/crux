@@ -62,6 +62,7 @@ CREATE  TABLE IF NOT EXISTS `valueType`(
 `datastoreId` BIGINT(100) NOT NULL ,
 `name` VARCHAR(100) NOT NULL ,
 `className` VARCHAR(100) NOT NULL ,
+`promotedValueClassName` VARCHAR(100) NOT NULL,
 `isNumeric` BOOLEAN NOT NULL,
 PRIMARY KEY (`id`) ,
 UNIQUE INDEX `valueType_unique_keys` (`datastoreId`, `name`),
@@ -475,6 +476,7 @@ CREATE  TABLE IF NOT EXISTS `groupBy` (
 `id` BIGINT(100) NOT NULL AUTO_INCREMENT,
 `groupBysId` BIGINT(100) NOT NULL,
 `rowAliasId` BIGINT(100) NOT NULL,
+`position` INT NOT NULL,
 PRIMARY KEY (`id`) , 
 UNIQUE INDEX `groupBy_unique_keys` (`groupBysId`, `rowAliasId`) ,
 CONSTRAINT `fk_groupBy_rowAliasId` 
@@ -496,13 +498,20 @@ INSERT  INTO `datastore`(`id`,`name`) VALUES (1, 'HBase');
 
 INSERT  INTO `user`(`id`,`name`,`password`) VALUES (1, 'nube','nube');
 
-INSERT  INTO `valueType`(`id`,`datastoreId`, `name`,`className`,`isNumeric`) VALUES (1, 1, 'String','java.lang.String',false);
-INSERT  INTO `valueType`(`id`,`datastoreId`, `name`,`className`,`isNumeric`) VALUES (2, 1, 'Boolean','java.lang.Boolean',true);
-INSERT  INTO `valueType`(`id`,`datastoreId`, `name`,`className`,`isNumeric`) VALUES (3, 1, 'Integer','java.lang.Integer',true);
-INSERT  INTO `valueType`(`id`,`datastoreId`, `name`,`className`,`isNumeric`) VALUES (4, 1, 'Long','java.lang.Long',true);
-INSERT  INTO `valueType`(`id`,`datastoreId`, `name`,`className`,`isNumeric`) VALUES (5, 1, 'Float','java.lang.Float',true);
-INSERT  INTO `valueType`(`id`,`datastoreId`, `name`,`className`,`isNumeric`) VALUES (6, 1, 'Double','java.lang.Double',true);
-INSERT  INTO `valueType`(`id`,`datastoreId`, `name`,`className`,`isNumeric`) VALUES (7, 1, 'Short','java.lang.Short',true);
+INSERT  INTO `valueType`(`id`,`datastoreId`, `name`,`className`,`promotedValueClassName`, `isNumeric`) 
+	VALUES (1, 1, 'String','java.lang.String','java.lang.String', false);
+INSERT  INTO `valueType`(`id`,`datastoreId`, `name`,`className`,`promotedValueClassName`, `isNumeric`)
+	VALUES (2, 1, 'Boolean','java.lang.Boolean', 'java.lang.Boolean', true);
+INSERT  INTO `valueType`(`id`,`datastoreId`, `name`,`className`,`promotedValueClassName`, `isNumeric`)
+	VALUES (3, 1, 'Integer','java.lang.Integer','java.lang.Long', true);
+INSERT  INTO `valueType`(`id`,`datastoreId`, `name`,`className`,`promotedValueClassName`, `isNumeric`)
+	VALUES (4, 1, 'Long','java.lang.Long','java.lang.Long', true);
+INSERT  INTO `valueType`(`id`,`datastoreId`, `name`,`className`,`promotedValueClassName`, `isNumeric`)
+	VALUES (5, 1, 'Float','java.lang.Float','java.lang.Double', true);
+INSERT  INTO `valueType`(`id`,`datastoreId`, `name`,`className`,`promotedValueClassName`, `isNumeric`)
+	VALUES (6, 1, 'Double','java.lang.Double','java.lang.Double', true);
+INSERT  INTO `valueType`(`id`,`datastoreId`, `name`,`className`,`promotedValueClassName`, `isNumeric`)
+	VALUES (7, 1, 'Short','java.lang.Short','java.lang.Long', true);
 
 
 INSERT  INTO `reportType`(`id`,`type`) VALUES (1, 'Columns');

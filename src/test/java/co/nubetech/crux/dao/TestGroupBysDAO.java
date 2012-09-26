@@ -7,6 +7,7 @@ import java.sql.Statement;
 import org.junit.Test;
 import org.junit.Assert.*;
 
+import co.nubetech.crux.model.GroupBy;
 import co.nubetech.crux.model.GroupBys;
 import co.nubetech.crux.util.CruxException;
 
@@ -24,8 +25,8 @@ public class TestGroupBysDAO extends DBConnection{
 			stmt.executeUpdate("insert into rowAlias values(19999,99999,'aliasTest1',1,3)");
 			stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',null,25)");
 			stmt.executeUpdate("insert into groupBys(id, reportId) values(1, 99999)");
-			stmt.executeUpdate("insert into groupBy(id, groupBysId, rowAliasId) values(1,1,99999)");
-			stmt.executeUpdate("insert into groupBy(id, groupBysId, rowAliasId) values(2,1,19999)");
+			stmt.executeUpdate("insert into groupBy(id, groupBysId, rowAliasId, position) values(1,1,99999,1)");
+			stmt.executeUpdate("insert into groupBy(id, groupBysId, rowAliasId, position) values(2,1,19999,2)");
 			
 			GroupBysDAO dao = new GroupBysDAO();
 			dao.session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
@@ -35,7 +36,10 @@ public class TestGroupBysDAO extends DBConnection{
 			assertEquals(1, groupBys.getId());
 			assertEquals(99999, groupBys.getReport().getId());
 			assertEquals("reportTest", groupBys.getReport().getName());
+			//for (GroupBy groupBy: groupBys.getGroupBy()) {
 			assertEquals(2, groupBys.getGroupBy().size());
+			//System.out.println("Groupby is " + groupBy);
+			//}
 		}
 		catch (CruxException e) {
 			// TODO Auto-generated catch block
