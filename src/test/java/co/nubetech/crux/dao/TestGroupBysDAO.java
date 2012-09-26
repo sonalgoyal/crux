@@ -53,15 +53,15 @@ public class TestGroupBysDAO extends DBConnection{
 		} 
 		finally {
 			if (stmt != null) {
-				
 				dao.session.close();
-				stmt.executeUpdate("delete * from rowAlias");
-				stmt.executeUpdate("delete * from columnAlias");
-				stmt.executeUpdate("delete * from report");
-				stmt.executeUpdate("delete * from groupBy");
-				stmt.executeUpdate("delete * from groupBys");
-				stmt.executeUpdate("delete * from mapping");
-				stmt.executeUpdate("delete * from connection");
+				
+				stmt.executeUpdate("delete from groupBy");
+				stmt.executeUpdate("delete from groupBys");
+				stmt.executeUpdate("delete from report");
+				stmt.executeUpdate("delete from rowAlias");
+				stmt.executeUpdate("delete from columnAlias");
+				stmt.executeUpdate("delete from mapping");
+				stmt.executeUpdate("delete from connection");
 				
 				stmt.close();
 			}
