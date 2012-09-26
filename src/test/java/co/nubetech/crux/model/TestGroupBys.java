@@ -16,14 +16,14 @@ public class TestGroupBys {
 		alias.setId(1l);
 		alias.setLength(10);
 		alias.setValueType(new ValueType());
-		date.setAlias(alias);
+		date.setRowAlias(alias);
 		
 		GroupBy time = new GroupBy();
 		time.setId(2l);
 		RowAlias alias1 = new RowAlias();
 		alias1.setId(2l);
 		alias1.setLength(5);
-		time.setAlias(alias1);
+		time.setRowAlias(alias1);
 		
 		GroupBys groupBys = new GroupBys();
 		groupBys.setId(100l);

@@ -16,6 +16,7 @@ public class TestGroupBysDAO extends DBConnection{
 	@Test
 	public void testGetGroupBys() throws Exception{
 		Statement stmt = null;
+		GroupBysDAO dao = null;
 		try{
 			stmt = getStatement();
 			stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
@@ -28,7 +29,7 @@ public class TestGroupBysDAO extends DBConnection{
 			stmt.executeUpdate("insert into groupBy(id, groupBysId, rowAliasId, position) values(1,1,99999,1)");
 			stmt.executeUpdate("insert into groupBy(id, groupBysId, rowAliasId, position) values(2,1,19999,2)");
 			
-			GroupBysDAO dao = new GroupBysDAO();
+			dao = new GroupBysDAO();
 			dao.session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
 					.getNewSession();
 			GroupBys groupBys = dao.findById(1l); 
@@ -52,6 +53,16 @@ public class TestGroupBysDAO extends DBConnection{
 		} 
 		finally {
 			if (stmt != null) {
+				
+				dao.session.close();
+				stmt.executeUpdate("delete * from rowAlias");
+				stmt.executeUpdate("delete * from columnAlias");
+				stmt.executeUpdate("delete * from report");
+				stmt.executeUpdate("delete * from groupBy");
+				stmt.executeUpdate("delete * from groupBys");
+				stmt.executeUpdate("delete * from mapping");
+				stmt.executeUpdate("delete * from connection");
+				
 				stmt.close();
 			}
 		}

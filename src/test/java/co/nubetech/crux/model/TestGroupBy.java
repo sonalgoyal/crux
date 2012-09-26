@@ -26,14 +26,15 @@ public class TestGroupBy {
 		groupBy.setId(1l);
 		RowAlias alias = new RowAlias();
 		alias.setId(100l);
-		groupBy.setAlias(alias);
-		groupBy.setOrder(1);
+		groupBy.setRowAlias(alias);
+		groupBy.setPosition(1);
 		
 		GroupBy groupBy1 = new GroupBy();
 		groupBy1.setId(1l);
 		RowAlias alias1 = new RowAlias();
 		alias1.setId(100l);
-		groupBy1.setAlias(alias1);
+		groupBy1.setRowAlias(alias1);
+		groupBy1.setPosition(1);
 		
 		assertEquals(groupBy, groupBy1);
 	}
@@ -44,13 +45,13 @@ public class TestGroupBy {
 		groupBy.setId(1l);
 		RowAlias alias = new RowAlias();
 		alias.setId(100l);
-		groupBy.setAlias(alias);
+		groupBy.setRowAlias(alias);
 		
 		GroupBy groupBy1 = new GroupBy();
 		groupBy1.setId(2l);
 		RowAlias alias1 = new RowAlias();
 		alias1.setId(100l);
-		groupBy1.setAlias(alias1);
+		groupBy1.setRowAlias(alias1);
 		
 		assertFalse(groupBy.equals(groupBy1));
 	}
@@ -61,13 +62,13 @@ public class TestGroupBy {
 		groupBy.setId(1l);
 		RowAlias alias = new RowAlias();
 		alias.setId(100l);
-		groupBy.setAlias(alias);
+		groupBy.setRowAlias(alias);
 		
 		GroupBy groupBy1 = new GroupBy();
 		groupBy1.setId(1l);
 		RowAlias alias1 = new RowAlias();
 		alias1.setId(100l);
-		groupBy1.setAlias(alias1);
+		groupBy1.setRowAlias(alias1);
 		
 		assertEquals(groupBy.hashCode(), groupBy1.hashCode());
 	}
