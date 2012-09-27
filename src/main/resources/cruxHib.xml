@@ -138,6 +138,7 @@
 			<key column="reportId" />
 			<one-to-many class="ReportDesign" />
 		</bag>
+		<one-to-one name="groupBys" class="GroupBys" property-ref="report"/>
 	</class>
 
 	<class name="ReportDesign" table="reportDesign" lazy="false">
@@ -235,7 +236,7 @@
 		<id name="id" >
 			<generator class="increment" />
 		</id>
-		<many-to-one name="report" column="reportId" class="Report"  lazy="false" />
+		<many-to-one name="report" column="reportId" class="Report"  lazy="false"/>
 		<bag name="groupBy" table="groupBy" cascade="save-update,delete,all-delete-orphan" order-by="position asc">
 			<key column="groupBysId" not-null="true"/>
 			<one-to-many class="GroupBy" />
