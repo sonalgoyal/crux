@@ -202,6 +202,96 @@ public class TestGroupBysDAO extends DBConnection{
 		
 	}
 	
+	@Test
+	public void testUpdate() throws Exception {
+		GroupBysDAO dao = null;
+		try{
+			stmt.executeUpdate("insert into groupBys(id, reportId) values(1, 99999)");
+			stmt.executeUpdate("insert into groupBy(id, groupBysId, rowAliasId, position) values(1,1,99999,1)");
+			stmt.executeUpdate("insert into groupBy(id, groupBysId, rowAliasId, position) values(2,1,19999,2)");
+			
+			dao = new GroupBysDAO();
+			dao.session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
+					.getNewSession();
+			dao.transaction = dao.session.getTransaction();
+			
+			GroupBys groupBys = dao.findById(1l);
+			groupBys.getGroupBy().remove(0);
+			groupBys.getGroupBy().get(0).setPosition(1);
+			
+			long id = dao.save(groupBys);
+						
+			assertEquals(id, groupBys.getId());
+			assertEquals(1, groupBys.getId());
+			//assertEquals(99999, groupBys.getReport().getId());
+//			/assertEquals("reportTest", groupBys.getReport().getName());
+			
+			ResultSet rs = stmt.executeQuery("select id, reportId from groupBys");
+			if (rs!= null  && rs.first()) {
+				assertEquals(id, rs.getLong(1));
+				assertEquals(99999, rs.getLong(2));
+				rs.close();
+			}
+			else {
+				fail("GroupBys not modified");
+			}
+			ResultSet rs1 = stmt.executeQuery("select id, groupBysId,rowAliasId, position from groupBy");
+			if (rs1 != null && rs1.first()) {
+				assertNotNull(rs1.getLong(1));
+				assertEquals(id, rs1.getLong(2));
+				assertEquals(19999, rs1.getLong(3));
+				assertEquals(1, rs1.getInt(4));
+				assertFalse(rs1.next());				
+			}
+			else {				
+				fail("Groupbys should have modified groupBy");
+			}
+			
+			RowAlias alias = new RowAlias();
+			alias.setId(99999);
+			
+			GroupBy groupBy1 = createGroupBy(2, alias);
+			
+			groupBys.getGroupBy().add(groupBy1);
+			id = dao.save(groupBys);
+			
+			assertEquals(id, groupBys.getId());
+			assertEquals(1, groupBys.getId());
+			
+			rs = stmt.executeQuery("select id, reportId from groupBys");
+			if (rs!= null  && rs.first()) {
+				assertEquals(id, rs.getLong(1));
+				assertEquals(99999, rs.getLong(2));
+				rs.close();
+			}
+			else {
+				fail("GroupBys unintended modified");
+			}
+			rs1 = stmt.executeQuery("select id, groupBysId,rowAliasId, position from groupBy");
+			if (rs1 != null && rs1.first()) {
+				assertNotNull(rs1.getLong(1));
+				assertEquals(id, rs1.getLong(2));
+				assertEquals(19999, rs1.getLong(3));
+				assertEquals(1, rs1.getInt(4));
+				rs1.next();
+				assertNotNull(rs1.getLong(1));
+				assertEquals(id, rs1.getLong(2));
+				assertEquals(99999, rs1.getLong(3));
+				assertEquals(2, rs1.getInt(4));
+			}
+			
+		}
+		catch (Throwable e) {
+			e.printStackTrace();
+			fail("Unexpected exception " + e);
+		} 
+		finally {
+				dao.session.close();
+		}
+		
+	}
+
+	
 	public GroupBy createGroupBy(int position, RowAlias alias) {
 		GroupBy groupBy = new GroupBy();
 		groupBy.setRowAlias(alias);
