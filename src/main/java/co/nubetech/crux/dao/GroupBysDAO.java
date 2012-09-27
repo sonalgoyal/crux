@@ -65,9 +65,4 @@ public class GroupBysDAO {
 		}
 		return groupBys.getId();
 	}
-
-	
-	
-
-
 }

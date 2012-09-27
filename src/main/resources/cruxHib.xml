@@ -235,10 +235,10 @@
 		<id name="id" >
 			<generator class="increment" />
 		</id>
-		<many-to-one name="report" column="reportId" class="Report"  lazy="false"/>
-		<bag name="groupBy" table="groupBy" cascade="all" order-by="position asc">
-			<key column="groupBysId"/>
-			<one-to-many class="GroupBy"/>
+		<many-to-one name="report" column="reportId" class="Report"  lazy="false" />
+		<bag name="groupBy" table="groupBy" cascade="save-update,delete,all-delete-orphan" order-by="position asc">
+			<key column="groupBysId" not-null="true"/>
+			<one-to-many class="GroupBy" />
 		</bag>
 	</class>
 	
