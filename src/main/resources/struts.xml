@@ -143,8 +143,28 @@
 			<result type="json" />
 		</action>		
 		<!-- Required for root namespace to work with Jetty -->
-               <action name="">
-                       <result type="chain">welcome</result>
-               </action>
+        <action name="">
+            <result type="chain">welcome</result>
+        </action>
+        <action name="initializeAnalysis" class="co.nubetech.crux.action.AnalysisAction"
+			method="initializeAnalysis">
+			<result name="success">/defineAnalysis.jsp</result>
+		</action>
+		<action name="saveAnalysis" class="co.nubetech.crux.action.AnalysisAction"
+			method="saveAnalysis">
+			<interceptor-ref name="cruxDemoInterceptorStack"/>
+			<result type="json"/>
+		</action>
+		<action name="updateAnalysis" class="co.nubetech.crux.action.AnalysisAction"
+			method="updateAnalysis">
+			<interceptor-ref name="cruxDemoInterceptorStack"/>
+			<result type="json"/>
+		</action>
+		<action name="deleteAnalysis" class="co.nubetech.crux.action.AnalysisAction"
+			method="deleteAnalysis">
+			<interceptor-ref name="cruxDemoInterceptorStack"/>
+			<result type="json"/>
+		</action>
+        
 	</package>
 </struts>

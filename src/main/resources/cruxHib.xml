@@ -223,4 +223,11 @@
 		<property name="index" type="int" column="indexNo" />
 		<property name="column" type="int" column="columnNo" />
 	</class>
+    <class name="Analysis" table="analysis" lazy="false">
+	   <id name="id">
+	       <generator class="increment" />
+	   </id> 
+	   <property name="name" type="string" column="name" />
+	   <property name="text" type="string" column="text" />
+	</class>
 </hibernate-mapping>
