@@ -14,6 +14,7 @@
  dojo.require("dijit.form.Form");
  dojo.require("dijit.form.Button");
  dojo.require("dijit.form.ValidationTextBox");
+ dojo.require("dijit.form.SimpleTextarea");
  dojo.require("dijit.form.Select");
  dojo.require("dojox.grid.DataGrid");
  dojo.require("dojo.data.ItemFileWriteStore");
@@ -324,12 +325,7 @@
 	   obj = dojox.json.ref.fromJson(document.getElementById("jsonType").value);
 	   results = dojox.json.schema.validate(obj, schema);
 	 
-	   if(results.valid){ 
-		 alert("True");
-	   }
-	   else { 
-		 alert("False");
-	   }
+
 	 return results;
  }
 
@@ -381,7 +377,7 @@
                                       maxlength=100 required="true" trim="true" missingMessage="Required."></td></tr>
             <tr><td align="right">Json:&nbsp;</td>
             <td align="left">
-            <textarea id="jsonType" name="analysis.text"  ></textarea></td></tr>
+            <textarea id="jsonType" name="analysis.text" dojoType="dijit.form.SimpleTextarea"  ></textarea></td></tr>
             <tr><td></td>
             <td align="center">
             <button type="submit" dojoType="dijit.form.Button" >Save</button>
