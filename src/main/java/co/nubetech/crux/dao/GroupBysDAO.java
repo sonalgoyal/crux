@@ -1,10 +1,13 @@
 package co.nubetech.crux.dao;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.hibernate.JDBCException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import co.nubetech.crux.model.GroupBy;
 import co.nubetech.crux.model.GroupBys;
 import co.nubetech.crux.model.Mapping;
 import co.nubetech.crux.util.CruxException;
@@ -40,6 +43,14 @@ public class GroupBysDAO {
 		long id = groupBys.getId();
 		try {
 			transaction.begin();
+			//null the group by
+			List<GroupBy> groupByList = groupBys.getGroupBy();
+			if (groupByList != null) {
+				for (GroupBy grpBy: groupByList) {
+					groupByList.remove(grpBy);
+				}
+			}
+			groupBys.getReport().setGroupBys(null);
 			session.delete(groupBys);
 			transaction.commit();
 		} catch (JDBCException e) {
