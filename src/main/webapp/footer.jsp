@@ -14,7 +14,7 @@
 -->
 
 
-<div align="center" style="width: 100%;  bottom: 10px;">Copyright 2011 Nube Technologies</div>
+<div align="center" style="width: 100%;  bottom: 10px;">Copyright 2012 Nube Technologies</div>
 </div>
 
 

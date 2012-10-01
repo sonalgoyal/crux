@@ -491,6 +491,20 @@ ON UPDATE NO ACTION
 
 
 -- -----------------------------------------------------
+-- Table `analysis`
+-- -----------------------------------------------------
+
+DROP TABLE IF EXISTS `analysis` ;
+
+CREATE  TABLE IF NOT EXISTS `analysis`(
+`id` BIGINT(100) NOT NULL AUTO_INCREMENT ,
+`name` VARCHAR(100) NOT NULL ,
+`text` VARCHAR(100) NOT NULL ,
+PRIMARY KEY (`id`) ) ENGINE = InnoDB;
+
+
+
+-- -----------------------------------------------------
 -- insert queries
 -- -----------------------------------------------------
 
