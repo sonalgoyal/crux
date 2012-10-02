@@ -178,7 +178,7 @@
 			</dependencies>			
 		</profile>
 		<profile>
-			<id></id>
+			<id>hbase0.92</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 				<property>
