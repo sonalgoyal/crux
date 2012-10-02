@@ -120,6 +120,8 @@ Instructions to run test cases of Crux with Maven
 -
     CRUX_HOME$ mvn test
 
+(For running tests against 0.92.1, set umask 0022 and run tests against hbase0.92 profile)
+
 Instructions to set up the dev environment in Eclipse
 -
 - Add the Maven dependencies through the Eclipse m2e plugin and you should be good to go. 
