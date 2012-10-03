@@ -28,6 +28,7 @@ public class Report {
 	private Collection<ReportDesign> designs = new ArrayList<ReportDesign>();
 	private Collection<RowAliasFilter> rowAliasFilters = new ArrayList<RowAliasFilter>();
 	private Collection<ColumnFilter> columnFilters = new ArrayList<ColumnFilter>();
+	private GroupBys groupBys;
 
 	public Report() {
 
@@ -127,15 +128,23 @@ public class Report {
 		return result;
 	}
 
-	
-	@Override
-	public String toString() {
-		return "Report [id=" + id + ", user=" + user + ", name=" + name
-				+ ", reportType=" + reportType + ", dashboard=" + dashboard
-				+ ", designs=" + designs + ", rowAliasFilters="
-				+ rowAliasFilters + ", columnFilters=" + columnFilters + ", numRecordsPerPage="+ numRecordsPerPage + "]";
+	/**
+	 * @return the groupBys
+	 */
+	public GroupBys getGroupBys() {
+		return groupBys;
 	}
 
+	/**
+	 * @param groupBys the groupBys to set
+	 */
+	public void setGroupBys(GroupBys groupBys) {
+		this.groupBys = groupBys;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -145,6 +154,8 @@ public class Report {
 		result = prime * result
 				+ ((dashboard == null) ? 0 : dashboard.hashCode());
 		result = prime * result + ((designs == null) ? 0 : designs.hashCode());
+		result = prime * result
+				+ ((groupBys == null) ? 0 : groupBys.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
@@ -157,55 +168,99 @@ public class Report {
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof Report)) {
 			return false;
+		}
 		Report other = (Report) obj;
 		if (columnFilters == null) {
-			if (other.columnFilters != null)
+			if (other.columnFilters != null) {
 				return false;
-		} else if (!columnFilters.equals(other.columnFilters))
+			}
+		} else if (!columnFilters.equals(other.columnFilters)) {
 			return false;
+		}
 		if (dashboard == null) {
-			if (other.dashboard != null)
+			if (other.dashboard != null) {
 				return false;
-		} else if (!dashboard.equals(other.dashboard))
+			}
+		} else if (!dashboard.equals(other.dashboard)) {
 			return false;
+		}
 		if (designs == null) {
-			if (other.designs != null)
+			if (other.designs != null) {
 				return false;
-		} else if (!designs.equals(other.designs))
+			}
+		} else if (!designs.equals(other.designs)) {
 			return false;
-		if (id != other.id)
+		}
+		if (groupBys == null) {
+			if (other.groupBys != null) {
+				return false;
+			}
+		} else if (!groupBys.equals(other.groupBys)) {
 			return false;
+		}
+		if (id != other.id) {
+			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
-		if (numRecordsPerPage != other.numRecordsPerPage)
+		}
+		if (numRecordsPerPage != other.numRecordsPerPage) {
 			return false;
+		}
 		if (reportType == null) {
-			if (other.reportType != null)
+			if (other.reportType != null) {
 				return false;
-		} else if (!reportType.equals(other.reportType))
+			}
+		} else if (!reportType.equals(other.reportType)) {
 			return false;
+		}
 		if (rowAliasFilters == null) {
-			if (other.rowAliasFilters != null)
+			if (other.rowAliasFilters != null) {
 				return false;
-		} else if (!rowAliasFilters.equals(other.rowAliasFilters))
+			}
+		} else if (!rowAliasFilters.equals(other.rowAliasFilters)) {
 			return false;
+		}
 		if (user == null) {
-			if (other.user != null)
+			if (other.user != null) {
 				return false;
-		} else if (!user.equals(other.user))
+			}
+		} else if (!user.equals(other.user)) {
 			return false;
+		}
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Report [id=" + id + ", user=" + user + ", name=" + name
+				+ ", reportType=" + reportType + ", dashboard=" + dashboard
+				+ ", numRecordsPerPage=" + numRecordsPerPage + ", designs="
+				+ designs + ", rowAliasFilters=" + rowAliasFilters
+				+ ", columnFilters=" + columnFilters + ", groupBys=" + groupBys
+				+ "]";
+	}
+
+	
+	
 }

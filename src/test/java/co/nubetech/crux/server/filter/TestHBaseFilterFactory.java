@@ -3397,7 +3397,7 @@ public class TestHBaseFilterFactory {
 		FilterType type = new FilterType(1, "Greater Than");
 
 		ValueType valueType = new ValueType(1, null, "java.lang.Long",
-				"java.lang.Long", true);
+				"java.lang.Long", "java.lang.Long", true);
 
 		RowAlias alias = new RowAlias(1, null, valueType, 8, "alias");
 

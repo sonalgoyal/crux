@@ -89,9 +89,12 @@ public class TestMappingAction {
 		when(mockedConnectionDAO.findAll()).thenReturn(connectionList);
 				
 		//Code for creating List<ValueType> & mock for it.
-		ValueType valueType1 = new ValueType(101, datastore, "valueType1", "className1", true);
-		ValueType valueType2 = new ValueType(102, datastore, "valueType2", "className2", true);
-		ValueType valueType3 = new ValueType(103, datastore, "valueType3", "className3", true);
+		ValueType valueType1 = new ValueType(101, datastore, "valueType1", "className1", 
+				"className1", true);
+		ValueType valueType2 = new ValueType(102, datastore, "valueType2", "className2", 
+				"className2", true);
+		ValueType valueType3 = new ValueType(103, datastore, "valueType3", "className3", 
+				"className3", true);
 		
 		List<ValueType> valueTypeList = new ArrayList<ValueType>();
 		valueTypeList.add(valueType1);
@@ -231,7 +234,9 @@ public class TestMappingAction {
 		
 		
 		//Code for creating List<Mapping> & mock for it.
-		ValueType valueType = new ValueType(101, datastore, "valueType1", "className1", true);
+		ValueType valueType = new ValueType(101, datastore, "valueType1", "className1", 
+				"className1", true);
+		
 	
 		
 		//Code for creating List<Mapping> & mock for it.
@@ -317,7 +322,8 @@ public class TestMappingAction {
 		datastore.setId(121212);
 		datastore.setName("Hbase");
 		
-		ValueType valueType = new ValueType(101, datastore, "valueTypeName", "className", true);
+		ValueType valueType = new ValueType(101, datastore, "valueTypeName", "className", 
+				"className", true);
 				
 		Mapping mapping = new Mapping();
 		
@@ -390,7 +396,8 @@ public class TestMappingAction {
 		datastore.setId(121212);
 		datastore.setName("Hbase");
 		
-		ValueType valueType = new ValueType(101, datastore, "valueTypeName", "className", true);
+		ValueType valueType = new ValueType(101, datastore, "valueTypeName", "className", 
+				"className", true);
 				
 		Mapping mapping = new Mapping();
 		
@@ -419,7 +426,8 @@ public class TestMappingAction {
 		datastore.setId(121212);
 		datastore.setName("Hbase");
 		
-		ValueType valueType = new ValueType(101, datastore, "valueType", "className1", true);
+		ValueType valueType = new ValueType(101, datastore, "valueType", "className1", 
+				"className1", true);
 		
 		Mapping mapping = new Mapping();
 				
@@ -519,9 +527,12 @@ public class TestMappingAction {
 		
 		Datastore datastore = new Datastore();
 		
-		ValueType valueType1 = new ValueType((long) 1001, datastore, "valueType1", "className1", true);
-		ValueType valueType2 = new ValueType((long) 1002, datastore, "valueType2", "className2", true);
-		ValueType valueType3 = new ValueType((long) 1003, datastore, "valueType3", "className3", true);
+		ValueType valueType1 = new ValueType((long) 1001, datastore, "valueType1", 
+				"className1", "className1", true);
+		ValueType valueType2 = new ValueType((long) 1002, datastore, "valueType2", "className2", 
+				"className1", true);
+		ValueType valueType3 = new ValueType((long) 1003, datastore, "valueType3", 
+				"className3", "className1", true);
 		
 		List<ValueType> valueTypeList = new ArrayList<ValueType>();
 		valueTypeList.add(valueType1);

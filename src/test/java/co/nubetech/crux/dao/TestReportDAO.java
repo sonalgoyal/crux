@@ -16,6 +16,7 @@ package co.nubetech.crux.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,37 +42,54 @@ public class TestReportDAO extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
+		stmt.executeUpdate("insert into rowAlias values(99999,99999,'aliasTest',1,3)");
+		stmt.executeUpdate("insert into rowAlias values(19999,99999,'aliasTest1',1,3)");
 		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',null,25)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
+		stmt.executeUpdate("insert into groupBys(id, reportId) values(1, 99999)");
+		stmt.executeUpdate("insert into groupBy(id, groupBysId, rowAliasId, position) values(1,1,99999,1)");
+		stmt.executeUpdate("insert into groupBy(id, groupBysId, rowAliasId, position) values(2,1,19999,2)");
+		
 		
 		ReportDAO reportDAO = new ReportDAO();
 		try{
-		reportDAO.session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
-				.getNewSession();
-
-		Report resultRep = reportDAO.findById(99999l);
-		assertEquals(resultRep.getName(), "reportTest");
-		assertEquals(resultRep.getUser().getId(), 1l);
-		assertEquals(resultRep.getNumRecordsPerPage(), 25l);
-		
-		ArrayList<ReportDesign> designs = new ArrayList<ReportDesign>(
-				resultRep.getDesigns());
-		ReportDesign design = designs.get(0);
-
-		assertEquals(design.getId(), 99999l);
-		assertEquals(design.getReport().getId(), 99999l);
-		assertEquals(design.getMappingAxis(), "x");
-		
+			reportDAO.session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
+					.getNewSession();
+	
+			Report resultRep = reportDAO.findById(99999l);
+			assertEquals(resultRep.getName(), "reportTest");
+			assertEquals(resultRep.getUser().getId(), 1l);
+			assertEquals(resultRep.getNumRecordsPerPage(), 25l);
+			
+			ArrayList<ReportDesign> designs = new ArrayList<ReportDesign>(
+					resultRep.getDesigns());
+			ReportDesign design = designs.get(0);
+	
+			assertEquals(design.getId(), 99999l);
+			assertEquals(design.getReport().getId(), 99999l);
+			assertEquals(design.getMappingAxis(), "x");
+			assertEquals(1, resultRep.getGroupBys().getId());
+			assertEquals(1, resultRep.getGroupBys().getGroupBy().get(0).getId());
+			assertEquals(1, resultRep.getGroupBys().getGroupBy().get(0).getPosition());
+			assertEquals(2, resultRep.getGroupBys().getGroupBy().get(1).getId());
+			assertEquals(2, resultRep.getGroupBys().getGroupBy().get(1).getPosition());		
 		}
-		catch(Exception e){ e.printStackTrace(); }
+		catch(Throwable e){ 
+			e.printStackTrace();
+			fail("Exception running test");
+		}
 		finally{
-		stmt.executeUpdate("delete from reportDesign where id=" + 99999);
-		stmt.executeUpdate("delete from report where id=" + 99999);
-		stmt.executeUpdate("delete from columnAlias where id=" + 99999);
-		stmt.executeUpdate("delete from mapping where id=" + 99999);
-		stmt.executeUpdate("delete from connection where id=" + 99999);
-		reportDAO.session.close();
-		stmt.close();
+			stmt.executeUpdate("delete from groupBy");
+			stmt.executeUpdate("delete from groupBys");
+			stmt.executeUpdate("delete from rowAlias");
+			stmt.executeUpdate("delete from reportDesign where id=" + 99999);
+			stmt.executeUpdate("delete from report where id=" + 99999);
+			stmt.executeUpdate("delete from columnAlias where id=" + 99999);
+			stmt.executeUpdate("delete from mapping where id=" + 99999);
+			stmt.executeUpdate("delete from connection where id=" + 99999);
+			
+			reportDAO.session.close();
+			stmt.close();
 		}
 	}
 
