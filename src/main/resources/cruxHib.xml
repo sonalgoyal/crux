@@ -66,6 +66,7 @@
 		<many-to-one name="datastore" column="datastoreId" class="Datastore" lazy="false" />
 		<property name="name" type="string" column="name" />
 		<property name="className" type="string" column="className" />
+		<property name="promotedValueClassName" type="string" column="promotedValueClassName" />
 		<property name="numeric" type="boolean" column="isNumeric" />
 	</class>
 	
@@ -137,6 +138,7 @@
 			<key column="reportId" />
 			<one-to-many class="ReportDesign" />
 		</bag>
+		<one-to-one name="groupBys" class="GroupBys" property-ref="report"/>
 	</class>
 
 	<class name="ReportDesign" table="reportDesign" lazy="false">
@@ -223,6 +225,26 @@
 		<property name="index" type="int" column="indexNo" />
 		<property name="column" type="int" column="columnNo" />
 	</class>
+<<<<<<< Temporary merge branch 1
+	<class name="GroupBy" table="groupBy" lazy="false">
+		<id name="id" >
+			<generator class="increment" />
+		</id>
+		<many-to-one name="rowAlias" column="rowAliasId" class="RowAlias"  lazy="false"/>	
+		<property name="position" column="position" type="int" lazy="false" />	
+	</class>
+	<class name="GroupBys" table="groupBys" lazy="false">
+		<id name="id" >
+			<generator class="increment" />
+		</id>
+		<many-to-one name="report" column="reportId" class="Report"  lazy="false"/>
+		<bag name="groupBy" table="groupBy" cascade="save-update,delete,all-delete-orphan" order-by="position asc">
+			<key column="groupBysId" not-null="true"/>
+			<one-to-many class="GroupBy" />
+		</bag>
+	</class>
+	
+=======
     <class name="Analysis" table="analysis" lazy="false">
 	   <id name="id">
 	       <generator class="increment" />
@@ -230,4 +252,5 @@
 	   <property name="name" type="string" column="name" />
 	   <property name="text" type="string" column="text" />
 	</class>
+>>>>>>> Temporary merge branch 2
 </hibernate-mapping>

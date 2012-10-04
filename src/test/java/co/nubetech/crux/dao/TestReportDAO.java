@@ -14,7 +14,9 @@
  */
 package co.nubetech.crux.dao;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -22,14 +24,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.junit.Test;
 
 import co.nubetech.crux.model.ColumnFilter;
 import co.nubetech.crux.model.Dashboard;
+import co.nubetech.crux.model.GroupBy;
+import co.nubetech.crux.model.GroupBys;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
+import co.nubetech.crux.model.RowAlias;
 import co.nubetech.crux.model.RowAliasFilter;
 import co.nubetech.crux.util.CruxException;
 
@@ -100,6 +106,8 @@ public class TestReportDAO extends DBConnection {
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
+		stmt.executeUpdate("insert into rowAlias values(99999,99999,'aliasTest',1,3)");
+		stmt.executeUpdate("insert into rowAlias values(19999,99999,'aliasTest1',1,3)");
 
 		Session session = com.googlecode.s2hibernate.struts2.plugin.util.HibernateSessionFactory
 				.getNewSession();
@@ -131,6 +139,31 @@ public class TestReportDAO extends DBConnection {
 		ArrayList<ReportDesign> designs = new ArrayList<ReportDesign>();
 		designs.add(design);
 		report.setDesigns(designs);
+		
+		GroupBys groupBys = new GroupBys();
+		
+		RowAlias alias = new RowAlias();
+		alias.setId(99999);
+		
+		RowAlias alias1 = new RowAlias();
+		alias1.setId(19999);
+		
+		List<GroupBy> groupByList = new ArrayList<GroupBy>();
+		GroupBy groupBy = new GroupBy();
+		
+		groupBy.setRowAlias(alias);
+		groupBy.setPosition(1);
+		
+		GroupBy groupBy1 = new GroupBy();
+		
+		groupBy1.setRowAlias(alias1);
+		groupBy1.setPosition(2);
+		
+		groupByList.add(groupBy);
+		groupByList.add(groupBy1);
+		groupBys.setGroupBy(groupByList);
+		groupBys.setReport(report);
+		report.setGroupBys(groupBys);
 
 		reportDAO.session = session;
 		reportDAO.transaction = reportDAO.session.getTransaction();
@@ -157,11 +190,41 @@ public class TestReportDAO extends DBConnection {
 			assertEquals(rs1.getLong("columnAliasId"), 99999l);
 			assertEquals(rs1.getString("mappingAxis"), "x");
 		}
-
 		rs1.close();
-
+		
+		rs = stmt.executeQuery("select id, reportId from groupBys");
+		long groupBysId = -1;
+		if (rs!= null  && rs.first()) {
+			groupBysId = rs.getLong(1);
+			assertFalse(-1 == groupBysId);
+			assertEquals(reportId, rs.getLong(2));
+			rs.close();
+		}
+		else {
+			fail("GroupBys not created");
+		}
+		rs1 = stmt.executeQuery("select id, groupBysId,rowAliasId, position from groupBy");
+		if (rs1 != null && rs1.first()) {
+			assertNotNull(rs1.getLong(1));
+			assertEquals(groupBysId, rs1.getLong(2));
+			assertEquals(99999, rs1.getLong(3));
+			assertEquals(1, rs1.getInt(4));
+			rs1.next();
+			assertNotNull(rs1.getLong(1));
+			assertEquals(groupBysId, rs1.getLong(2));
+			assertEquals(19999, rs1.getLong(3));
+			assertEquals(2, rs1.getInt(4));
+			rs1.close();				
+		}
+		else {				
+			fail("Groupbys should have created groupBy");
+		}
+		
+		stmt.executeUpdate("delete from groupBy");
+		stmt.executeUpdate("delete from groupBys");
 		stmt.executeUpdate("delete from reportDesign where id=" + designId);
 		stmt.executeUpdate("delete from report where id=" + reportId);
+		stmt.executeUpdate("delete from rowAlias");
 		stmt.executeUpdate("delete from columnAlias where id=" + 99999);
 		stmt.executeUpdate("delete from mapping where id=" + 99999);
 		stmt.executeUpdate("delete from connection where id=" + 99999);
@@ -177,9 +240,16 @@ public class TestReportDAO extends DBConnection {
 
 		stmt.executeUpdate("insert into connection values(99999,1,1,'connectionTest')");
 		stmt.executeUpdate("insert into mapping values(99999,99999,'mappingTest','tableTest')");
+		stmt.executeUpdate("insert into rowAlias values(99999,99999,'aliasTest',1,3)");
+		stmt.executeUpdate("insert into rowAlias values(19999,99999,'aliasTest1',1,3)");
 		stmt.executeUpdate("insert into columnAlias values(99999,99999,1,'columnFamilyTest','qualifierTest','aliasTest')");
 		stmt.executeUpdate("insert into report values(99999,1,1,'reportTest',null,25)");
 		stmt.executeUpdate("insert into reportDesign values(99999,99999,99999,null,'x')");
+		stmt.executeUpdate("insert into groupBys(id, reportId) values(1, 99999)");
+		stmt.executeUpdate("insert into groupBy(id, groupBysId, rowAliasId, position) values(1,1,99999,1)");
+		stmt.executeUpdate("insert into groupBy(id, groupBysId, rowAliasId, position) values(2,1,19999,2)");
+		
+
 
 		ReportDAO reportDAO = new ReportDAO();
 
@@ -197,18 +267,32 @@ public class TestReportDAO extends DBConnection {
 
 		ResultSet rs = stmt
 				.executeQuery("select * from report where id = 99999");
-		while (rs.next()) {
-			assertTrue(false);
-		}
+		if (rs!= null  && rs.first()) {
+			System.out.println(rs.getLong(0));
+			fail("Report should have been deleted");
+		}			
 		rs.close();
 
 		ResultSet rs1 = stmt
 				.executeQuery("select * from reportDesign where id = 99999");
-		while (rs1.next()) {
-			assertTrue(false);
+		if (rs1!= null  && rs1.first()) {
+			System.out.println(rs1.getLong(0));
+			fail("ReportDesign should have been deleted");
 		}
 		rs1.close();
-
+		
+		rs = stmt.executeQuery("select id from groupBys");
+		if (rs!= null  && rs.first()) {
+			System.out.println(rs.getLong(0));
+			fail("GroupBys should have been deleted");
+		}
+		rs1 = stmt.executeQuery("select id from groupBy");
+		if (rs1 != null && rs1.first()) {
+			fail("Deleting groupbys should have deleted groupby");
+		}
+		stmt.executeUpdate("delete from groupBy");
+		stmt.executeUpdate("delete from groupBys");
+		stmt.executeUpdate("delete from rowAlias");
 		stmt.executeUpdate("delete from columnAlias where id=" + 99999);
 		stmt.executeUpdate("delete from mapping where id=" + 99999);
 		stmt.executeUpdate("delete from connection where id=" + 99999);
