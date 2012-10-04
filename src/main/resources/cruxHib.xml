@@ -225,7 +225,6 @@
 		<property name="index" type="int" column="indexNo" />
 		<property name="column" type="int" column="columnNo" />
 	</class>
-<<<<<<< Temporary merge branch 1
 	<class name="GroupBy" table="groupBy" lazy="false">
 		<id name="id" >
 			<generator class="increment" />
@@ -243,8 +242,6 @@
 			<one-to-many class="GroupBy" />
 		</bag>
 	</class>
-	
-=======
     <class name="Analysis" table="analysis" lazy="false">
 	   <id name="id">
 	       <generator class="increment" />
@@ -252,5 +249,4 @@
 	   <property name="name" type="string" column="name" />
 	   <property name="text" type="string" column="text" />
 	</class>
->>>>>>> Temporary merge branch 2
 </hibernate-mapping>
