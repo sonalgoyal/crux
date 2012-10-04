@@ -242,7 +242,6 @@
 			<one-to-many class="GroupBy" />
 		</bag>
 	</class>
-	
     <class name="Analysis" table="analysis" lazy="false">
 	   <id name="id">
 	       <generator class="increment" />
