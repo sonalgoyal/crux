@@ -1,6 +1,7 @@
 package co.nubetech.crux.server.aggregate;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
@@ -9,6 +10,7 @@ import org.apache.hadoop.hbase.coprocessor.BaseEndpointCoprocessor;
 
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
+import co.nubetech.crux.model.ReportDesignFunction;
 
 public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements 
 	GroupingAggregationProtocol{
@@ -40,6 +42,7 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 		List<Stack<CruxAggregator>> aggregators = new ArrayList<Stack<CruxAggregator>>();
 		for (ReportDesign design: report.getDesigns()) {
 			Collection<ReportDesignFunction> functions = design.getReportDesignFunctionList();
+			
 		}
 		return aggregators;
 	}
