@@ -11,6 +11,7 @@ import org.apache.hadoop.hbase.coprocessor.BaseEndpointCoprocessor;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
 import co.nubetech.crux.model.ReportDesignFunction;
+import co.nubetech.crux.server.functions.CruxFunction;
 
 public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements 
 	GroupingAggregationProtocol{
@@ -38,8 +39,8 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 		return returnList;
 	}
 	
-	protected List<Stack<CruxAggregator>> getAggregators(Report report) {
-		List<Stack<CruxAggregator>> aggregators = new ArrayList<Stack<CruxAggregator>>();
+	protected List<Stack<CruxFunction>> getAggregators(Report report) {
+		List<Stack<CruxFunction>> aggregators = new ArrayList<Stack<CruxFunction>>();
 		for (ReportDesign design: report.getDesigns()) {
 			Collection<ReportDesignFunction> functions = design.getReportDesignFunctionList();
 			

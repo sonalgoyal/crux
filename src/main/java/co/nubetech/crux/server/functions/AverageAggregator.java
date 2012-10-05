@@ -1,8 +1,11 @@
-package co.nubetech.crux.server.aggregate;
+package co.nubetech.crux.server.functions;
 
 import org.apache.hadoop.hbase.util.Bytes;
 
-public class AverageAggregator implements CruxAggregator{
+import co.nubetech.crux.util.CruxException;
+
+
+public class AverageAggregator extends FunctionBase implements CruxAggregator{
 	
 	private int count;
 	private double sum;
@@ -15,7 +18,8 @@ public class AverageAggregator implements CruxAggregator{
 	/*
 	 * this method is invoked for each value
 	 */
-	public void aggregate(byte[] o) {
+	@Override
+	public void aggregate(byte[] o) throws CruxException{
 		Double dbl = Bytes.toDouble(o);
 		count++;
 		sum += dbl;
@@ -24,7 +28,8 @@ public class AverageAggregator implements CruxAggregator{
 	/*
 	 * invoked in the end to get the result
 	 */
-	public Object getResult() {
+	@Override
+	public Object getAggregate() {
 		if (count != 0) {
 			return sum/count;
 		}
@@ -32,8 +37,6 @@ public class AverageAggregator implements CruxAggregator{
 			return null;
 		}
 	}
-
-	
 	
 
 }
