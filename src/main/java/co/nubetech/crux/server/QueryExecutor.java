@@ -74,7 +74,7 @@ public class QueryExecutor {
 				setSelectedColumns(report, get);
 				Result result = hTable.get(get);
 				logger.debug("getRow is: " + result.getRow());
-				scanner = new GetScanner(result);
+				scanner = new GetScanner(result, report);
 			} else {
 				Scan scan = new Scan();
 				RangeFilters rangeFilters = getRangeFilters(report, mapping);
@@ -88,7 +88,13 @@ public class QueryExecutor {
 				setSelectedColumns(report, scan);
 				logger.debug("Scan object is " + scan);
 				ResultScanner resultScanner = hTable.getScanner(scan);
-				scanner = new ScanScanner(resultScanner);
+				if (report.getGroupBys() != null) {
+					//we have to call the coprocessors here
+					//TODO
+				}
+				else {
+					scanner = new ScanScanner(resultScanner, report);
+				}
 			}			
 		} catch (Exception e) {
 			e.printStackTrace();

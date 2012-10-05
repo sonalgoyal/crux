@@ -18,13 +18,17 @@ import java.io.IOException;
 
 import org.apache.hadoop.hbase.client.Result;
 
+import co.nubetech.crux.model.Report;
+
 public class GetScanner implements CruxScanner {
 
 	private Result result;
 	private boolean isRead;
+	private Report report;
 
-	public GetScanner(Result get) {
+	public GetScanner(Result get, Report report) {
 		this.result = get;
+		this.report = report;
 	}
 
 	public void close() {
@@ -32,23 +36,23 @@ public class GetScanner implements CruxScanner {
 		// do nothing really;
 	}
 
-	public Result next() throws IOException {
+	public CruxResult next() throws IOException {
 		if (isRead) {
 			close();
 		} else {
 			isRead = true;
 		}
-		return result;
+		return new CruxResultImpl(result, report);
 	}
 
-	public Result[] next(int n) throws IOException {
+	public CruxResult[] next(int n) throws IOException {
 		if (n >= 2) {
 			throw new IOException(
 					"Number of results requested is more than results available");
 		} else if (n < 1) {
 			throw new IOException("Invalid number of results requested");
 		} else {
-			return new Result[] { next() };
+			return new CruxResult[] { next() };
 		}
 	}
 

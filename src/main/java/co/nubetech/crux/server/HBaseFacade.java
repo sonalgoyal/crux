@@ -202,7 +202,7 @@ public class HBaseFacade {
 			keys[0] = key1;
 			keys[1] = key2;
 
-			GetScanner scanner = new GetScanner(new Result(keys));
+			GetScanner scanner = new GetScanner(new Result(keys), report);
 			return scanner;
 
 		} catch (Exception e) {
