@@ -19,12 +19,16 @@ import java.io.IOException;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 
+import co.nubetech.crux.model.Report;
+
 public class ScanScanner implements CruxScanner {
 
 	private ResultScanner scanner;
+	private Report report;
 
-	public ScanScanner(ResultScanner result) {
+	public ScanScanner(ResultScanner result, Report r) {
 		this.scanner = result;
+		this.report = r;
 	}
 
 	@Override
@@ -35,19 +39,13 @@ public class ScanScanner implements CruxScanner {
 	}
 
 	@Override
-	public Result next() throws IOException {
+	public CruxResult next() throws IOException {
 		if (scanner != null) {
-			return scanner.next();
+			return new CruxResultImpl(scanner.next(), report);
 		}
 		return null;
 	}
 
-	@Override
-	public Result[] next(int n) throws IOException {
-		if (scanner != null) {
-			return scanner.next(n);
-		}
-		return null;
-	}
+	
 
 }

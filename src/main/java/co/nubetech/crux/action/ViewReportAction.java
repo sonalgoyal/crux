@@ -197,7 +197,8 @@ public class ViewReportAction extends ViewReportListAction {
 				logger.debug("AxisValues:"+axisValues);
 			}
 
-			if (cruxScanner != null) {
+			//TODO
+			/*if (cruxScanner != null) {
 				logger.debug("About to create dataList");
 				ArrayList<Conversion> conversionList = getConversionList(reportDesignList);
 				ArrayList<SubByteArray> subByteArrayList = getSubByteArrayList(reportDesignList);
@@ -211,7 +212,7 @@ public class ViewReportAction extends ViewReportListAction {
 
 			} else {
 				error.setMessage("Cannot determine result.");
-			}
+			}*/
 		} catch (CruxException e) {
 			e.printStackTrace();
 			error.setMessage(e.getMessage());
