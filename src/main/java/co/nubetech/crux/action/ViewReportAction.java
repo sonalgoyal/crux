@@ -23,8 +23,6 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 
 import co.nubetech.crux.dao.MappingDAO;
-import co.nubetech.crux.functions.Conversion;
-import co.nubetech.crux.functions.SubByteArray;
 import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.ColumnFilter;
 import co.nubetech.crux.model.Connection;
@@ -36,6 +34,8 @@ import co.nubetech.crux.model.RowAliasFilter;
 import co.nubetech.crux.model.ValueType;
 import co.nubetech.crux.server.CruxScanner;
 import co.nubetech.crux.server.HBaseFacade;
+import co.nubetech.crux.server.functions.Conversion;
+import co.nubetech.crux.server.functions.SubByteArray;
 import co.nubetech.crux.util.CruxError;
 import co.nubetech.crux.util.CruxException;
 import co.nubetech.crux.view.Cell;
