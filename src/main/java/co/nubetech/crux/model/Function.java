@@ -58,14 +58,6 @@ public class Function {
 		return result;
 	}
 	
-	public boolean isRowType(){
-		boolean result = false;
-		if(this.functionType == (short)1){
-			result = true;
-		}
-		return result;
-	}
-	
 	@Override
 	public String toString() {
 		return "Functions [id=" + id + ", functionName=" + functionName
