@@ -24,8 +24,9 @@ import co.nubetech.crux.util.CruxException;
 public class Ceil extends FunctionBase implements CruxNonAggregator{
 
 	private final static Logger logger = Logger.getLogger(Ceil.class);
-
 	String valueType;
+	
+	
 	public Ceil(Map<String, String> properties) {
 		super();
 		this.properties = properties;

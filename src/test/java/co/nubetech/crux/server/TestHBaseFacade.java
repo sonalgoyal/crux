@@ -58,6 +58,8 @@ import co.nubetech.crux.util.CruxConstants;
 import co.nubetech.crux.util.CruxException;
 
 public class TestHBaseFacade {
+	
+	/*
 	private static final HBaseTestingUtility TEST_UTIL = new HBaseTestingUtility();
 	// private static final HBaseRESTTestingUtility REST_TEST_UTIL = new
 	// HBaseRESTTestingUtility();
@@ -2167,11 +2169,10 @@ public class TestHBaseFacade {
                 assertTrue(Bytes.equals(Bytes.toBytes("value" +i), column));
                 assertTrue(Bytes.equals(Bytes.toBytes("I am a sub" +i*2 + " and I am a long"), column1));
                 assertNull(results.get(i-12).getValue(COLUMN_2, Bytes.toBytes("qualifier")));
-        }*/
+        }
             scanner.close();
     }
-
-
+*/
 
 
 }
