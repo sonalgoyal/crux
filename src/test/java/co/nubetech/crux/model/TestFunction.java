@@ -8,16 +8,16 @@ public class TestFunction {
 	
 	@Test
 	public void testEqualsWithNoValuesNull(){
-		Function function = new Function("sum","class.Sum",(short)1);
-		Function functions1 = new Function("sum","class.Sum",(short)1);
+		Function function = new Function("sum","class.Sum",false);
+		Function functions1 = new Function("sum","class.Sum",false);
 		
 		assertTrue(function.equals(functions1));
 	}
 	
 	@Test
 	public void testEqualsForNotEqualObjects(){
-		Function function = new Function("sum","class.Sum",(short)1);
-		Function functions1 = new Function("sum","class.Sum",(short)2);
+		Function function = new Function("sum","class.Sum",false);
+		Function functions1 = new Function("sum","class.Sum",false);
 		
 		assertTrue(!function.equals(functions1));
 	}
@@ -32,8 +32,8 @@ public class TestFunction {
 	
 	@Test
 	public void testHashCodeWithNoValuesNull(){
-		Function function = new Function("sum","class.Sum",(short)1);
-		Function functions1 = new Function("sum","class.Sum",(short)1);
+		Function function = new Function("sum","class.Sum",false);
+		Function functions1 = new Function("sum","class.Sum",false);
 		
 		assertTrue(function.hashCode() == functions1.hashCode());
 	}

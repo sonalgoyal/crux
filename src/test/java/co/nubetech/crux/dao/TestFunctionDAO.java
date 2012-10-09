@@ -17,7 +17,7 @@ public class TestFunctionDAO extends DBConnection {
 				.getNewSession();
 		Statement stmt = getStatement();
 		stmt.executeUpdate("insert into function values(99999,'sum','class.Sum',1)");
-		Function function = new Function("sum","class.Sum",(short)1);
+		Function function = new Function("sum","class.Sum",false);
 		function.setId(99999l);
 		assertEquals(functionDAO.findById(99999l), function);
 		functionDAO.session.close();

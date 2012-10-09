@@ -227,7 +227,7 @@ public class SaveReportAction extends ReportDesignAction {
 							.getFunctionName())) {
 						reportDesignFunctionList.add(new ReportDesignFunction(
 								reportDesign, function));
-						if (function.isAggregateType()) {
+						if (function.isAggregate()) {
 							isAggregate = true;
 						} else {
 							isRow = true;

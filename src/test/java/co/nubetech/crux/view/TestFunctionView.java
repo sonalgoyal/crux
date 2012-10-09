@@ -17,7 +17,7 @@ public class TestFunctionView {
 		function.setId(12345);
 		function.setFunctionName("fun");
 		function.setFunctionClass("class1");
-		function.setFunctionType((short)1);
+		function.setAggregate(false);
 		
 		Datastore dataStore = new Datastore();
 		dataStore.setId(1212);

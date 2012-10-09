@@ -8,7 +8,7 @@ public class TestFunctionTypeMapping {
 	
 	@Test
 	public void testEqualsWithNoValuesNull(){
-		Function function = new Function("sum","class.Sum",(short)1);
+		Function function = new Function("sum","class.Sum",false);
 		ValueType valueType = new ValueType();
 		valueType.setClassName("testClass");
 		valueType.setDatastore(new Datastore());
@@ -24,8 +24,8 @@ public class TestFunctionTypeMapping {
 	
 	@Test
 	public void testEqualsForNotEqualObjects(){
-		Function functions1 = new Function("sum","class.Sum",(short)1);
-		Function functions2 = new Function("sum","class.Sum",(short)2);
+		Function functions1 = new Function("sum","class.Sum",false);
+		Function functions2 = new Function("sum","class.Sum", false);
 		ValueType valueType = new ValueType();
 		valueType.setClassName("testClass");
 		valueType.setDatastore(new Datastore());
@@ -48,7 +48,7 @@ public class TestFunctionTypeMapping {
 	
 	@Test
 	public void testHashCodeWithNoValuesNull(){
-		Function function = new Function("sum","class.Sum",(short)1);
+		Function function = new Function("sum","class.Sum",false);
 		ValueType valueType = new ValueType();
 		valueType.setClassName("testClass");
 		valueType.setDatastore(new Datastore());

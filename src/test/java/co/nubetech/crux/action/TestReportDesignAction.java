@@ -87,9 +87,9 @@ public class TestReportDesignAction {
 		reportDesignAction.setReportTypeDAO(mockedReportTypeDAO);
 		when(mockedReportTypeDAO.findAll()).thenReturn(reportTypeList);
 						
-		Function function1 = new Function("FirstFunction", "classFirstFunction", (short)101);
-		Function function2 = new Function("SecondFunction", "classSecondFunction", (short)102);
-		Function function3 = new Function("ThirdFunction", "classThirdFunction", (short)103);
+		Function function1 = new Function("FirstFunction", "classFirstFunction", false);
+		Function function2 = new Function("SecondFunction", "classSecondFunction", true);
+		Function function3 = new Function("ThirdFunction", "classThirdFunction", false);
 		
 		ValueType valueType1 = new ValueType();
 		valueType1.setId(1001);
