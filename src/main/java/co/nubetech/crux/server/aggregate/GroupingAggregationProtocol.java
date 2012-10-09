@@ -9,6 +9,7 @@ import org.apache.hadoop.hbase.ipc.CoprocessorProtocol;
 import co.nubetech.crux.model.Alias;
 import co.nubetech.crux.model.GroupBys;
 import co.nubetech.crux.model.Report;
+import co.nubetech.crux.util.CruxException;
 
 public interface GroupingAggregationProtocol extends CoprocessorProtocol{
 	
@@ -21,7 +22,8 @@ public interface GroupingAggregationProtocol extends CoprocessorProtocol{
 	 * @param groupBy
 	 * @param scan
 	 * @return
+	 * @throws CruxException 
 	 */
-	public List<List> getAggregates(Scan scan, Report report);
+	public List<List> getAggregates(Scan scan, Report report) throws CruxException;
 	
 }

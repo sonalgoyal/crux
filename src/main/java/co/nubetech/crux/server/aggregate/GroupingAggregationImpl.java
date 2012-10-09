@@ -8,16 +8,18 @@ import java.util.Stack;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.coprocessor.BaseEndpointCoprocessor;
 
+import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
 import co.nubetech.crux.model.ReportDesignFunction;
 import co.nubetech.crux.server.functions.CruxFunction;
+import co.nubetech.crux.util.CruxException;
 
 public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements 
 	GroupingAggregationProtocol{
 
 	@Override
-	public List<List> getAggregates(Scan scan, Report report) {
+	public List<List> getAggregates(Scan scan, Report report) throws CruxException{
 		List<List> returnList = new ArrayList<List>();
 		//understand the report
 		//see what is the group by
@@ -39,11 +41,22 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 		return returnList;
 	}
 	
-	protected List<Stack<CruxFunction>> getAggregators(Report report) {
+	protected List<Stack<CruxFunction>> getAggregators(Report report) throws CruxException{
+		
 		List<Stack<CruxFunction>> aggregators = new ArrayList<Stack<CruxFunction>>();
-		for (ReportDesign design: report.getDesigns()) {
-			Collection<ReportDesignFunction> functions = design.getReportDesignFunctionList();
-			
+		try {
+			for (ReportDesign design: report.getDesigns()) {
+				Collection<ReportDesignFunction> functions = design.getReportDesignFunctionList();
+				for (ReportDesignFunction function: functions) {
+					Stack<CruxFunction> functionStack = new Stack<CruxFunction>();
+					functionStack.push((CruxFunction) Class.forName(function.getFunction().getFunctionClass()).
+							newInstance());
+				}
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw new CruxException("Unable to generate the functions " + e);
 		}
 		return aggregators;
 	}

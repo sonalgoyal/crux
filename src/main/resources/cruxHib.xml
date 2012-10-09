@@ -202,7 +202,7 @@
 		</id>
 		<property name="functionName" type="string" column="functionName" />
 		<property name="functionClass" type="string" column="functionClass" />
-		<property name="functionType" type="short" column="functionType" />
+		<property name="aggregate" type="boolean" column="aggregate" />
 	</class>
 	<class name="ReportDesignFunction" table="reportDesignFunction" lazy="false">
 		<id name="id" >
