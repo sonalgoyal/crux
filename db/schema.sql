@@ -390,7 +390,7 @@ CREATE  TABLE IF NOT EXISTS `function` (
 `id` BIGINT(100) NOT NULL AUTO_INCREMENT ,
 `functionName` VARCHAR(100) NOT NULL ,
 `functionClass` VARCHAR(100) NOT NULL ,
-`isAggregate` TINYINT NOT NULL ,
+`aggregate` TINYINT NOT NULL ,
 PRIMARY KEY (`id`),
 UNIQUE INDEX `function_unique_keys` (`functionName`,`functionClass`)
 ) ENGINE = InnoDB;
@@ -605,19 +605,19 @@ INSERT  INTO `valueFilterType`(`valueTypeId`,`filterTypeId`) VALUES (7, 5);
 INSERT  INTO `valueFilterType`(`valueTypeId`,`filterTypeId`) VALUES (7, 6);
 -- INSERT  INTO `valueFilterType`(`id`,`valueTypeId`,`filterTypeId`) VALUES (7, 7);
 
-INSERT  INTO `function`(`functionName`,`functionClass`,`isAggregate`) VALUES ('Ceil','co.nubetech.crux.server.functions.Ceil',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`isAggregate`) VALUES ('date','co.nubetech.crux.server.functions.DateFunction',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`isAggregate`) VALUES ('day','co.nubetech.crux.server.functions.DateFunction',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`isAggregate`) VALUES ('month','co.nubetech.crux.server.functions.DateFunction',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`isAggregate`) VALUES ('year','co.nubetech.crux.server.functions.DateFunction',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`isAggregate`) VALUES ('hour','co.nubetech.crux.server.functions.DateFunction',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`isAggregate`) VALUES ('minute','co.nubetech.crux.server.functions.DateFunction',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`isAggregate`) VALUES ('second','co.nubetech.crux.server.functions.DateFunction',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`isAggregate`) VALUES ('LowerCase','co.nubetech.crux.server.functions.LowerCase',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`isAggregate`) VALUES ('SubString','co.nubetech.crux.server.functions.SubString',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`isAggregate`) VALUES ('Trim','co.nubetech.crux.server.functions.Trim',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`isAggregate`) VALUES ('UpperCase','co.nubetech.crux.server.functions.UpperCase',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`isAggregate`) VALUES ('Round','co.nubetech.crux.server.functions.Round',0);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('Ceil','co.nubetech.crux.server.functions.Ceil',0);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('date','co.nubetech.crux.server.functions.DateFunction',0);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('day','co.nubetech.crux.server.functions.DateFunction',0);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('month','co.nubetech.crux.server.functions.DateFunction',0);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('year','co.nubetech.crux.server.functions.DateFunction',0);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('hour','co.nubetech.crux.server.functions.DateFunction',0);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('minute','co.nubetech.crux.server.functions.DateFunction',0);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('second','co.nubetech.crux.server.functions.DateFunction',0);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('LowerCase','co.nubetech.crux.server.functions.LowerCase',0);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('SubString','co.nubetech.crux.server.functions.SubString',0);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('Trim','co.nubetech.crux.server.functions.Trim',0);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('UpperCase','co.nubetech.crux.server.functions.UpperCase',0);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('Round','co.nubetech.crux.server.functions.Round',0);
 
 INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (1,6,6);
 INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (2,1,3);
