@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import co.nubetech.crux.dao.FunctionDAO;
 import co.nubetech.crux.dao.MappingDAO;
 import co.nubetech.crux.dao.ReportDAO;
 import co.nubetech.crux.dao.ReportTypeDAO;
@@ -98,7 +99,10 @@ public class TestReportDesignAction {
 		List<Function> functions = new ArrayList<Function>();
 		functions.add(function1);
 		functions.add(function2);
-		functions.add(function3);	
+		functions.add(function3);
+		FunctionDAO mockedFunctionDAO = mock(FunctionDAO.class);
+		reportDesignAction.setFunctionDAO(mockedFunctionDAO);
+		when(mockedFunctionDAO.findAll()).thenReturn(functions);
 		
 		String returnString = reportDesignAction.populateDimensionAndMeasureList();
 		

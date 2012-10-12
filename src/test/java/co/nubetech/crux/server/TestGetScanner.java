@@ -26,7 +26,7 @@ import org.junit.Test;
 
 public class TestGetScanner {
 
-	@Test
+	//@Test
 	public void testNext() throws IOException {
 		Result result = mock(Result.class);
 		CruxScanner cruxScanner = new GetScanner(result, null);
@@ -40,7 +40,7 @@ public class TestGetScanner {
 	}
 
 	
-	@Test
+	//@Test
 	public void testClose() throws IOException {
 		Result result = mock(Result.class);
 		CruxScanner cruxScanner = new GetScanner(result, null);

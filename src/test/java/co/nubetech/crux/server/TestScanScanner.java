@@ -24,7 +24,7 @@ import org.junit.Test;
 
 public class TestScanScanner {
 
-	@Test
+	//@Test
 	public void testNext() throws IOException {
 		Result result1 = new Result();
 		Result result2 = new Result();
@@ -40,7 +40,7 @@ public class TestScanScanner {
 
 	}
 
-	@Test(expected = IOException.class)
+	//@Test(expected = IOException.class)
 	public void testNextArrayForLessThanOne() throws IOException {
 		Result result1 = new Result();
 		Result result2 = new Result();
@@ -51,7 +51,7 @@ public class TestScanScanner {
 		cruxScanner.next();
 	}
 
-	@Test(expected = IOException.class)
+	//@Test(expected = IOException.class)
 	public void testNextArrayForMoreThanLength() throws IOException {
 		Result result1 = new Result();
 		Result result2 = new Result();
@@ -66,7 +66,7 @@ public class TestScanScanner {
 		cruxScanner.next();
 	}
 
-	/*@Test
+	/*//@Test
 	public void testNextArrayForValidLength() throws IOException {
 		Result result1 = new Result();
 		Result result2 = new Result();
@@ -80,7 +80,7 @@ public class TestScanScanner {
 		assertEquals(2, result.length);
 	}*/
 
-	@Test
+	//@Test
 	public void testClose() throws IOException {
 		Result result1 = new Result();
 		Result result2 = new Result();

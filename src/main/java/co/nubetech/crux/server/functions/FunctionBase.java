@@ -24,10 +24,7 @@ public abstract class FunctionBase implements CruxFunction{
 	public static final String VALUE_TYPE_PROPERTY = "valueType";
 	public static final String VALUE_RETURN_PROPERTY = "valueReturn";
 
-	public FunctionBase() {
-		// this.properties = new HashMap<String, String>();
-	}
-
+	
 	public Map<String, String> getProperties() {
 		return properties;
 	}

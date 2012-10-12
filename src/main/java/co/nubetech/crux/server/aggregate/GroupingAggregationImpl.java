@@ -7,16 +7,21 @@ import java.util.Stack;
 
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.coprocessor.BaseEndpointCoprocessor;
+import org.apache.log4j.Logger;
 
 import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
 import co.nubetech.crux.model.ReportDesignFunction;
+import co.nubetech.crux.server.functions.Conversion;
 import co.nubetech.crux.server.functions.CruxFunction;
 import co.nubetech.crux.util.CruxException;
 
 public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements 
 	GroupingAggregationProtocol{
+	
+	private final static Logger logger = Logger.getLogger(GroupingAggregationImpl.class);
+
 
 	@Override
 	public List<List> getAggregates(Scan scan, Report report) throws CruxException{
@@ -46,12 +51,14 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 		List<Stack<CruxFunction>> aggregators = new ArrayList<Stack<CruxFunction>>();
 		try {
 			for (ReportDesign design: report.getDesigns()) {
+				logger.debug("Finding functions for design: " + design);
 				Collection<ReportDesignFunction> functions = design.getReportDesignFunctionList();
+				Stack<CruxFunction> functionStack = new Stack<CruxFunction>();
 				for (ReportDesignFunction function: functions) {
-					Stack<CruxFunction> functionStack = new Stack<CruxFunction>();
 					functionStack.push((CruxFunction) Class.forName(function.getFunction().getFunctionClass()).
 							newInstance());
 				}
+				aggregators.add(functionStack);
 			}
 		}
 		catch(Exception e) {

@@ -1,5 +1,6 @@
 package co.nubetech.crux.model;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
@@ -27,9 +28,9 @@ public class TestFunction {
 	@Test
 	public void testEqualsForNotEqualObjects(){
 		Function function = new Function(1, "sum","class.Sum",false, valueType, valueType);
-		Function functions1 = new Function(1, "sum","class.Sum",false, valueType, valueType);
+		Function functions1 = new Function(1, "sum","class.Sum",true, valueType, valueType);
 		
-		assertTrue(!function.equals(functions1));
+		assertFalse(function.equals(functions1));
 	}
 	
 	@Test

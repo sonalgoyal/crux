@@ -26,6 +26,9 @@ public class Ceil extends FunctionBase implements CruxNonAggregator{
 	private final static Logger logger = Logger.getLogger(Ceil.class);
 	String valueType;
 	
+	public Ceil() {
+		
+	}
 	
 	public Ceil(Map<String, String> properties) {
 		super();

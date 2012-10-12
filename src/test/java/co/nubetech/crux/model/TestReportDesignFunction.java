@@ -38,7 +38,7 @@ public class TestReportDesignFunction {
 	@Test
 	public void testEqualsForNotEqualObjects(){
 		Function functions1 = new Function(1, "sum","class.Sum",false, valueType, valueType);
-		Function functions2 = new Function(1, "sum","class.Sum",false, valueType, valueType);
+		Function functions2 = new Function(1, "avg","class.Avg",false, valueType, valueType);
 		Report report = new Report();
 		RowAlias rowAlias = new RowAlias();
 
