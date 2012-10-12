@@ -12,13 +12,6 @@ public class TestFunctionView {
 	
 	@Test
 	public void testFunctionView(){
-		
-		Function function = new Function();
-		function.setId(12345);
-		function.setFunctionName("fun");
-		function.setFunctionClass("class1");
-		function.setAggregate(false);
-		
 		Datastore dataStore = new Datastore();
 		dataStore.setId(1212);
 		dataStore.setName("DataStore");
@@ -28,10 +21,16 @@ public class TestFunctionView {
 		ValueType returnValueType = new ValueType(2,dataStore,"ReturnType","class3",
 				"className1", false);
 		
-		FunctionTypeMapping functionTypeMapping = new FunctionTypeMapping(function,
-				                                             valueType,returnValueType);
 		
-		FunctionView functionView = new FunctionView(functionTypeMapping);
+		Function function = new Function();
+		function.setId(12345);
+		function.setFunctionName("fun");
+		function.setFunctionClass("class1");
+		function.setAggregate(false);
+		function.setValueType(valueType);
+		function.setReturnValueType(returnValueType);
+						                                             
+		FunctionView functionView = new FunctionView(function);
 		
 		assertEquals(functionView.getFunctionName(),"fun");
 		assertEquals(functionView.getValueType(),"Type");

@@ -203,6 +203,8 @@
 		<property name="functionName" type="string" column="functionName" />
 		<property name="functionClass" type="string" column="functionClass" />
 		<property name="aggregate" type="boolean" column="aggregate" />
+		<many-to-one name="valueType" column="valueTypeId" class="ValueType"  lazy="false"/>
+		<many-to-one name="returnValueType" column="returnValueTypeId" class="ValueType"  lazy="false"/>
 	</class>
 	<class name="ReportDesignFunction" table="reportDesignFunction" lazy="false">
 		<id name="id" >
@@ -210,14 +212,6 @@
 		</id>
 		<many-to-one name="reportDesign" column="reportDesignId" class="ReportDesign"  lazy="false"/>
 		<many-to-one name="function" column="functionId" class="Function"  lazy="false"/>
-	</class>
-	<class name="FunctionTypeMapping" table="functionTypeMapping" lazy="false">
-		<id name="id" >
-			<generator class="increment" />
-		</id>
-		<many-to-one name="function" column="functionId" class="Function"  lazy="false"/>
-		<many-to-one name="valueType" column="valueTypeId" class="ValueType"  lazy="false"/>
-		<many-to-one name="returnValueType" column="returnValueTypeId" class="ValueType"  lazy="false"/>
 	</class>
 	<class name="Dashboard" table="dashboard" lazy="false">
 		<id name="id" >

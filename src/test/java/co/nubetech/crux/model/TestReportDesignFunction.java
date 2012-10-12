@@ -2,13 +2,23 @@ package co.nubetech.crux.model;
 
 import static org.junit.Assert.*;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class TestReportDesignFunction {
 	
+	private static ValueType valueType;
+	
+	@BeforeClass
+	public static void setUp() {
+		valueType = new ValueType();
+		valueType.setClassName("java.lang.Integer");
+		valueType.setName("int");
+	}
+	
 	@Test
 	public void testEqualsWithNoValuesNull(){
-		Function function = new Function("sum","class.Sum",false);
+		Function function = new Function(1, "sum","class.Sum",false, valueType, valueType);
 		Report report = new Report();
 		RowAlias rowAlias = new RowAlias();
 
@@ -27,8 +37,8 @@ public class TestReportDesignFunction {
 	
 	@Test
 	public void testEqualsForNotEqualObjects(){
-		Function functions1 = new Function("sum","class.Sum",false);
-		Function functions2 = new Function("sum","class.Sum",false);
+		Function functions1 = new Function(1, "sum","class.Sum",false, valueType, valueType);
+		Function functions2 = new Function(1, "sum","class.Sum",false, valueType, valueType);
 		Report report = new Report();
 		RowAlias rowAlias = new RowAlias();
 
@@ -53,7 +63,7 @@ public class TestReportDesignFunction {
 	
 	@Test
 	public void testHashCodeWithNoValuesNull(){
-		Function function = new Function("sum","class.Sum",false);
+		Function function = new Function(1, "sum","class.Sum",false, valueType, valueType);
 		Report report = new Report();
 		RowAlias rowAlias = new RowAlias();
 

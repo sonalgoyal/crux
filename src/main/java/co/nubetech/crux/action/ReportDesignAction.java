@@ -15,19 +15,21 @@
 package co.nubetech.crux.action;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import co.nubetech.crux.dao.FunctionTypeMappingDAO;
+import co.nubetech.crux.dao.FunctionDAO;
 import co.nubetech.crux.dao.MappingDAO;
 import co.nubetech.crux.dao.ReportTypeDAO;
 import co.nubetech.crux.dao.ValueFilterTypeDAO;
 import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.ColumnFilter;
 import co.nubetech.crux.model.FilterType;
+import co.nubetech.crux.model.Function;
 import co.nubetech.crux.model.FunctionTypeMapping;
 import co.nubetech.crux.model.Mapping;
 import co.nubetech.crux.model.Report;
@@ -63,7 +65,7 @@ public class ReportDesignAction extends ViewReportListAction {
 	protected boolean addToDashBoard;
 	private ArrayList<DimensionAndMeasureView> dimensionAndMeasureViewList = new ArrayList<DimensionAndMeasureView>();
 	private ArrayList<FunctionView> functionViewList = new ArrayList<FunctionView>();
-	protected FunctionTypeMappingDAO functionTypeMappingDAO = new FunctionTypeMappingDAO();
+	protected FunctionDAO functionDAO = new FunctionDAO();
 
 	public ReportDesignAction() {
 
@@ -109,13 +111,13 @@ public class ReportDesignAction extends ViewReportListAction {
 		this.error = error;
 	}
 
-	public FunctionTypeMappingDAO getFunctionTypeMappingDAO() {
-		return functionTypeMappingDAO;
+	public FunctionDAO getFunctionDAO() {
+		return functionDAO;
 	}
 
-	public void setFunctionTypeMappingDAO(
-			FunctionTypeMappingDAO functionTypeMappingDAO) {
-		this.functionTypeMappingDAO = functionTypeMappingDAO;
+	public void setFunctionDAO(
+			FunctionDAO functionDAO) {
+		this.functionDAO = functionDAO;
 	}
 
 	public ArrayList<FilterType> getFilterTypeList() {
@@ -243,10 +245,9 @@ public class ReportDesignAction extends ViewReportListAction {
 			}
 		}
 		reportTypeList = new ArrayList<ReportType>(reportTypeDAO.findAll());
-		ArrayList<FunctionTypeMapping> funcTypeMappingList = new ArrayList<FunctionTypeMapping>(
-				functionTypeMappingDAO.findAll());
-		for (FunctionTypeMapping funTypeMapping : funcTypeMappingList) {
-			functionViewList.add(new FunctionView(funTypeMapping));
+		List<Function> functions = functionDAO.findAll();
+		for (Function func : functions) {
+			functionViewList.add(new FunctionView(func));
 		}
 		return SUCCESS;
 	}

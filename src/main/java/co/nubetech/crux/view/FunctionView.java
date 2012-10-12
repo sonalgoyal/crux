@@ -1,5 +1,6 @@
 package co.nubetech.crux.view;
 
+import co.nubetech.crux.model.Function;
 import co.nubetech.crux.model.FunctionTypeMapping;
 
 public class FunctionView {
@@ -8,11 +9,11 @@ public class FunctionView {
 	private String valueType;
 	private String returnType;
 	
-	public FunctionView(FunctionTypeMapping functionMapping) {
+	public FunctionView(Function function) {
 		super();
-		this.functionName = functionMapping.getFunction().getFunctionName();
-		this.valueType = functionMapping.getValueType().getName();
-		this.returnType = functionMapping.getReturnValueType().getName();
+		this.functionName = function.getFunctionName();
+		this.valueType = function.getValueType().getName();
+		this.returnType = function.getReturnValueType().getName();
 	}
 
 	public String getFunctionName() {

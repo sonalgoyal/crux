@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import co.nubetech.crux.dao.FunctionTypeMappingDAO;
 import co.nubetech.crux.dao.MappingDAO;
 import co.nubetech.crux.dao.ReportDAO;
 import co.nubetech.crux.dao.ReportTypeDAO;
@@ -18,7 +17,6 @@ import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.Datastore;
 import co.nubetech.crux.model.FilterType;
 import co.nubetech.crux.model.Function;
-import co.nubetech.crux.model.FunctionTypeMapping;
 import co.nubetech.crux.model.Mapping;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportType;
@@ -87,27 +85,20 @@ public class TestReportDesignAction {
 		reportDesignAction.setReportTypeDAO(mockedReportTypeDAO);
 		when(mockedReportTypeDAO.findAll()).thenReturn(reportTypeList);
 						
-		Function function1 = new Function("FirstFunction", "classFirstFunction", false);
-		Function function2 = new Function("SecondFunction", "classSecondFunction", true);
-		Function function3 = new Function("ThirdFunction", "classThirdFunction", false);
 		
 		ValueType valueType1 = new ValueType();
 		valueType1.setId(1001);
 		ValueType valueType2 = new ValueType();
-		valueType1.setId(1002);
-				
-		FunctionTypeMapping functionTypeMapping1 = new FunctionTypeMapping(function1, valueType1, valueType2);
-		FunctionTypeMapping functionTypeMapping2 = new FunctionTypeMapping(function2, valueType1, valueType2);
-		FunctionTypeMapping functionTypeMapping3 = new FunctionTypeMapping(function3, valueType1, valueType2);
+		valueType2.setId(1002);
+	
+		Function function1 = new Function(1,"FirstFunction", "classFirstFunction", false, valueType1, valueType1);
+		Function function2 = new Function(2, "SecondFunction", "classSecondFunction", true, valueType1, valueType2);
+		Function function3 = new Function(3,"ThirdFunction", "classThirdFunction", false, valueType1, valueType2);
 		
-		ArrayList<FunctionTypeMapping> functionTypeMappingList = new ArrayList<FunctionTypeMapping>();
-		functionTypeMappingList.add(functionTypeMapping1);
-		functionTypeMappingList.add(functionTypeMapping2);
-		functionTypeMappingList.add(functionTypeMapping3);
-		
-		FunctionTypeMappingDAO mockedFunctionTypeMappingDAO = mock(FunctionTypeMappingDAO.class);
-		reportDesignAction.setFunctionTypeMappingDAO(mockedFunctionTypeMappingDAO);
-		when(mockedFunctionTypeMappingDAO.findAll()).thenReturn(functionTypeMappingList);
+		List<Function> functions = new ArrayList<Function>();
+		functions.add(function1);
+		functions.add(function2);
+		functions.add(function3);	
 		
 		String returnString = reportDesignAction.populateDimensionAndMeasureList();
 		
@@ -119,9 +110,9 @@ public class TestReportDesignAction {
 		assertEquals(reportTypeList.get(1), reportDesignAction.getReportTypeList().get(1));
 		assertEquals(reportTypeList.get(2), reportDesignAction.getReportTypeList().get(2));
 		//asserting functionTypeMappingList :
-		assertEquals(functionTypeMappingList.get(0).getFunction().getFunctionName(), reportDesignAction.getFunctionViewList().get(0).getFunctionName());
-		assertEquals(functionTypeMappingList.get(1).getFunction().getFunctionName(), reportDesignAction.getFunctionViewList().get(1).getFunctionName());
-		assertEquals(functionTypeMappingList.get(2).getFunction().getFunctionName(), reportDesignAction.getFunctionViewList().get(2).getFunctionName());
+		assertEquals(functions.get(0).getFunctionName(), reportDesignAction.getFunctionViewList().get(0).getFunctionName());
+		assertEquals(functions.get(1).getFunctionName(), reportDesignAction.getFunctionViewList().get(1).getFunctionName());
+		assertEquals(functions.get(2).getFunctionName(), reportDesignAction.getFunctionViewList().get(2).getFunctionName());
 		
 		// Problem : 'if (mappingId != 0){..}' section not done in this test method.
 		

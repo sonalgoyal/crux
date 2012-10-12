@@ -49,6 +49,9 @@ public class FunctionTypeMapping {
 		this.returnValueType = returnValueType;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -63,44 +66,58 @@ public class FunctionTypeMapping {
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof FunctionTypeMapping)) {
 			return false;
+		}
 		FunctionTypeMapping other = (FunctionTypeMapping) obj;
 		if (function == null) {
-			if (other.function != null)
+			if (other.function != null) {
 				return false;
-		} else if (!function.equals(other.function))
+			}
+		} else if (!function.equals(other.function)) {
 			return false;
-		if (id != other.id)
+		}
+		if (id != other.id) {
 			return false;
+		}
 		if (returnValueType == null) {
-			if (other.returnValueType != null)
+			if (other.returnValueType != null) {
 				return false;
-		} else if (!returnValueType.equals(other.returnValueType))
+			}
+		} else if (!returnValueType.equals(other.returnValueType)) {
 			return false;
+		}
 		if (valueType == null) {
-			if (other.valueType != null)
+			if (other.valueType != null) {
 				return false;
-		} else if (!valueType.equals(other.valueType))
+			}
+		} else if (!valueType.equals(other.valueType)) {
 			return false;
+		}
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		return "FunctionTypeMapping [id=" + id + ", functions=" + function
+		return "FunctionTypeMapping [id=" + id + ", function=" + function
 				+ ", valueType=" + valueType + ", returnValueType="
 				+ returnValueType + "]";
 	}
-	
-	
-	
+
 	
 
 }

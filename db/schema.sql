@@ -391,39 +391,22 @@ CREATE  TABLE IF NOT EXISTS `function` (
 `functionName` VARCHAR(100) NOT NULL ,
 `functionClass` VARCHAR(100) NOT NULL ,
 `aggregate` TINYINT NOT NULL ,
-PRIMARY KEY (`id`),
-UNIQUE INDEX `function_unique_keys` (`functionName`,`functionClass`)
-) ENGINE = InnoDB;
-
--- -----------------------------------------------------
--- Table `functionTypeMapping`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `functionTypeMapping` ;
-
-CREATE  TABLE IF NOT EXISTS `functionTypeMapping` (
-`id` BIGINT(100) NOT NULL AUTO_INCREMENT ,
-`functionId` BIGINT(100) NOT NULL ,
 `valueTypeId` BIGINT(100) NOT NULL ,
 `returnValueTypeId` BIGINT(100) NOT NULL ,
 PRIMARY KEY (`id`),
-INDEX `fk_functionTypeMapping_valueTypeId` (`valueTypeId` ASC),
-CONSTRAINT `fk_functionTypeMapping_valueTypeId`  
+UNIQUE INDEX `function_unique_keys` (`functionName`,`functionClass`, `valueTypeId`,`returnValueTypeId`),
+CONSTRAINT `fk_function_valueTypeId`  
 FOREIGN KEY (`valueTypeId`) 
 REFERENCES `valueType` (`id` )  
 ON DELETE NO ACTION 
 ON UPDATE NO ACTION,
-INDEX `fk_functionTypeMapping_returnValueTypeId` (`returnValueTypeId` ASC),
-CONSTRAINT `fk_functionTypeMapping_returnValueTypeId`  
+INDEX `fk_function_returnValueTypeId` (`returnValueTypeId` ASC),
+CONSTRAINT `fk_function_returnValueTypeId`  
 FOREIGN KEY (`returnValueTypeId`) 
 REFERENCES `valueType` (`id` )  
 ON DELETE NO ACTION 
-ON UPDATE NO ACTION,
-INDEX `fk_functionTypeMapping_functionId` (`functionId` ASC),
-CONSTRAINT `fk_functionTypeMapping_functionId`  
-FOREIGN KEY (`functionId`) 
-REFERENCES `function` (`id` )  
-ON DELETE NO ACTION 
-ON UPDATE NO ACTION) ENGINE = InnoDB;
+ON UPDATE NO ACTION
+) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `reportDesignFunction`
@@ -605,40 +588,25 @@ INSERT  INTO `valueFilterType`(`valueTypeId`,`filterTypeId`) VALUES (7, 5);
 INSERT  INTO `valueFilterType`(`valueTypeId`,`filterTypeId`) VALUES (7, 6);
 -- INSERT  INTO `valueFilterType`(`id`,`valueTypeId`,`filterTypeId`) VALUES (7, 7);
 
-INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('Ceil','co.nubetech.crux.server.functions.Ceil',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('date','co.nubetech.crux.server.functions.DateFunction',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('day','co.nubetech.crux.server.functions.DateFunction',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('month','co.nubetech.crux.server.functions.DateFunction',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('year','co.nubetech.crux.server.functions.DateFunction',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('hour','co.nubetech.crux.server.functions.DateFunction',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('minute','co.nubetech.crux.server.functions.DateFunction',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('second','co.nubetech.crux.server.functions.DateFunction',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('LowerCase','co.nubetech.crux.server.functions.LowerCase',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('SubString','co.nubetech.crux.server.functions.SubString',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('Trim','co.nubetech.crux.server.functions.Trim',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('UpperCase','co.nubetech.crux.server.functions.UpperCase',0);
-INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`) VALUES ('Round','co.nubetech.crux.server.functions.Round',0);
-
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (1,6,6);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (2,1,3);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (2,1,4);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (3,1,3);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (3,1,4);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (4,1,3);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (4,1,4);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (5,1,3);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (5,1,4);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (6,1,3);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (6,1,4);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (7,1,3);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (7,1,4);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (8,1,3);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (8,1,4);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (9,1,1);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (10,1,1);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (11,1,1);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (12,1,1);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (13,1,5);
-INSERT  INTO `functionTypeMapping`(`functionId`,`valueTypeId`,`returnValueTypeId`) VALUES (13,1,6);
-
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('Ceil','co.nubetech.crux.server.functions.Ceil',0, 6, 6);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('date','co.nubetech.crux.server.functions.DateFunction',0, 1, 3);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('date','co.nubetech.crux.server.functions.DateFunction',0, 1, 4);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('day','co.nubetech.crux.server.functions.DateFunction',0, 1, 3);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('day','co.nubetech.crux.server.functions.DateFunction',0, 1, 4);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('month','co.nubetech.crux.server.functions.DateFunction',0, 1, 3);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('month','co.nubetech.crux.server.functions.DateFunction',0, 1, 4);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('year','co.nubetech.crux.server.functions.DateFunction',0, 1,3);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('year','co.nubetech.crux.server.functions.DateFunction',0, 1,4);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('hour','co.nubetech.crux.server.functions.DateFunction',0, 1, 3);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('hour','co.nubetech.crux.server.functions.DateFunction',0, 1, 4);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('minute','co.nubetech.crux.server.functions.DateFunction',0, 1, 3);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('minute','co.nubetech.crux.server.functions.DateFunction',0, 1, 4);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('second','co.nubetech.crux.server.functions.DateFunction',0, 1, 3);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('second','co.nubetech.crux.server.functions.DateFunction',0, 1, 4);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('LowerCase','co.nubetech.crux.server.functions.LowerCase',0, 1,1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('SubString','co.nubetech.crux.server.functions.SubString',0, 1,1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('Trim','co.nubetech.crux.server.functions.Trim',0, 1, 1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('UpperCase','co.nubetech.crux.server.functions.UpperCase',0, 1, 1);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('Round','co.nubetech.crux.server.functions.Round',0, 1, 5);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('Round','co.nubetech.crux.server.functions.Round',0, 1, 6);
 
