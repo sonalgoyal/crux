@@ -85,6 +85,7 @@ public class TestGroupingAggregationImpl {
 		xDesign.setReportDesignFunctionList(xFunctions);
 		List<ReportDesignFunction> yFunctions = new ArrayList<ReportDesignFunction>();
 		yFunctions.add(getReportDesignFunction(average, yDesign));
+		yDesign.setReportDesignFunctionList(yFunctions);
 		
 		ArrayList<ReportDesign> designs = new ArrayList<ReportDesign>();
 		
@@ -117,12 +118,35 @@ public class TestGroupingAggregationImpl {
 	public void testGetAggregators() throws CruxException{
 		GroupingAggregationImpl impl = new GroupingAggregationImpl();
 		Report report = getReport(); 
-		List<Stack<CruxFunction>> functionList = impl.getAggregators(report);
+		List<Stack<CruxFunction>> functionList = impl.getFunctions(report);
 		assertEquals(3, functionList.size());
 		Stack<CruxFunction> xFnStack = functionList.get(0);
 		assertEquals(2,xFnStack.size());
-		
-		
+		assertEquals(co.nubetech.crux.server.functions.SumAggregator.class, xFnStack.pop().getClass());
+		assertEquals(co.nubetech.crux.server.functions.Ceil.class, xFnStack.pop().getClass());
+		Stack<CruxFunction> yFnStack = functionList.get(1);
+		assertEquals(1, yFnStack.size());
+		assertEquals(co.nubetech.crux.server.functions.AverageAggregator.class, yFnStack.pop().getClass());
+		Stack<CruxFunction> yFnStack1 = functionList.get(2);
+		assertEquals(0, yFnStack1.size());		
 	}
+	
+	@Test
+	public void testGetAggregatorsNoFunctions() throws CruxException{
+		GroupingAggregationImpl impl = new GroupingAggregationImpl();
+		Report report = getReport(); 
+		for (ReportDesign design: report.getDesigns()) {
+			design.setReportDesignFunctionList(null);
+		}
+		List<Stack<CruxFunction>> functionList = impl.getFunctions(report);
+		assertEquals(3, functionList.size());
+		Stack<CruxFunction> xFnStack = functionList.get(0);
+		assertEquals(0,xFnStack.size());
+		Stack<CruxFunction> yFnStack = functionList.get(1);
+		assertEquals(0, yFnStack.size());
+		Stack<CruxFunction> yFnStack1 = functionList.get(2);
+		assertEquals(0, yFnStack1.size());		
+	}
+
 
 }
