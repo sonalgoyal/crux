@@ -19,6 +19,7 @@ import co.nubetech.crux.model.GroupBys;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
 import co.nubetech.crux.model.ReportDesignFunction;
+import co.nubetech.crux.model.RowAlias;
 import co.nubetech.crux.server.functions.Conversion;
 import co.nubetech.crux.server.functions.CruxFunction;
 import co.nubetech.crux.util.CruxException;
@@ -73,6 +74,7 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 						 //convert and apply
 						//see if the design is on row or column alias
 						 Alias alias = getAlias(design);
+						 value = getValue(results, alias, report);
 					 }
 					 while (hasMoreRows);
 				}		 
@@ -88,6 +90,37 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 		}
 		
 		return returnList;
+	}
+	
+	/**
+	 * This is not the most optimized pience of code
+	 * we should go to the byte buffers
+	 * lets clean this later once the functionality works end to end
+	 * @param results
+	 * @param alias
+	 * @return
+	 */
+	protected byte[] getValue(List<KeyValue> results, Alias alias, Report report) {
+		byte[] value = null;
+		if (alias instanceof RowAlias) {
+			value = results.get(0).getKey();
+		}
+		else {
+			ColumnAlias colAlias = (ColumnAlias) alias;
+			String family = colAlias.getColumnFamily();
+			String qualifier = colAlias.getQualifier();
+			byte[] familyBytes = family.getBytes();
+			byte[] qualifierBytes = qualifier.getBytes();
+			for (KeyValue kv: results) {
+				if (kv.getFamily().equals(familyBytes)) {
+					if (kv.getQualifier().equals(qualifierBytes)) {
+						value = kv.getValue();
+						break;
+					}
+				}
+			}
+		}
+		return value;
 	}
 	
 	protected Alias getAlias(ReportDesign design) {
