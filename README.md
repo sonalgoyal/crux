@@ -1,5 +1,7 @@
 Crux is a reporting application for HBase.
 -
+Crux development is happening in two branches, master and aggregation. The aggregation branch is the current action branch, where we are providing enhanced querying and reporting capabilities. 
+
 <h5>Crux has been Tested Against</h5>
 <ol>
  <li>Cloudera's distribution CDH4</li>

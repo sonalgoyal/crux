@@ -216,11 +216,16 @@
 				</dependency>
 				<dependency>
 					<groupId>org.apache.hadoop</groupId>
+<<<<<<< HEAD
 					<artifactId>hadoop-common</artifactId>
+=======
+					<artifactId>hadoop-core</artifactId>
+>>>>>>> d2665307e8204e81da8298374016c45cce9979dd
 					<version>${hadoop.version}</version>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.hadoop</groupId>
+<<<<<<< HEAD
 					<artifactId>hadoop-common</artifactId>
 					<version>${hadoop.version}</version>
 					<classifier>tests</classifier>
@@ -243,6 +248,10 @@
 					<artifactId>hadoop-hdfs</artifactId>
 					<version>${hadoop.version}</version>
 					<classifier>tests</classifier>
+=======
+					<artifactId>hadoop-test</artifactId>
+					<version>${hadoop.version}</version>
+>>>>>>> d2665307e8204e81da8298374016c45cce9979dd
 					<scope>test</scope>
 				</dependency>
 			</dependencies>			
