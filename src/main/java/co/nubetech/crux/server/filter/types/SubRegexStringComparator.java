@@ -22,7 +22,6 @@ import java.nio.charset.IllegalCharsetNameException;
 import java.util.regex.Pattern;
 
 import org.apache.hadoop.hbase.HConstants;
-import org.apache.hadoop.hbase.filter.RegexStringComparator;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 

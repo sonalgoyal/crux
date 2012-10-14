@@ -1,13 +1,10 @@
 package co.nubetech.crux.server.aggregate;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.ipc.CoprocessorProtocol;
 
-import co.nubetech.crux.model.Alias;
-import co.nubetech.crux.model.GroupBys;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.util.CruxException;
 

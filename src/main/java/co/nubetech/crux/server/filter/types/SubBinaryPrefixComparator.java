@@ -14,11 +14,6 @@
  */
 package co.nubetech.crux.server.filter.types;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
-import org.apache.hadoop.hbase.filter.BinaryPrefixComparator;
 import org.apache.hadoop.hbase.util.Bytes;
 
 public class SubBinaryPrefixComparator extends SubBinaryComparator {

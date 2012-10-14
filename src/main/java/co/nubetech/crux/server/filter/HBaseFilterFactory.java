@@ -23,6 +23,8 @@ import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.RowFilter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
+import org.apache.hadoop.hbase.filter.WritableByteArrayComparable;
+import org.apache.hadoop.hbase.util.Bytes;
 
 import co.nubetech.crux.model.Alias;
 import co.nubetech.crux.model.ColumnAlias;
@@ -45,8 +47,6 @@ import co.nubetech.crux.server.filter.types.SubBinarySuffixComparator;
 import co.nubetech.crux.server.filter.types.SubRegexStringComparator;
 import co.nubetech.crux.server.filter.types.SubSubstringComparator;
 import co.nubetech.crux.util.CruxException;
-import org.apache.hadoop.hbase.filter.WritableByteArrayComparable;
-import org.apache.hadoop.hbase.util.Bytes;
 
 public class HBaseFilterFactory {
 	

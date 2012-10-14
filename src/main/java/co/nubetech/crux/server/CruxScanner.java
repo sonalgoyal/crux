@@ -16,8 +16,6 @@ package co.nubetech.crux.server;
 
 import java.io.IOException;
 
-import org.apache.hadoop.hbase.client.Result;
-
 public interface CruxScanner {
 
 	void close();

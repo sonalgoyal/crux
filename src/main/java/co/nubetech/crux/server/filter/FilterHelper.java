@@ -17,10 +17,8 @@ package co.nubetech.crux.server.filter;
 
 import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
-import org.apache.hadoop.hbase.filter.WritableByteArrayComparable;
 import org.apache.log4j.Logger;
 
-import co.nubetech.crux.model.ColumnFilter;
 import co.nubetech.crux.model.FilterType;
 import co.nubetech.crux.model.RowAliasFilter;
 import co.nubetech.crux.util.CruxException;

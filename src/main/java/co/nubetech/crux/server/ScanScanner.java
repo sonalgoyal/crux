@@ -16,7 +16,6 @@ package co.nubetech.crux.server;
 
 import java.io.IOException;
 
-import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 
 import co.nubetech.crux.model.Report;

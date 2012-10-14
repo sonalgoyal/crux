@@ -9,7 +9,6 @@ import org.hibernate.Transaction;
 
 import co.nubetech.crux.model.GroupBy;
 import co.nubetech.crux.model.GroupBys;
-import co.nubetech.crux.model.Mapping;
 import co.nubetech.crux.util.CruxException;
 
 import com.googlecode.s2hibernate.struts2.plugin.annotations.SessionTarget;

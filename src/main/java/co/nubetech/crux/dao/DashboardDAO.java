@@ -6,7 +6,6 @@ import org.hibernate.JDBCException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import co.nubetech.crux.model.ColumnFilter;
 import co.nubetech.crux.model.Dashboard;
 import co.nubetech.crux.util.CruxException;
 

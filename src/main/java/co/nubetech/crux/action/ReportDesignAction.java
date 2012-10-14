@@ -30,7 +30,6 @@ import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.ColumnFilter;
 import co.nubetech.crux.model.FilterType;
 import co.nubetech.crux.model.Function;
-import co.nubetech.crux.model.FunctionTypeMapping;
 import co.nubetech.crux.model.Mapping;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;

@@ -1,7 +1,6 @@
 package co.nubetech.crux.view;
 
 import co.nubetech.crux.model.Function;
-import co.nubetech.crux.model.FunctionTypeMapping;
 
 public class FunctionView {
 

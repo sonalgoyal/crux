@@ -10,7 +10,6 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.coprocessor.BaseEndpointCoprocessor;
 import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
 import org.apache.hadoop.hbase.regionserver.InternalScanner;
-import org.apache.hadoop.ipc.ProtocolSignature;
 import org.apache.log4j.Logger;
 
 import co.nubetech.crux.model.Alias;
@@ -20,7 +19,6 @@ import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
 import co.nubetech.crux.model.ReportDesignFunction;
 import co.nubetech.crux.model.RowAlias;
-import co.nubetech.crux.server.functions.Conversion;
 import co.nubetech.crux.server.functions.CruxFunction;
 import co.nubetech.crux.util.CruxException;
 

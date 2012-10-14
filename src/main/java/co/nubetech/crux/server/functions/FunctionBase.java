@@ -16,8 +16,6 @@ package co.nubetech.crux.server.functions;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 public abstract class FunctionBase implements CruxFunction{
 
 	protected Map<String, String> properties;
