@@ -17,9 +17,15 @@ public class SumAggregator extends FunctionBase implements CruxAggregator{
 	 * this method is invoked for each value
 	 */
 	@Override
-	public void aggregate(byte[] o) throws CruxException{
-		Double dbl = Bytes.toDouble(o);
-		sum += dbl;
+	public void aggregate(Object o) throws CruxException{
+		if (o instanceof byte[]) {
+			Double dbl = Bytes.toDouble((byte[])o);
+			sum += dbl;
+		}
+		else {
+			Double dbl = (Double) o;
+			sum += dbl;
+		}		
 	}
 	
 	/*

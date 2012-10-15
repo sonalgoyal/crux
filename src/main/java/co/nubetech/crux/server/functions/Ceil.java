@@ -30,26 +30,17 @@ public class Ceil extends FunctionBase implements CruxNonAggregator{
 		
 	}
 	
-	public Ceil(Map<String, String> properties) {
-		super();
-		this.properties = properties;
-		valueType = getProperty(VALUE_TYPE_PROPERTY);
-	}
 
 	@Override
-	public Object execute(byte[] value) throws CruxException {
-		String valueInString = Bytes.toString(value);
-
-		if (valueInString == null) {
-			throw new CruxException("");
-		}
+	public Object execute(Object value) throws CruxException {
 		try {
-			if (valueType.equals("Double")) {
-				Double valueInDouble = Double.parseDouble(valueInString);
-				return Math.ceil(valueInDouble);
-			} else {
-				throw new CruxException("The type" + valueType
-						+ "is not supported.");
+			if (value instanceof byte[]) {
+				Double dbl = Bytes.toDouble((byte[]) value);
+				return Math.ceil(dbl);
+			}
+			else {
+				Double dbl = (Double) value;
+				return Math.ceil(dbl);
 			}
 		} catch (Exception e) {
 			throw new CruxException(e.getMessage());

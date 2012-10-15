@@ -19,10 +19,17 @@ public class AverageAggregator extends FunctionBase implements CruxAggregator{
 	 * this method is invoked for each value
 	 */
 	@Override
-	public void aggregate(byte[] o) throws CruxException{
-		Double dbl = Bytes.toDouble(o);
-		count++;
-		sum += dbl;
+	public void aggregate(Object o) throws CruxException{
+		if (o instanceof byte[]) {
+			Double dbl = Bytes.toDouble((byte[]) o);
+			count++;
+			sum += dbl;
+		}
+		else {
+			Double dbl = (Double) o;
+			count++;
+			sum += dbl;
+		}
 	}
 	
 	/*

@@ -21,13 +21,21 @@ import co.nubetech.crux.util.CruxException;
 public class UpperCase extends FunctionBase implements CruxNonAggregator{
 
 	@Override
-	public Object execute(byte[] value) throws CruxException {
-		String valueInString = Bytes.toString(value);
-		
-		if (valueInString != null) {
-			valueInString = valueInString.toUpperCase();
+	public Object execute(Object value) throws CruxException {
+		if (value instanceof byte[]) {
+			String valueInString = Bytes.toString((byte[])value);
+			if (valueInString != null) {
+				valueInString = valueInString.toUpperCase();
+			}
+			return valueInString;
 		}
-		return valueInString;
+		else {
+			String valueInString = (String) value;
+			if (valueInString != null) {
+				valueInString = valueInString.toUpperCase();
+			}
+			return valueInString;
+		}
 	}
 
 }

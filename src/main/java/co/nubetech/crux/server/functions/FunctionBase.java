@@ -17,28 +17,36 @@ package co.nubetech.crux.server.functions;
 import java.util.Map;
 
 public abstract class FunctionBase implements CruxFunction{
-
-	protected Map<String, String> properties;
-	public static final String VALUE_TYPE_PROPERTY = "valueType";
-	public static final String VALUE_RETURN_PROPERTY = "valueReturn";
+	
+	String valueType;
+	String returnValueType;
+	
+	/**
+	 * @return the valueType
+	 */
+	public String getValueType() {
+		return valueType;
+	}
+	/**
+	 * @param valueType the valueType to set
+	 */
+	public void setValueType(String valueType) {
+		this.valueType = valueType;
+	}
+	/**
+	 * @return the returnValueType
+	 */
+	public String getReturnValueType() {
+		return returnValueType;
+	}
+	/**
+	 * @param returnValueType the returnValueType to set
+	 */
+	public void setReturnValueType(String returnValueType) {
+		this.returnValueType = returnValueType;
+	}
 
 	
-	public Map<String, String> getProperties() {
-		return properties;
-	}
-
-	public void setProperties(Map<String, String> properties) {
-		this.properties = properties;
-	}
-
-	public void setProperty(String key, String value) {
-		properties.put(key, value);
-	}
-
-	public String getProperty(String key) {
-		return properties.get(key);
-	}
-
 	
 
 }

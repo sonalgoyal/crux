@@ -1,5 +1,6 @@
 /**
- * Copyright 2011 Nube Technologies
+ * 
+Copyright 2011 Nube Technologies
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@
 package co.nubetech.crux.action;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,8 +36,6 @@ import co.nubetech.crux.model.RowAliasFilter;
 import co.nubetech.crux.model.ValueType;
 import co.nubetech.crux.server.CruxScanner;
 import co.nubetech.crux.server.HBaseFacade;
-import co.nubetech.crux.server.functions.Conversion;
-import co.nubetech.crux.server.functions.SubByteArray;
 import co.nubetech.crux.util.CruxError;
 import co.nubetech.crux.util.CruxException;
 import co.nubetech.crux.view.Cell;
@@ -184,7 +184,7 @@ public class ViewReportAction extends ViewReportListAction {
 			logger.debug("About to get data for Report:" + report);
 			cruxScanner = hbaseFacade.execute(conn, report, mapping);
 			logger.debug("Data fetched from HBaseFacade");
-			Result result = null;
+			/*Result result = null;
 			ArrayList<ReportDesign> reportDesignList = new ArrayList<ReportDesign>(
 					report.getDesigns());
 			
@@ -227,7 +227,7 @@ public class ViewReportAction extends ViewReportListAction {
 		return dataList;
 	}
 
-	private ArrayList<Cell> getCellList(
+/*	private ArrayList<Cell> getCellList(
 			ArrayList<ReportDesign> reportDesignList, Result result,
 			ArrayList<Conversion> conversionList,
 			ArrayList<SubByteArray> subByteArrayList) throws CruxException {
@@ -301,7 +301,7 @@ public class ViewReportAction extends ViewReportListAction {
 		}
 
 		return conversionList;
-	}
+	}*/
 
 	protected static int getOffset(RowAlias rowAlias) {
 		Mapping mapping = rowAlias.getMapping();

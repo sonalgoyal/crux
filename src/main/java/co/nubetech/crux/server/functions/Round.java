@@ -27,31 +27,11 @@ public class Round extends FunctionBase implements CruxNonAggregator{
 
 	String valueType;
 
-	public Round(Map<String, String> properties) {
-		super();
-		this.properties = properties;
-		valueType = getProperty(VALUE_TYPE_PROPERTY);
+	public Round() {
 	}
 
 	@Override
-	public Object execute(byte[] value) throws CruxException {
-		String valueInString = Bytes.toString(value);
-		if (valueInString == null) {
-			throw new CruxException("");
-		}
-		try {
-			if (valueType.equals("Double")) {
-				Double valueInDouble = Double.parseDouble(valueInString);
-				return Math.round(valueInDouble);
-			} else if (valueType.equals("Float")) {
-				Float valueInFloat = Float.parseFloat(valueInString);
-				return Math.round(valueInFloat);
-			} else {
-				throw new CruxException("The type" + valueType
-						+ "is not supported.");
-			}
-		} catch (Exception e) {
-			throw new CruxException(e.getMessage());
-		}
+	public Object execute(Object value) throws CruxException {
+		return null;
 	}
 }

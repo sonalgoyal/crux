@@ -19,7 +19,9 @@ import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
 import co.nubetech.crux.model.ReportDesignFunction;
 import co.nubetech.crux.model.RowAlias;
+import co.nubetech.crux.server.functions.CruxAggregator;
 import co.nubetech.crux.server.functions.CruxFunction;
+import co.nubetech.crux.server.functions.CruxNonAggregator;
 import co.nubetech.crux.util.CruxException;
 
 public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements 
@@ -33,10 +35,11 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 	 * the server needs to be executed
 	 * which means at least one of the design functions
 	 * is an aggregate
+	 * Thsi function is called without a group by
 	 */
 	@Override
-	public List<List> getAggregates(Scan scan, Report report) throws CruxException{
-		List<List> returnList = new ArrayList<List>();
+	public List getAggregates(Scan scan, Report report) throws CruxException{
+		List returnList = new ArrayList();
 		try {
 			
 			//understand the report
@@ -57,31 +60,31 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 			//may have to revise this
 			 InternalScanner scanner = ((RegionCoprocessorEnvironment) getEnvironment())
 				        .getRegion().getScanner(scan);
-			 if (groupBys == null) {
-				 //just simple function application, but an aggregate is possibly lurking in somewhere
-				 //without a groupby ..ouch
+			 //just simple function application, but an aggregate like min/max is lurking in somewhere
+			 //without a groupby ..ouch
+			 byte[] value = null;
+			 List<KeyValue> results = new ArrayList<KeyValue>();
+			 boolean hasMoreRows = false;
+			 do {
+				 hasMoreRows = scanner.next(results);
 				 int index = 0;
-				 byte[] value = null;
-				 List<KeyValue> results = new ArrayList<KeyValue>();
 				 for (ReportDesign design: designs) {
+					 index++;
 					 //get each value and apply functions
 					 Stack<CruxFunction> designFn = functions.get(index++);
-				 	 boolean hasMoreRows = false;
-					 do {
-						 hasMoreRows = scanner.next(results);
-						 //convert and apply
-						//see if the design is on row or column alias
-						 Alias alias = getAlias(design);
-						 value = getValue(results, alias, report);
-					 }
-					 while (hasMoreRows);
-				}		 
-				 
-			 }
-			 //group bys are not null
-			 else {
-				  
-			 }
+					 //convert and apply
+					 //see if the design is on row or column alias
+					 Alias alias = getAlias(design);
+					 value = getValue(results, alias, report);
+					 applyFunctions(value, designFn);					 
+				 }					 
+			}
+			while (hasMoreRows); 	
+			//we have applied functions to each row of the scan
+			//now lets get final values and populate
+			for (ReportDesign design: designs) {
+				returnList.add(null);
+			}			
 		}
 		catch(Exception e) {
 			throw new CruxException("Error processing aggregates " + e);
@@ -90,6 +93,31 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 		return returnList;
 	}
 	
+	/**
+	 * Apply functions
+	 * @param value
+	 * @param functions
+	 */
+	public void applyFunctions(byte[] value, Stack<CruxFunction> functions) throws CruxException{
+		//pop each function
+		//if its an aggregate, get the value
+		//else just apply
+		//we will apply only till we meet an aggregate
+		CruxFunction fn = null;
+		Object intermediateValue = value;
+		while ((fn = functions.pop()) != null) {
+			applyFunction(value, fn);
+		}
+	}
+	
+	public void applyFunction(Object value, CruxFunction function) throws CruxException {
+		if (function instanceof CruxAggregator) {
+			((CruxAggregator) function).aggregate(value);			
+		}
+		else {
+			((CruxNonAggregator)function).execute(value);
+		}
+	}
 	/**
 	 * This is not the most optimized pience of code
 	 * we should go to the byte buffers
@@ -128,6 +156,8 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 		 }
 		 return alias;
 	}
+	
+	
 	
 	protected List<Stack<CruxFunction>> getFunctions(Report report) throws CruxException{
 		
