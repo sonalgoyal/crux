@@ -1,23 +1,16 @@
 package co.nubetech.crux.action;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.servlet.ServletContext;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
-
-import org.apache.struts2.dispatcher.Dispatcher;
 import org.hibernate.Session;
 import org.junit.Test;
-
-import com.opensymphony.xwork2.ActionProxy;
 
 import co.nubetech.crux.dao.DBConnection;
 import co.nubetech.crux.dao.DashboardDAO;

@@ -20,7 +20,6 @@ import static org.mockito.Mockito.mock;
 import java.io.IOException;
 
 import org.apache.hadoop.hbase.client.Result;
-import org.junit.Test;
 
 //TODO : big one, tests in this package are breaking, need to revisit
 

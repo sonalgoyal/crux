@@ -14,9 +14,6 @@
  */
 package co.nubetech.crux.server.functions;
 
-import java.util.Map;
-
-import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 
 import co.nubetech.crux.util.CruxException;

@@ -26,8 +26,6 @@ import java.io.IOException;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
 
-import co.nubetech.crux.server.filter.types.SubSubstringComparator;
-
 public class TestSubSubstringComparater {
 	@Test
 	public void testCompareToWithEqualLength() {

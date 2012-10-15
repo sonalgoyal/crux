@@ -27,8 +27,6 @@ import java.io.IOException;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
 
-import co.nubetech.crux.server.filter.types.FloatComparator;
-
 public class TestFloatComparator {
 
 	@Test

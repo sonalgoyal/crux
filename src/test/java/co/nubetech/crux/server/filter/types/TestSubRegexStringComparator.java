@@ -28,8 +28,6 @@ import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
 
-import co.nubetech.crux.server.filter.types.SubRegexStringComparator;
-
 public class TestSubRegexStringComparator {
 	
 	@Test

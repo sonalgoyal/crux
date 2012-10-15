@@ -1,12 +1,12 @@
 package co.nubetech.crux.server.aggregate;
 
-import java.util.ArrayList;
+import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import co.nubetech.crux.model.Alias;
 import co.nubetech.crux.model.ColumnAlias;

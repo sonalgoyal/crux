@@ -1,6 +1,10 @@
 package co.nubetech.crux.action;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +27,6 @@ import co.nubetech.crux.model.ValueType;
 import co.nubetech.crux.util.CruxConstants;
 import co.nubetech.crux.util.CruxException;
 import co.nubetech.crux.view.MappingView;
-import static org.mockito.Mockito.*;
 
 public class TestMappingAction {
 	@Test

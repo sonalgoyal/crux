@@ -1,6 +1,9 @@
 package co.nubetech.crux.dao;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -10,7 +13,6 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert.*;
 
 import co.nubetech.crux.model.GroupBy;
 import co.nubetech.crux.model.GroupBys;

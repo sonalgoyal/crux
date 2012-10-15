@@ -2,8 +2,6 @@ package co.nubetech.crux.model;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 public class TestGroupBys {

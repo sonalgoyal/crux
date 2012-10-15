@@ -20,7 +20,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 
 import org.apache.hadoop.hbase.client.Result;
-import org.junit.Test;
 
 public class TestScanScanner {
 

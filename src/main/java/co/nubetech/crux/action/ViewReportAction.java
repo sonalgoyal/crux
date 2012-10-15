@@ -16,16 +16,11 @@ Copyright 2011 Nube Technologies
 package co.nubetech.crux.action;
 
 import java.util.ArrayList;
-
-import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 
 import co.nubetech.crux.dao.MappingDAO;
-import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.ColumnFilter;
 import co.nubetech.crux.model.Connection;
 import co.nubetech.crux.model.Mapping;
@@ -38,7 +33,6 @@ import co.nubetech.crux.server.CruxScanner;
 import co.nubetech.crux.server.HBaseFacade;
 import co.nubetech.crux.util.CruxError;
 import co.nubetech.crux.util.CruxException;
-import co.nubetech.crux.view.Cell;
 import co.nubetech.crux.view.FilterAliasView;
 
 public class ViewReportAction extends ViewReportListAction {

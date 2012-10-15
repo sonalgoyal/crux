@@ -22,7 +22,6 @@ import co.nubetech.crux.model.FilterType;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.RowAlias;
 import co.nubetech.crux.model.RowAliasFilter;
-import co.nubetech.crux.server.filter.RowFilterComparator;
 
 public class TestRowFilterComparator {
 

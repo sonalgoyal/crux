@@ -22,13 +22,8 @@ import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import co.nubetech.crux.model.ColumnAlias;
-import co.nubetech.crux.model.ColumnFilter;
 import co.nubetech.crux.model.FilterType;
 import co.nubetech.crux.model.RowAliasFilter;
-import co.nubetech.crux.model.ValueType;
-import co.nubetech.crux.server.filter.ComparatorNotFoundException;
-import co.nubetech.crux.server.filter.FilterHelper;
 import co.nubetech.crux.util.CruxException;
 
 public class TestFilterHelper {

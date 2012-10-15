@@ -14,48 +14,6 @@
  */
 package co.nubetech.crux.server;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.HashMap;
-
-import org.apache.commons.pool.KeyedPoolableObjectFactory;
-import org.apache.commons.pool.PoolUtils;
-import org.apache.hadoop.hbase.HBaseTestingUtility;
-import org.apache.hadoop.hbase.HColumnDescriptor;
-import org.apache.hadoop.hbase.HTableDescriptor;
-import org.apache.hadoop.hbase.client.HBaseAdmin;
-import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.log4j.Logger;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import co.nubetech.crux.model.ColumnAlias;
-import co.nubetech.crux.model.ColumnFilter;
-import co.nubetech.crux.model.Connection;
-import co.nubetech.crux.model.ConnectionProperty;
-import co.nubetech.crux.model.FilterType;
-import co.nubetech.crux.model.Mapping;
-import co.nubetech.crux.model.Report;
-import co.nubetech.crux.model.ReportDesign;
-import co.nubetech.crux.model.RowAlias;
-import co.nubetech.crux.model.RowAliasFilter;
-import co.nubetech.crux.model.ValueType;
-import co.nubetech.crux.pool.HBaseConnectionPool;
-import co.nubetech.crux.pool.HBaseConnectionPoolFactory;
-import co.nubetech.crux.util.CruxConstants;
-import co.nubetech.crux.util.CruxException;
 
 public class TestHBaseFacade {
 	

@@ -8,8 +8,6 @@ import co.nubetech.crux.model.Connection;
 import co.nubetech.crux.model.ConnectionProperty;
 import co.nubetech.crux.model.Datastore;
 import co.nubetech.crux.util.CruxConstants;
-import co.nubetech.crux.util.CruxException;
-import co.nubetech.crux.view.ConnectionView;;
 
 public class TestConnectionView {
 	

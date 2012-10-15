@@ -1,6 +1,6 @@
 package co.nubetech.crux.dao;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.sql.ResultSet;
 import java.sql.Statement;

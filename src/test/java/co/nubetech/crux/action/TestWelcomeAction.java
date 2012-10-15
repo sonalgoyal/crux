@@ -1,31 +1,24 @@
 package co.nubetech.crux.action;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 
 import co.nubetech.crux.dao.ConnectionDAO;
 import co.nubetech.crux.dao.MappingDAO;
 import co.nubetech.crux.dao.ReportDAO;
-import co.nubetech.crux.dao.ValueTypeDAO;
-import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.Connection;
-import co.nubetech.crux.model.ConnectionProperty;
 import co.nubetech.crux.model.Dashboard;
 import co.nubetech.crux.model.Datastore;
 import co.nubetech.crux.model.Mapping;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportType;
-import co.nubetech.crux.model.RowAlias;
 import co.nubetech.crux.model.User;
-import co.nubetech.crux.model.ValueType;
-import co.nubetech.crux.util.CruxConstants;
 
 public class TestWelcomeAction {
 

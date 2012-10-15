@@ -18,18 +18,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.DataInputStream;
-import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
-
-import co.nubetech.crux.server.filter.types.SubBinaryComparator;
 
 public class TestSubBinaryComparator {
 

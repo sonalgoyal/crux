@@ -1,13 +1,15 @@
 package co.nubetech.crux.action;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.junit.Test;
 
 import co.nubetech.crux.dao.FunctionDAO;
 import co.nubetech.crux.dao.MappingDAO;

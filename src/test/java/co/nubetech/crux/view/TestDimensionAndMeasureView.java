@@ -2,11 +2,11 @@ package co.nubetech.crux.view;
 
 import static org.junit.Assert.assertEquals;
 
-import co.nubetech.crux.model.ValueType;
-import co.nubetech.crux.model.RowAlias;
-import co.nubetech.crux.model.Datastore;
-
 import org.junit.Test;
+
+import co.nubetech.crux.model.Datastore;
+import co.nubetech.crux.model.RowAlias;
+import co.nubetech.crux.model.ValueType;
 
 public class TestDimensionAndMeasureView {
 

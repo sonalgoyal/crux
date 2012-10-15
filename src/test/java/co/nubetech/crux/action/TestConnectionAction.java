@@ -1,24 +1,21 @@
 package co.nubetech.crux.action;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 
 import co.nubetech.crux.dao.ConnectionDAO;
-import co.nubetech.crux.dao.UserDAO;
 import co.nubetech.crux.model.Connection;
 import co.nubetech.crux.model.ConnectionProperty;
 import co.nubetech.crux.model.Datastore;
 import co.nubetech.crux.model.User;
 import co.nubetech.crux.util.CruxConstants;
-import co.nubetech.crux.view.ConnectionView;
 
 
 public class TestConnectionAction {

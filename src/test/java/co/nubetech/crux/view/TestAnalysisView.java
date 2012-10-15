@@ -15,6 +15,7 @@
 package co.nubetech.crux.view;
 
 import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 import co.nubetech.crux.model.Analysis;

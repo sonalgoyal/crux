@@ -14,10 +14,6 @@
  */
 package co.nubetech.crux.pool;
 
-import static org.junit.Assert.assertEquals;
-
-import org.apache.hadoop.hbase.rest.client.Client;
-import org.apache.hadoop.hbase.rest.client.Cluster;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 

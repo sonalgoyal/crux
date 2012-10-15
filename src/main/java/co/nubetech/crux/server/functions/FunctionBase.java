@@ -14,7 +14,6 @@
  */
 package co.nubetech.crux.server.functions;
 
-import java.util.Map;
 
 public abstract class FunctionBase implements CruxFunction{
 	

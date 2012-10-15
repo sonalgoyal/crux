@@ -20,10 +20,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
 import org.junit.Test;
 
 import co.nubetech.crux.model.Analysis;
