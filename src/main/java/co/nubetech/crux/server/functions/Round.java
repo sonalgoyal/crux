@@ -31,4 +31,9 @@ public class Round extends FunctionBase implements CruxNonAggregator{
 	public Object execute(Object value) throws CruxException {
 		return null;
 	}
+	
+	@Override
+	public boolean isAggregate() {
+		return false;
+	}
 }

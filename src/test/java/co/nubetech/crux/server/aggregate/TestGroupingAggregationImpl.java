@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
 
 import co.nubetech.crux.model.Alias;
@@ -18,7 +19,9 @@ import co.nubetech.crux.model.ReportDesign;
 import co.nubetech.crux.model.ReportDesignFunction;
 import co.nubetech.crux.model.RowAlias;
 import co.nubetech.crux.model.ValueType;
+import co.nubetech.crux.server.functions.Ceil;
 import co.nubetech.crux.server.functions.CruxFunction;
+import co.nubetech.crux.server.functions.SumAggregator;
 import co.nubetech.crux.util.CruxException;
 
 public class TestGroupingAggregationImpl {
@@ -147,6 +150,35 @@ public class TestGroupingAggregationImpl {
 		Stack<CruxFunction> yFnStack1 = functionList.get(2);
 		assertEquals(0, yFnStack1.size());		
 	}
+	
+	@Test
+	public void testApplyFunctionsAggregate() throws CruxException{
+		GroupingAggregationImpl impl = new GroupingAggregationImpl();
+		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
+		SumAggregator summer = new SumAggregator();
+		xFnStack.push(summer);
+		xFnStack.push(new Ceil());
+		byte[] value = Bytes.toBytes(new Double(54.5d));
+		impl.applyFunctions(value, xFnStack);
+		byte[] value1 = Bytes.toBytes(new Double(5.25d));
+		impl.applyFunctions(value1, xFnStack);
+		assertEquals(59.75d, summer.getAggregate());
+	}
+	
+	@Test
+	public void testApplyFunctionsNonAggregate() throws CruxException{
+		GroupingAggregationImpl impl = new GroupingAggregationImpl();
+		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
+		SumAggregator summer = new SumAggregator();
+		xFnStack.push(new Ceil());
+		xFnStack.push(summer);
+		byte[] value = Bytes.toBytes(new Double(54.5d));
+		impl.applyFunctions(value, xFnStack);
+		byte[] value1 = Bytes.toBytes(new Double(5.25d));
+		impl.applyFunctions(value1, xFnStack);
+		assertEquals(61d, summer.getAggregate());
+	}
+	
 
 
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.junit.Test;
@@ -123,7 +124,7 @@ public class TestMappingAction {
 		RowAlias rowAlias2 = new RowAlias(902, mapping, valueType1, 4 ,"rowAliasName2");
 		RowAlias rowAlias3 = new RowAlias(903, mapping, valueType1, 4 ,"rowAliasName3");
 		
-		Map<String, RowAlias> rowAliasMap = new HashMap<String, RowAlias>();
+		SortedMap<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
 		rowAliasMap.put("rowAlias1", rowAlias1);
 		rowAliasMap.put("rowAlias2", rowAlias2);
 		rowAliasMap.put("rowAlias3", rowAlias3);
@@ -257,7 +258,7 @@ public class TestMappingAction {
 		RowAlias rowAlias2 = new RowAlias(902, mapping, valueType, 4 ,"rowAliasName2");
 		RowAlias rowAlias3 = new RowAlias(903, mapping, valueType, 4 ,"rowAliasName3");
 		
-		Map<String, RowAlias> rowAliasMap = new HashMap<String, RowAlias>();
+		SortedMap<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
 		rowAliasMap.put("rowAlias1", rowAlias1);
 		rowAliasMap.put("rowAlias2", rowAlias2);
 		rowAliasMap.put("rowAlias3", rowAlias3);
@@ -438,7 +439,7 @@ public class TestMappingAction {
 		RowAlias rowAlias2 = new RowAlias(902, mapping, valueType, 4 ,"rowAliasName2");
 		RowAlias rowAlias3 = new RowAlias(903, mapping, valueType, 4 ,"rowAliasName3");
 		
-		Map<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
+		SortedMap<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
 		rowAliasMap.put("rowAlias1", rowAlias1);
 		rowAliasMap.put("rowAlias2", rowAlias2);
 		rowAliasMap.put("rowAlias3", rowAlias3);
@@ -484,7 +485,7 @@ public class TestMappingAction {
 		RowAlias rowAlias2 = new RowAlias();
 		RowAlias rowAlias3 = new RowAlias();
 		
-		Map<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
+		SortedMap<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
 		rowAliasMap.put("rowAlias1", rowAlias1);
 		rowAliasMap.put("rowAlias2", rowAlias2);
 		rowAliasMap.put("rowAlias3", rowAlias3);
@@ -509,7 +510,7 @@ public class TestMappingAction {
 		
 		Mapping mapping = new Mapping();
 		
-		Map<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
+		SortedMap<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
 	
 		mapping.setRowAlias(rowAliasMap);
 			

@@ -45,5 +45,10 @@ public class AverageAggregator extends FunctionBase implements CruxAggregator{
 		}
 	}
 	
+	@Override
+	public boolean isAggregate() {
+		return true;
+	}
+	
 
 }

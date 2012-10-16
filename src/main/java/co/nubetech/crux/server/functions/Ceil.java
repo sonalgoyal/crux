@@ -44,4 +44,9 @@ public class Ceil extends FunctionBase implements CruxNonAggregator{
 			throw new CruxException(e.getMessage());
 		}
 	}
+	
+	@Override
+	public boolean isAggregate() {
+		return false;
+	}
 }

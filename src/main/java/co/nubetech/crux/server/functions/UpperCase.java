@@ -37,5 +37,10 @@ public class UpperCase extends FunctionBase implements CruxNonAggregator{
 			return valueInString;
 		}
 	}
+	
+	@Override
+	public boolean isAggregate() {
+		return false;
+	}
 
 }

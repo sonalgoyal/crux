@@ -297,28 +297,7 @@ public class ViewReportAction extends ViewReportListAction {
 		return conversionList;
 	}*/
 
-	protected static int getOffset(RowAlias rowAlias) {
-		Mapping mapping = rowAlias.getMapping();
-		int offset = 0;
-		Map<String, RowAlias> rowAliases = mapping.getRowAlias();
-		for (String alias : rowAliases.keySet()) {
-			if (alias.equals(rowAlias.getAlias())) {
-				break;
-			} else {
-				offset += rowAliases.get(alias).getLength();
-			}
-		}
-		return offset;
-	}
-
-	protected static int getRowAliasLength(RowAlias rowAlias) {
-		int length = 0;
-		if (!(rowAlias.getLength() == null || rowAlias.getLength() == 0)) {
-			length = rowAlias.getLength().intValue();
-		}
-		return length;
-	}
-
+	
 	private void setValueToRowAndColumnFilter(
 			ArrayList<RowAliasFilter> rowFilterList,
 			ArrayList<ColumnFilter> columnFilterList) {

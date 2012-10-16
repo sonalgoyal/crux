@@ -15,7 +15,10 @@
 package co.nubetech.crux.model;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class Mapping {
 
@@ -24,16 +27,16 @@ public class Mapping {
 	private String name;
 	private String tableName;
 	private Map<String, ColumnAlias> columnAlias;
-	private Map<String, RowAlias> rowAlias;
+	private SortedMap<String, RowAlias> rowAlias;
 
 	public Mapping() {
 		connection = new Connection();
 		columnAlias = new HashMap<String, ColumnAlias>();
-		rowAlias = new HashMap<String, RowAlias>();
+		rowAlias = new TreeMap<String, RowAlias>();
 	}
 
 	public Mapping(Connection connection, String name, String tableName,
-			Map<String, ColumnAlias> columnAlias, Map<String, RowAlias> rowAlias) {
+			Map<String, ColumnAlias> columnAlias, SortedMap<String, RowAlias> rowAlias) {
 		super();
 		this.connection = connection;
 		this.name = name;
@@ -62,7 +65,7 @@ public class Mapping {
 		return rowAlias;
 	}
 
-	public void setRowAlias(Map<String, RowAlias> rowAlias) {
+	public void setRowAlias(SortedMap<String, RowAlias> rowAlias) {
 		this.rowAlias = rowAlias;
 	}
 

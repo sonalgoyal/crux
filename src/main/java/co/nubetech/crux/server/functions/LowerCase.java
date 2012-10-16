@@ -38,4 +38,9 @@ public class LowerCase extends FunctionBase implements CruxNonAggregator{
 		}
 	}
 
+	
+	@Override
+	public boolean isAggregate() {
+		return false;
+	}
 }

@@ -36,4 +36,9 @@ public class SumAggregator extends FunctionBase implements CruxAggregator{
 		return sum;
 	}
 
+	@Override
+	public boolean isAggregate() {
+		return true;
+	}
+
 }

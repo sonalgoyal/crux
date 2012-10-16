@@ -94,7 +94,7 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 	}
 	
 	/**
-	 * Apply functions
+	 * Apply functions till you hit an aggregate
 	 * @param value
 	 * @param functions
 	 */
@@ -103,21 +103,24 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 		//if its an aggregate, get the value
 		//else just apply
 		//we will apply only till we meet an aggregate
-		CruxFunction fn = null;
+		//CruxFunction fn = null;
 		Object intermediateValue = value;
-		while ((fn = functions.pop()) != null) {
-			applyFunction(value, fn);
+		int size = functions.size() - 1;
+		for (CruxFunction fn : functions) {
+			logger.debug("Function is " + fn + " and size is " + size);
+			if (fn.isAggregate()) {
+				logger.debug("applying aggregator " + fn);
+				((CruxAggregator) fn).aggregate(intermediateValue);
+				break;				
+			}
+			else {
+				logger.debug("applying non aggregator " + fn);
+				intermediateValue = ((CruxNonAggregator)fn).execute(value);
+			}
 		}
 	}
 	
-	public void applyFunction(Object value, CruxFunction function) throws CruxException {
-		if (function instanceof CruxAggregator) {
-			((CruxAggregator) function).aggregate(value);			
-		}
-		else {
-			((CruxNonAggregator)function).execute(value);
-		}
-	}
+	
 	/**
 	 * This is not the most optimized pience of code
 	 * we should go to the byte buffers
@@ -158,9 +161,7 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 	}
 	
 	
-	
 	protected List<Stack<CruxFunction>> getFunctions(Report report) throws CruxException{
-		
 		List<Stack<CruxFunction>> aggregators = new ArrayList<Stack<CruxFunction>>();
 		try {
 			for (ReportDesign design: report.getDesigns()) {
@@ -183,7 +184,5 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 		}
 		return aggregators;
 	}
-	
-	
 
 }

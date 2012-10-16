@@ -14,6 +14,8 @@
  */
 package co.nubetech.crux.model;
 
+import java.util.Map;
+
 public class RowAlias extends Alias {
 
 	private Integer length;
@@ -81,9 +83,16 @@ public class RowAlias extends Alias {
 		return true;
 	}
 
-	
-
-	
-	
-	
+	protected int getOffset() {
+		int offset = 0;
+		Map<String, RowAlias> rowAliases = mapping.getRowAlias();
+		for (String alias : rowAliases.keySet()) {
+			if (alias.equals(this.getAlias())) {
+				break;
+			} else {
+				offset += rowAliases.get(alias).getLength();
+			}
+		}
+		return offset;
+	}
 }

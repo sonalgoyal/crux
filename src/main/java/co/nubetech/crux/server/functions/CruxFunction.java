@@ -16,6 +16,8 @@ public interface CruxFunction {
 	
 	public void setReturnValueType(String returnValueType);
 	
-	public String getReturnValueType();	
+	public String getReturnValueType();
+	
+	public boolean isAggregate();
 
 }

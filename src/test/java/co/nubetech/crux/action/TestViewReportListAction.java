@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 
 import org.junit.Test;
 
@@ -159,7 +160,7 @@ public class TestViewReportListAction {
 		connection.setName("ConnectionName1");	
 		
 		Map<String, ColumnAlias> columnAliasMap = null;
-		Map<String, RowAlias> rowAliasMap = null;
+		SortedMap<String, RowAlias> rowAliasMap = null;
 		
 		
 		//mappings

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.junit.Test;
 
@@ -176,7 +178,7 @@ public class TestReportDesignAction {
 		rowAlias3.setAlias("rowAlias3");
 		rowAlias3.setValueType(valueType3);
 		
-		Map<String, RowAlias> rowAliasMap = new HashMap<String, RowAlias>();
+		SortedMap<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
 		rowAliasMap.put("rowAlias1", rowAlias1);
 		rowAliasMap.put("rowAlias2", rowAlias2);
 		rowAliasMap.put("rowAlias3", rowAlias3);
