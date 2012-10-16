@@ -82,8 +82,12 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 			while (hasMoreRows); 	
 			//we have applied functions to each row of the scan
 			//now lets get final values and populate
+			int index = 0;
 			for (ReportDesign design: designs) {
-				returnList.add(null);
+				index++;
+				//get each value and apply functions
+				Stack<CruxFunction> designFn = functions.get(index++);
+				returnList.add(getFunctionValue(designFn));
 			}			
 		}
 		catch(Exception e) {
@@ -91,6 +95,26 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 		}
 		
 		return returnList;
+	}
+	
+	public Object getFunctionValue(Stack<CruxFunction> functions) throws CruxException {
+		Object returnVal = null;
+		for (CruxFunction fn : functions) {
+			logger.debug("Trying to find the aggregate function, is it " + fn);
+			if (fn.isAggregate()) {
+				returnVal = ((CruxAggregator)fn).getAggregate();
+				break;
+			}			
+		}
+		logger.debug("Lets get to the final val now");
+		for (CruxFunction fn : functions) {
+			logger.debug("Trying the non agg function now, is it " + fn);
+			if (!fn.isAggregate()) {
+				logger.debug("Executing " );
+				returnVal = ((CruxNonAggregator)fn).execute(returnVal);				
+			}			
+		}
+		return returnVal;
 	}
 	
 	/**
@@ -122,7 +146,7 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 	
 	
 	/**
-	 * This is not the most optimized pience of code
+	 * This is not the most optimized piece of code
 	 * we should go to the byte buffers
 	 * lets clean this later once the functionality works end to end
 	 * @param results
