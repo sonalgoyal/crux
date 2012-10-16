@@ -124,7 +124,7 @@ public class TestMappingAction {
 		RowAlias rowAlias2 = new RowAlias(902, mapping, valueType1, 4 ,"rowAliasName2");
 		RowAlias rowAlias3 = new RowAlias(903, mapping, valueType1, 4 ,"rowAliasName3");
 		
-		SortedMap<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
 		rowAliasMap.put("rowAlias1", rowAlias1);
 		rowAliasMap.put("rowAlias2", rowAlias2);
 		rowAliasMap.put("rowAlias3", rowAlias3);
@@ -258,7 +258,7 @@ public class TestMappingAction {
 		RowAlias rowAlias2 = new RowAlias(902, mapping, valueType, 4 ,"rowAliasName2");
 		RowAlias rowAlias3 = new RowAlias(903, mapping, valueType, 4 ,"rowAliasName3");
 		
-		SortedMap<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
 		rowAliasMap.put("rowAlias1", rowAlias1);
 		rowAliasMap.put("rowAlias2", rowAlias2);
 		rowAliasMap.put("rowAlias3", rowAlias3);
@@ -439,7 +439,7 @@ public class TestMappingAction {
 		RowAlias rowAlias2 = new RowAlias(902, mapping, valueType, 4 ,"rowAliasName2");
 		RowAlias rowAlias3 = new RowAlias(903, mapping, valueType, 4 ,"rowAliasName3");
 		
-		SortedMap<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
 		rowAliasMap.put("rowAlias1", rowAlias1);
 		rowAliasMap.put("rowAlias2", rowAlias2);
 		rowAliasMap.put("rowAlias3", rowAlias3);
@@ -485,7 +485,7 @@ public class TestMappingAction {
 		RowAlias rowAlias2 = new RowAlias();
 		RowAlias rowAlias3 = new RowAlias();
 		
-		SortedMap<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
 		rowAliasMap.put("rowAlias1", rowAlias1);
 		rowAliasMap.put("rowAlias2", rowAlias2);
 		rowAliasMap.put("rowAlias3", rowAlias3);
@@ -510,7 +510,7 @@ public class TestMappingAction {
 		
 		Mapping mapping = new Mapping();
 		
-		SortedMap<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
 	
 		mapping.setRowAlias(rowAliasMap);
 			

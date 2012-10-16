@@ -178,7 +178,7 @@ public class TestReportDesignAction {
 		rowAlias3.setAlias("rowAlias3");
 		rowAlias3.setValueType(valueType3);
 		
-		SortedMap<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
 		rowAliasMap.put("rowAlias1", rowAlias1);
 		rowAliasMap.put("rowAlias2", rowAlias2);
 		rowAliasMap.put("rowAlias3", rowAlias3);

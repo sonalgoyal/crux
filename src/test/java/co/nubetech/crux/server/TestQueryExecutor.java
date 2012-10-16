@@ -1210,7 +1210,7 @@ public class TestQueryExecutor {
 		rowAlias.setValueType(new ValueType(1l, new Datastore(), "String",
 				"java.lang.String", false));
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		mapping.setRowAlias(rowAliases);
 		rowAlias.setMapping(mapping);
 		rowAlias.setLength(5);
@@ -1239,7 +1239,7 @@ public class TestQueryExecutor {
 	@Test
 	public void testGetRangeFiltersSingleRowAliasLtGtFilter() throws CruxException {
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		mapping.setRowAlias(rowAliases);
 
 		RowAlias rowAlias = new RowAlias();
@@ -1287,7 +1287,7 @@ public class TestQueryExecutor {
 		rowAlias.setValueType(new ValueType(1l, new Datastore(), "String",
 				"java.lang.String", false));
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		mapping.setRowAlias(rowAliases);
 		rowAlias.setMapping(mapping);
 		rowAlias.setLength(5);
@@ -1329,7 +1329,7 @@ public class TestQueryExecutor {
 		rowAlias1.setAlias("Alias1");
 		
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		mapping.setRowAlias(rowAliases);
 		
 		rowAlias.setMapping(mapping);
@@ -1380,7 +1380,7 @@ public class TestQueryExecutor {
 		rowAlias1.setAlias("Alias1");
 		
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		mapping.setRowAlias(rowAliases);
 		
 		rowAlias.setMapping(mapping);
@@ -1431,7 +1431,7 @@ public class TestQueryExecutor {
 		rowAlias1.setAlias("Alias1");
 		
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		mapping.setRowAlias(rowAliases);
 		
 		rowAlias.setMapping(mapping);
@@ -1482,7 +1482,7 @@ public class TestQueryExecutor {
 		rowAlias1.setAlias("Alias1");
 		
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		mapping.setRowAlias(rowAliases);
 		
 		rowAlias.setMapping(mapping);
@@ -1520,7 +1520,7 @@ public class TestQueryExecutor {
 	public void testGetRangeFiltersDoubleRowAliasWrongFilter()
 			throws CruxException {
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		mapping.setRowAlias(rowAliases);
 		
 		RowAlias rowAlias = new RowAlias();
@@ -1624,7 +1624,7 @@ public class TestQueryExecutor {
 	@Test
 	public void testSetRangeScan() throws CruxException {
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		mapping.setRowAlias(rowAliases);
 
 		RowAlias rowAlias = new RowAlias();
@@ -1674,7 +1674,7 @@ public class TestQueryExecutor {
 	@Test
 	public void testSetRangeScanOnlyLt() throws CruxException {
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		mapping.setRowAlias(rowAliases);
 
 		RowAlias rowAlias = new RowAlias();
@@ -1715,7 +1715,7 @@ public class TestQueryExecutor {
 	@Test
 	public void testSetRangeScanOnlyGt() throws CruxException {
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		mapping.setRowAlias(rowAliases);
 
 		RowAlias rowAlias = new RowAlias();

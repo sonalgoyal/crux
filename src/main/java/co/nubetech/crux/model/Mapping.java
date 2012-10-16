@@ -27,7 +27,7 @@ public class Mapping {
 	private String name;
 	private String tableName;
 	private Map<String, ColumnAlias> columnAlias;
-	private SortedMap<String, RowAlias> rowAlias;
+	private Map<String, RowAlias> rowAlias;
 
 	public Mapping() {
 		connection = new Connection();
@@ -36,7 +36,7 @@ public class Mapping {
 	}
 
 	public Mapping(Connection connection, String name, String tableName,
-			Map<String, ColumnAlias> columnAlias, SortedMap<String, RowAlias> rowAlias) {
+			Map<String, ColumnAlias> columnAlias, Map<String, RowAlias> rowAlias) {
 		super();
 		this.connection = connection;
 		this.name = name;
@@ -65,7 +65,7 @@ public class Mapping {
 		return rowAlias;
 	}
 
-	public void setRowAlias(SortedMap<String, RowAlias> rowAlias) {
+	public void setRowAlias(Map<String, RowAlias> rowAlias) {
 		this.rowAlias = rowAlias;
 	}
 

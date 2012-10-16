@@ -18,8 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.SortedMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
@@ -1826,7 +1825,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -1865,7 +1864,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -1903,7 +1902,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.EQUAL, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -1942,7 +1941,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -1980,7 +1979,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.LESS, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2019,7 +2018,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2057,7 +2056,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.EQUAL, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2096,7 +2095,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2134,7 +2133,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.LESS, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2173,7 +2172,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2212,7 +2211,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2251,7 +2250,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2289,7 +2288,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.EQUAL, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2328,7 +2327,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2366,7 +2365,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.LESS, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2405,7 +2404,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2444,7 +2443,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2483,7 +2482,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2521,7 +2520,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.EQUAL, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2560,7 +2559,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2599,7 +2598,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2637,7 +2636,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.LESS, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2676,7 +2675,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2715,7 +2714,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2753,7 +2752,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.EQUAL, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2792,7 +2791,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2830,7 +2829,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.LESS, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2869,7 +2868,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2908,7 +2907,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2947,7 +2946,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -2985,7 +2984,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.EQUAL, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -3024,7 +3023,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -3063,7 +3062,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.EQUAL, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -3103,7 +3102,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -3142,7 +3141,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.LESS, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -3182,7 +3181,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -3221,7 +3220,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.EQUAL, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -3260,7 +3259,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.EQUAL, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -3299,7 +3298,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.EQUAL, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -3338,7 +3337,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.EQUAL, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -3378,7 +3377,7 @@ public class TestHBaseFilterFactory {
 				expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -3416,7 +3415,7 @@ public class TestHBaseFilterFactory {
 				alias1);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		rowAliases.put(alias1.getAlias(), alias1);
 
@@ -3911,7 +3910,7 @@ public class TestHBaseFilterFactory {
 		RowFilter expectedFilter = new RowFilter(CompareOp.EQUAL, expectedComp);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		mapping.setRowAlias(rowAliases);
 
@@ -3949,7 +3948,7 @@ public class TestHBaseFilterFactory {
 				alias1);
 
 		Mapping mapping = new Mapping();
-		SortedMap<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliases = new TreeMap<String, RowAlias>();
 		rowAliases.put(alias.getAlias(), alias);
 		rowAliases.put(alias1.getAlias(), alias1);
 
