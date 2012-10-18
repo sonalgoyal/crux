@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NavigableSet;
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.hadoop.hbase.client.Get;

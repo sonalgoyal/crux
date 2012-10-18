@@ -1,10 +1,11 @@
 package co.nubetech.crux.server.functions;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
 
 import co.nubetech.crux.util.CruxException;
-import static org.junit.Assert.*;
 
 public class TestSumAggregator {
 	

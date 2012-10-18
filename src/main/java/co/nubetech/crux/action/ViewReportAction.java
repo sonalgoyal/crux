@@ -16,7 +16,6 @@ Copyright 2011 Nube Technologies
 package co.nubetech.crux.action;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -26,7 +25,6 @@ import co.nubetech.crux.model.Connection;
 import co.nubetech.crux.model.Mapping;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
-import co.nubetech.crux.model.RowAlias;
 import co.nubetech.crux.model.RowAliasFilter;
 import co.nubetech.crux.model.ValueType;
 import co.nubetech.crux.server.CruxScanner;

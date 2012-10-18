@@ -16,6 +16,13 @@ package co.nubetech.crux.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Stack;
+
+import org.apache.log4j.Logger;
+
+import co.nubetech.crux.server.functions.CruxFunction;
+import co.nubetech.crux.util.CruxException;
 
 public class Report {
 
@@ -29,6 +36,8 @@ public class Report {
 	private Collection<RowAliasFilter> rowAliasFilters = new ArrayList<RowAliasFilter>();
 	private Collection<ColumnFilter> columnFilters = new ArrayList<ColumnFilter>();
 	private GroupBys groupBys;
+	
+	final static Logger logger = Logger.getLogger(Report.class);
 
 	public Report() {
 
@@ -259,6 +268,47 @@ public class Report {
 				+ designs + ", rowAliasFilters=" + rowAliasFilters
 				+ ", columnFilters=" + columnFilters + ", groupBys=" + groupBys
 				+ "]";
+	}
+	
+	/*
+	 * A report is an aggregate report
+	 * if at least one function is an aggregate function
+	 */
+	public boolean isAggregateReport() throws CruxException{
+		boolean isAggregate = false;
+		List<Stack<CruxFunction>> functions = getFunctions();
+		for (Stack<CruxFunction> fnStack: functions) {
+			for (CruxFunction fn: fnStack) {
+				if (fn.isAggregate()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public List<Stack<CruxFunction>> getFunctions() throws CruxException{
+		List<Stack<CruxFunction>> aggregators = new ArrayList<Stack<CruxFunction>>();
+		try {
+			for (ReportDesign design: getDesigns()) {
+				logger.debug("Finding functions for design: " + design);
+				Collection<ReportDesignFunction> functions = design.getReportDesignFunctionList();
+				Stack<CruxFunction> functionStack = new Stack<CruxFunction>();
+				if (functions != null) {
+					for (ReportDesignFunction function: functions) {
+						logger.debug("Creating function class for " + function);
+						functionStack.push((CruxFunction) Class.forName(function.getFunction().getFunctionClass()).
+								newInstance());
+					}
+				}
+				aggregators.add(functionStack);
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw new CruxException("Unable to generate the functions " + e);
+		}
+		return aggregators;
 	}
 
 	

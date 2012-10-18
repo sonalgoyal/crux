@@ -1,10 +1,21 @@
 package co.nubetech.crux.model;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+import java.util.Stack;
+
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import co.nubetech.crux.server.functions.CruxFunction;
+import co.nubetech.crux.util.CruxException;
+
+
 public class TestReport {
+	private final static Logger logger = Logger.getLogger(TestReport.class);
 	@Test
 	public void testEquals() {
 		User user = new User();
@@ -129,4 +140,50 @@ public class TestReport {
 		assertTrue(!report1.onDashboard());
 		assertTrue(report.onDashboard());
 	}
+	
+	@Test
+	public void testGetAggregators() throws CruxException{
+		Report report = Util.getReport(); 
+		List<Stack<CruxFunction>> functionList = report.getFunctions();
+		assertEquals(3, functionList.size());
+		Stack<CruxFunction> xFnStack = functionList.get(0);
+		assertEquals(2,xFnStack.size());
+		assertEquals(co.nubetech.crux.server.functions.SumAggregator.class, xFnStack.pop().getClass());
+		assertEquals(co.nubetech.crux.server.functions.Ceil.class, xFnStack.pop().getClass());
+		Stack<CruxFunction> yFnStack = functionList.get(1);
+		assertEquals(1, yFnStack.size());
+		assertEquals(co.nubetech.crux.server.functions.AverageAggregator.class, yFnStack.pop().getClass());
+		Stack<CruxFunction> yFnStack1 = functionList.get(2);
+		assertEquals(0, yFnStack1.size());		
+	}
+	
+	@Test
+	public void testGetAggregatorsNoFunctions() throws CruxException{
+		Report report = Util.getReport(); 
+		for (ReportDesign design: report.getDesigns()) {
+			design.setReportDesignFunctionList(null);
+		}
+		List<Stack<CruxFunction>> functionList = report.getFunctions();
+		assertEquals(3, functionList.size());
+		Stack<CruxFunction> xFnStack = functionList.get(0);
+		assertEquals(0,xFnStack.size());
+		Stack<CruxFunction> yFnStack = functionList.get(1);
+		assertEquals(0, yFnStack.size());
+		Stack<CruxFunction> yFnStack1 = functionList.get(2);
+		assertEquals(0, yFnStack1.size());		
+	}
+	
+	@Test
+	public void testIsAggregateTrue() throws CruxException{
+		Report report = Util.getReport();
+		assertTrue(report.isAggregateReport());
+	}
+	
+	@Test
+	public void testIsAggregateFalse() throws CruxException{
+		Report report = Util.getReportWithoutAggregateFunctions();
+		assertFalse(report.isAggregateReport());
+	}
+	
+	
 }

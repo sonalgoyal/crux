@@ -1,5 +1,6 @@
 package co.nubetech.crux.server.aggregate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.coprocessor.BaseEndpointCoprocessor;
 import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
+import org.apache.hadoop.hbase.ipc.ProtocolSignature;
 import org.apache.hadoop.hbase.regionserver.InternalScanner;
 import org.apache.log4j.Logger;
 
@@ -17,7 +19,6 @@ import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.GroupBys;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
-import co.nubetech.crux.model.ReportDesignFunction;
 import co.nubetech.crux.model.RowAlias;
 import co.nubetech.crux.server.functions.CruxAggregator;
 import co.nubetech.crux.server.functions.CruxFunction;
@@ -28,6 +29,17 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 	GroupingAggregationProtocol{
 	
 	private final static Logger logger = Logger.getLogger(GroupingAggregationImpl.class);
+	public static final long VERSION = 1L;
+	
+	@Override
+	public ProtocolSignature getProtocolSignature(
+	     String protocol, long version, int clientMethodsHashCode)
+	     throws IOException {
+	     if (GroupingAggregationImpl.class.getName().equals(protocol)) {
+	    	 return new ProtocolSignature(GroupingAggregationImpl.VERSION, null);
+		 }
+		 throw new IOException("Unknown protocol: " + protocol);
+	  }
 
 	/**
 	 * We are here
@@ -35,7 +47,7 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 	 * the server needs to be executed
 	 * which means at least one of the design functions
 	 * is an aggregate
-	 * Thsi function is called without a group by
+	 * This function is called without a group by
 	 */
 	@Override
 	public List getAggregates(Scan scan, Report report) throws CruxException{
@@ -49,7 +61,7 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 			//get the col or row alias and the function to be applied.
 			//create list of functions to be applied.
 			Collection<ReportDesign> designs = report.getDesigns();
-			List<Stack<CruxFunction>> functions = getFunctions(report);		
+			List<Stack<CruxFunction>> functions = report.getFunctions();		
 			GroupBys groupBys = report.getGroupBys();
 			//open the scan
 			//get values of data for each group by
@@ -91,6 +103,7 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 			}			
 		}
 		catch(Exception e) {
+			e.printStackTrace();
 			throw new CruxException("Error processing aggregates " + e);
 		}
 		
@@ -182,31 +195,7 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 			 alias = design.getColumnAlias(); 
 		 }
 		 return alias;
-	}
+	}	
 	
 	
-	protected List<Stack<CruxFunction>> getFunctions(Report report) throws CruxException{
-		List<Stack<CruxFunction>> aggregators = new ArrayList<Stack<CruxFunction>>();
-		try {
-			for (ReportDesign design: report.getDesigns()) {
-				logger.debug("Finding functions for design: " + design);
-				Collection<ReportDesignFunction> functions = design.getReportDesignFunctionList();
-				Stack<CruxFunction> functionStack = new Stack<CruxFunction>();
-				if (functions != null) {
-					for (ReportDesignFunction function: functions) {
-						logger.debug("Creating function class for " + function);
-						functionStack.push((CruxFunction) Class.forName(function.getFunction().getFunctionClass()).
-								newInstance());
-					}
-				}
-				aggregators.add(functionStack);
-			}
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			throw new CruxException("Unable to generate the functions " + e);
-		}
-		return aggregators;
-	}
-
 }

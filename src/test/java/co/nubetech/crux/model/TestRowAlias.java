@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import co.nubetech.crux.action.ViewReportAction;
-
 public class TestRowAlias {
 	@Test
 	public void testEquals() {
