@@ -310,6 +310,10 @@ public class Report {
 		}
 		return aggregators;
 	}
+	
+	public ReportDesign getDesignAtIndex(int index) {
+		return null;
+	}
 
 	
 	

@@ -20,6 +20,8 @@ import co.nubetech.crux.model.GroupBys;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
 import co.nubetech.crux.model.RowAlias;
+import co.nubetech.crux.server.FunctionUtil;
+import co.nubetech.crux.server.ServerUtil;
 import co.nubetech.crux.server.functions.CruxAggregator;
 import co.nubetech.crux.server.functions.CruxFunction;
 import co.nubetech.crux.server.functions.CruxNonAggregator;
@@ -33,12 +35,12 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 	
 	@Override
 	public ProtocolSignature getProtocolSignature(
-	     String protocol, long version, int clientMethodsHashCode)
-	     throws IOException {
-	     if (GroupingAggregationImpl.class.getName().equals(protocol)) {
-	    	 return new ProtocolSignature(GroupingAggregationImpl.VERSION, null);
-		 }
-		 throw new IOException("Unknown protocol: " + protocol);
+	    String protocol, long version, int clientMethodsHashCode)
+	    throws IOException {
+	    if (GroupingAggregationImpl.class.getName().equals(protocol)) {
+	    	return new ProtocolSignature(GroupingAggregationImpl.VERSION, null);
+		}
+		throw new IOException("Unknown protocol: " + protocol);
 	  }
 
 	/**
@@ -86,21 +88,17 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 					 Stack<CruxFunction> designFn = functions.get(index++);
 					 //convert and apply
 					 //see if the design is on row or column alias
-					 Alias alias = getAlias(design);
-					 value = getValue(results, alias, report);
-					 applyFunctions(value, designFn);					 
+					 Alias alias = ServerUtil.getAlias(design);
+					 value = ServerUtil.getValue(results, alias, report);
+					 FunctionUtil.applyAggregateFunctions(value, designFn);					 
 				 }					 
 			}
 			while (hasMoreRows); 	
 			//we have applied functions to each row of the scan
 			//now lets get final values and populate
-			int index = 0;
-			for (ReportDesign design: designs) {
-				index++;
-				//get each value and apply functions
-				Stack<CruxFunction> designFn = functions.get(index++);
-				returnList.add(getFunctionValue(designFn));
-			}			
+			returnList = FunctionUtil.getAppliedValues(report, functions);
+			
+			//dont I have to close this scanner?
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -110,92 +108,6 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 		return returnList;
 	}
 	
-	public Object getFunctionValue(Stack<CruxFunction> functions) throws CruxException {
-		Object returnVal = null;
-		for (CruxFunction fn : functions) {
-			logger.debug("Trying to find the aggregate function, is it " + fn);
-			if (fn.isAggregate()) {
-				returnVal = ((CruxAggregator)fn).getAggregate();
-				break;
-			}			
-		}
-		logger.debug("Lets get to the final val now");
-		for (CruxFunction fn : functions) {
-			logger.debug("Trying the non agg function now, is it " + fn);
-			if (!fn.isAggregate()) {
-				logger.debug("Executing " );
-				returnVal = ((CruxNonAggregator)fn).execute(returnVal);				
-			}			
-		}
-		return returnVal;
-	}
-	
-	/**
-	 * Apply functions till you hit an aggregate
-	 * @param value
-	 * @param functions
-	 */
-	public void applyFunctions(byte[] value, Stack<CruxFunction> functions) throws CruxException{
-		//pop each function
-		//if its an aggregate, get the value
-		//else just apply
-		//we will apply only till we meet an aggregate
-		//CruxFunction fn = null;
-		Object intermediateValue = value;
-		int size = functions.size() - 1;
-		for (CruxFunction fn : functions) {
-			logger.debug("Function is " + fn + " and size is " + size);
-			if (fn.isAggregate()) {
-				logger.debug("applying aggregator " + fn);
-				((CruxAggregator) fn).aggregate(intermediateValue);
-				break;				
-			}
-			else {
-				logger.debug("applying non aggregator " + fn);
-				intermediateValue = ((CruxNonAggregator)fn).execute(value);
-			}
-		}
-	}
-	
-	
-	/**
-	 * This is not the most optimized piece of code
-	 * we should go to the byte buffers
-	 * lets clean this later once the functionality works end to end
-	 * @param results
-	 * @param alias
-	 * @return
-	 */
-	protected byte[] getValue(List<KeyValue> results, Alias alias, Report report) {
-		byte[] value = null;
-		if (alias instanceof RowAlias) {
-			value = results.get(0).getKey();
-		}
-		else {
-			ColumnAlias colAlias = (ColumnAlias) alias;
-			String family = colAlias.getColumnFamily();
-			String qualifier = colAlias.getQualifier();
-			byte[] familyBytes = family.getBytes();
-			byte[] qualifierBytes = qualifier.getBytes();
-			for (KeyValue kv: results) {
-				if (kv.getFamily().equals(familyBytes)) {
-					if (kv.getQualifier().equals(qualifierBytes)) {
-						value = kv.getValue();
-						break;
-					}
-				}
-			}
-		}
-		return value;
-	}
-	
-	protected Alias getAlias(ReportDesign design) {
-		Alias alias = design.getRowAlias();
-		 if (alias == null) {
-			 alias = design.getColumnAlias(); 
-		 }
-		 return alias;
-	}	
-	
-	
+		
+		
 }

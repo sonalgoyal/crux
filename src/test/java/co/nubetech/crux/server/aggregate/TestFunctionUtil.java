@@ -20,26 +20,25 @@ import org.junit.Test;
 
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.Util;
+import co.nubetech.crux.server.FunctionUtil;
 import co.nubetech.crux.server.functions.Ceil;
 import co.nubetech.crux.server.functions.CruxFunction;
 import co.nubetech.crux.server.functions.SumAggregator;
 import co.nubetech.crux.server.functions.UpperCase;
 import co.nubetech.crux.util.CruxException;
 
-public class TestGroupingAggregationImpl {
-	 
+public class TestFunctionUtil {
 		
 	@Test
 	public void testApplyFunctionsAggregateFirst() throws CruxException{
-		GroupingAggregationImpl impl = new GroupingAggregationImpl();
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
 		SumAggregator summer = new SumAggregator();
 		xFnStack.push(summer);
 		xFnStack.push(new Ceil());
 		byte[] value = Bytes.toBytes(new Double(54.5d));
-		impl.applyFunctions(value, xFnStack);
+		FunctionUtil.applyAggregateFunctions(value, xFnStack);
 		byte[] value1 = Bytes.toBytes(new Double(5.25d));
-		impl.applyFunctions(value1, xFnStack);
+		FunctionUtil.applyAggregateFunctions(value1, xFnStack);
 		assertEquals(59.75d, summer.getAggregate());
 	}
 	
@@ -51,54 +50,50 @@ public class TestGroupingAggregationImpl {
 		xFnStack.push(new Ceil());
 		xFnStack.push(summer);
 		byte[] value = Bytes.toBytes(new Double(54.5d));
-		impl.applyFunctions(value, xFnStack);
+		FunctionUtil.applyAggregateFunctions(value, xFnStack);
 		byte[] value1 = Bytes.toBytes(new Double(5.25d));
-		impl.applyFunctions(value1, xFnStack);
+		FunctionUtil.applyAggregateFunctions(value1, xFnStack);
 		assertEquals(61d, summer.getAggregate());
 	}
 	
 	@Test
 	public void testApplyFunctionsAllNonAggregate() throws CruxException{
-		GroupingAggregationImpl impl = new GroupingAggregationImpl();
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
 		xFnStack.push(new UpperCase());
 		byte[] value = Bytes.toBytes(new String("rowKey"));
-		impl.applyFunctions(value, xFnStack);		
+		FunctionUtil.applyAggregateFunctions(value, xFnStack);		
 	}
 	
 	@Test
 	public void testApplyFunctionsOnlyAggregate() throws CruxException{
-		GroupingAggregationImpl impl = new GroupingAggregationImpl();
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
 		SumAggregator summer = new SumAggregator();
 		xFnStack.push(summer);
 		byte[] value = Bytes.toBytes(new Double(54.5d));
-		impl.applyFunctions(value, xFnStack);
+		FunctionUtil.applyAggregateFunctions(value, xFnStack);
 		byte[] value1 = Bytes.toBytes(new Double(5.25d));
-		impl.applyFunctions(value1, xFnStack);
+		FunctionUtil.applyAggregateFunctions(value1, xFnStack);
 		assertEquals(59.75d, summer.getAggregate());
 	}
 	
 	@Test
 	public void testGetValueNonAggregateFirst() throws CruxException{
-		GroupingAggregationImpl impl = new GroupingAggregationImpl();
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
 		SumAggregator summer = new SumAggregator();
 		summer.aggregate(Bytes.toBytes(new Double(54.5d)));
 		xFnStack.push(new Ceil());
 		xFnStack.push(summer);
-		assertEquals(55d, impl.getFunctionValue(xFnStack));
+		assertEquals(55d, FunctionUtil.getFunctionValue(xFnStack));
 	}
 	
 	@Test
 	public void testGetValueAggregateFirst() throws CruxException{
-		GroupingAggregationImpl impl = new GroupingAggregationImpl();
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
 		SumAggregator summer = new SumAggregator();
 		summer.aggregate(Bytes.toBytes(new Double(54.5d)));
 		xFnStack.push(summer);
 		xFnStack.push(new Ceil());
-		assertEquals(55d, impl.getFunctionValue(xFnStack));
+		assertEquals(55d, FunctionUtil.getFunctionValue(xFnStack));
 	}
 	
 	

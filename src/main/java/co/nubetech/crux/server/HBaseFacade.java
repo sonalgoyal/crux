@@ -187,7 +187,7 @@ public class HBaseFacade {
 
 	}
 
-	public CruxScanner executeTest(Connection conn, Report report,
+	/*public CruxScanner executeTest(Connection conn, Report report,
 			Mapping mapping) throws CruxException {
 		try {
 
@@ -201,12 +201,15 @@ public class HBaseFacade {
 					KeyValue.Type.Put, Bytes.toBytes(20));
 			keys[0] = key1;
 			keys[1] = key2;
-
-			GetScanner scanner = new GetScanner(new Result(keys), report);
+			
+			CruxResultImpl impl1 = new CruxResultImpl(
+					new Result(keys), report);
+			
+			CruxScannerResultScannerImpl scanner = new CruxScannerResultScannerImpl(impl1, report);
 			return scanner;
 
 		} catch (Exception e) {
 			throw new CruxException(e);
 		}
-	}
+	}*/
 }

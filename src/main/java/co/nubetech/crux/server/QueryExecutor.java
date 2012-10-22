@@ -25,6 +25,7 @@ import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.client.coprocessor.Batch;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -37,6 +38,9 @@ import co.nubetech.crux.model.ReportDesign;
 import co.nubetech.crux.model.RowAlias;
 import co.nubetech.crux.model.RowAliasFilter;
 import co.nubetech.crux.model.ValueType;
+import co.nubetech.crux.server.aggregate.GroupingAggregationBatch;
+import co.nubetech.crux.server.aggregate.GroupingAggregationBatchCallback;
+import co.nubetech.crux.server.aggregate.GroupingAggregationProtocol;
 import co.nubetech.crux.server.filter.HBaseFilterFactory;
 import co.nubetech.crux.server.filter.RangeFilters;
 import co.nubetech.crux.server.filter.RowFilterComparator;
@@ -69,7 +73,7 @@ public class QueryExecutor {
 				setSelectedColumns(report, get);
 				Result result = hTable.get(get);
 				logger.debug("getRow is: " + result.getRow());
-				scanner = new GetScanner(result, report);
+				scanner = new CruxScannerResultImpl(result, report);
 			} else {
 				Scan scan = new Scan();
 				RangeFilters rangeFilters = getRangeFilters(report, mapping);
@@ -82,13 +86,23 @@ public class QueryExecutor {
 				scan.setFilter(rowFilters);
 				setSelectedColumns(report, scan);
 				logger.debug("Scan object is " + scan);
-				ResultScanner resultScanner = hTable.getScanner(scan);
-				if (report.getGroupBys() != null) {
-					//we have to call the coprocessors here
-					//TODO
+				if (report.getGroupBys() != null || report.isAggregateReport()) {
+					
+					//means we have to aggregate
+					GroupingAggregationBatch batchCall = new GroupingAggregationBatch(scan, report);
+					GroupingAggregationBatchCallback callback = new GroupingAggregationBatchCallback(report);
+					try {
+						hTable.coprocessorExec(
+							GroupingAggregationProtocol.class, scan.getStartRow(), scan.getStopRow(), 
+								batchCall, callback); 
+					}
+					catch(Throwable e) {
+						
+					}
 				}
 				else {
-					scanner = new ScanScanner(resultScanner, report);
+					ResultScanner resultScanner = hTable.getScanner(scan);
+					scanner = new CruxScannerResultScannerImpl(resultScanner, report);
 				}
 			}			
 		} catch (Exception e) {

@@ -20,7 +20,6 @@ public interface CruxScanner {
 
 	void close();
 
-	CruxResult next() throws IOException;
-	
+	CruxResult next() throws IOException;	
 
 }
