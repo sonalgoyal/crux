@@ -95,7 +95,27 @@ public class TestFunctionUtil {
 		xFnStack.push(new Ceil());
 		assertEquals(55d, FunctionUtil.getFunctionValue(xFnStack));
 	}
+
 	
+	@Test
+	public void testGetAppliedValuesAggregateFirst() throws CruxException{
+		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
+		SumAggregator summer = new SumAggregator();
+		xFnStack.push(summer);
+		xFnStack.push(new Ceil());
+		
+		Stack<CruxFunction> yFnStack = new Stack<CruxFunction>();
+		
+		//yFnStack.push(new UpperCase());
+		
+		byte[] value = Bytes.toBytes(new Double(54.5d));
+		FunctionUtil.applyAggregateFunctions(value, xFnStack);
+		byte[] value1 = Bytes.toBytes(new Double(5.25d));
+		FunctionUtil.applyAggregateFunctions(value1, xFnStack);
+		
+		byte[] value2 = Bytes.toBytes("i Am a Mixed sTRing");
+		List values = FunctionUtil.getFunctionValueList(Util.getReport(), Util.getReport().getFunctions());;
+	}
 	
 
 }

@@ -49,13 +49,13 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 	 * the server needs to be executed
 	 * which means at least one of the design functions
 	 * is an aggregate
-	 * This function is called without a group by
+	 *  
 	 */
 	@Override
-	public List getAggregates(Scan scan, Report report) throws CruxException{
-		List returnList = new ArrayList();
+	public List<List> getAggregates(Scan scan, Report report) throws CruxException{
+		List<List> returnList = new ArrayList<List>();
+		InternalScanner scanner = null;
 		try {
-			
 			//understand the report
 			//see what is the group by
 			//get the designs
@@ -72,37 +72,60 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 			//we are keeping everything in memory, as we are assuming that final report holds less data
 			//we are going to be dealing with preaggregated data only, umm..lets see..
 			//may have to revise this
-			 InternalScanner scanner = ((RegionCoprocessorEnvironment) getEnvironment())
-				        .getRegion().getScanner(scan);
-			 //just simple function application, but an aggregate like min/max is lurking in somewhere
-			 //without a groupby ..ouch
-			 byte[] value = null;
-			 List<KeyValue> results = new ArrayList<KeyValue>();
-			 boolean hasMoreRows = false;
-			 do {
-				 hasMoreRows = scanner.next(results);
-				 int index = 0;
-				 for (ReportDesign design: designs) {
-					 index++;
-					 //get each value and apply functions
-					 Stack<CruxFunction> designFn = functions.get(index++);
-					 //convert and apply
-					 //see if the design is on row or column alias
-					 Alias alias = ServerUtil.getAlias(design);
-					 value = ServerUtil.getValue(results, alias, report);
-					 FunctionUtil.applyAggregateFunctions(value, designFn);					 
-				 }					 
+			if (groupBys == null) {
+				 scanner = ((RegionCoprocessorEnvironment) getEnvironment())
+					        .getRegion().getScanner(scan);
+				 //just simple function application, but an aggregate like min/max is lurking in somewhere
+				 //without a groupby ..ouch
+				 byte[] value = null;
+				 List<KeyValue> results = new ArrayList<KeyValue>();
+				 boolean hasMoreRows = false;
+				 do {
+					 hasMoreRows = scanner.next(results);
+					 int index = 0;
+					 for (ReportDesign design: designs) {
+						 index++;
+						 //get each value and apply functions
+						 Stack<CruxFunction> designFn = functions.get(index++);
+						 //convert and apply
+						 //see if the design is on row or column alias
+						 Alias alias = ServerUtil.getAlias(design);
+						 value = ServerUtil.getValue(results, alias, report);
+						 FunctionUtil.applyAggregateFunctions(value, designFn);					 
+					 }					 
+				}
+				while (hasMoreRows); 	
+				//we have applied functions to each row of the scan
+				//now lets get final values and populate
+				returnList.add(FunctionUtil.getFunctionValueList(report, functions));
 			}
-			while (hasMoreRows); 	
-			//we have applied functions to each row of the scan
-			//now lets get final values and populate
-			returnList = FunctionUtil.getAppliedValues(report, functions);
-			
-			//dont I have to close this scanner?
+			else {
+				//handle group bys
+				throw new CruxException("Unsupported stuff so far..to come soon :");	
+			}			
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 			throw new CruxException("Error processing aggregates " + e);
+		}
+		finally {
+		      if (scanner != null) {
+		    	  try {
+		    		  scanner.close();
+		    	  }
+		    	  catch(IOException io) {
+		    		  throw new CruxException("Error closing scanner", io);
+		    	  }
+		      }
+		}
+		logger.info("Value from this region is "
+		        + ((RegionCoprocessorEnvironment) getEnvironment()).getRegion()
+		            .getRegionNameAsString() + ": " + returnList);
+		for (List list: returnList) {
+			logger.debug("New Row begins");
+			for (Object row: list) {
+				logger.debug("Row is " + row);				
+			}			
 		}
 		
 		return returnList;

@@ -92,7 +92,16 @@ public class FunctionUtil {
 		}
 	}
 	
-	public static List getAppliedValues(Report report, List<Stack<CruxFunction>> functions) throws CruxException{
+	/**
+	 * Get list of values
+	 * all aggregations have been performed so far
+	 * lets apply other functions on top of them and return the final values
+	 * @param report
+	 * @param functions
+	 * @return
+	 * @throws CruxException
+	 */
+	public static List getFunctionValueList(Report report, List<Stack<CruxFunction>> functions) throws CruxException{
 		int index = 0;
 		List returnList = new ArrayList();
 		for (ReportDesign design: report.getDesigns()) {

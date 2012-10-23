@@ -97,7 +97,8 @@ public class QueryExecutor {
 								batchCall, callback); 
 					}
 					catch(Throwable e) {
-						
+						e.printStackTrace();
+						throw new CruxException("Error executing query", e);
 					}
 				}
 				else {
