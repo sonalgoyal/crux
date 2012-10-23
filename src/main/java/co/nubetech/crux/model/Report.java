@@ -15,7 +15,7 @@
 package co.nubetech.crux.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.List;
 import java.util.Stack;
 
@@ -32,9 +32,9 @@ public class Report {
 	private ReportType reportType;
 	private Dashboard dashboard;
 	private long numRecordsPerPage;
-	private Collection<ReportDesign> designs = new ArrayList<ReportDesign>();
-	private Collection<RowAliasFilter> rowAliasFilters = new ArrayList<RowAliasFilter>();
-	private Collection<ColumnFilter> columnFilters = new ArrayList<ColumnFilter>();
+	private List<ReportDesign> designs = new ArrayList<ReportDesign>();
+	private List<RowAliasFilter> rowAliasFilters = new ArrayList<RowAliasFilter>();
+	private List<ColumnFilter> columnFilters = new ArrayList<ColumnFilter>();
 	private GroupBys groupBys;
 	
 	final static Logger logger = Logger.getLogger(Report.class);
@@ -68,19 +68,19 @@ public class Report {
 		this.numRecordsPerPage = numRecordsPerPage;
 	}
 
-	public Collection<RowAliasFilter> getRowAliasFilters() {
+	public List<RowAliasFilter> getRowAliasFilters() {
 		return rowAliasFilters;
 	}
 
-	public void setRowAliasFilters(Collection<RowAliasFilter> rowAliasFilters) {
+	public void setRowAliasFilters(List<RowAliasFilter> rowAliasFilters) {
 		this.rowAliasFilters = rowAliasFilters;
 	}
 
-	public Collection<ColumnFilter> getColumnFilters() {
+	public List<ColumnFilter> getColumnFilters() {
 		return columnFilters;
 	}
 
-	public void setColumnFilters(Collection<ColumnFilter> columnFilters) {
+	public void setColumnFilters(List<ColumnFilter> columnFilters) {
 		this.columnFilters = columnFilters;
 	}
 
@@ -100,7 +100,7 @@ public class Report {
 		this.name = name;
 	}
 
-	public Collection<ReportDesign> getDesigns() {
+	public List<ReportDesign> getDesigns() {
 		return designs;
 	}
 
@@ -112,7 +112,7 @@ public class Report {
 		this.reportType = reportType;
 	}
 
-	public void setDesigns(Collection<ReportDesign> designs) {
+	public void setDesigns(List<ReportDesign> designs) {
 		this.designs = designs;
 	}
 
@@ -290,9 +290,9 @@ public class Report {
 	public List<Stack<CruxFunction>> getFunctions() throws CruxException{
 		List<Stack<CruxFunction>> aggregators = new ArrayList<Stack<CruxFunction>>();
 		try {
-			for (ReportDesign design: getDesigns()) {
+			for (ReportDesign design: designs) {
 				logger.debug("Finding functions for design: " + design);
-				Collection<ReportDesignFunction> functions = design.getReportDesignFunctionList();
+				List<ReportDesignFunction> functions = design.getReportDesignFunctionList();
 				Stack<CruxFunction> functionStack = new Stack<CruxFunction>();
 				if (functions != null) {
 					for (ReportDesignFunction function: functions) {
@@ -311,10 +311,6 @@ public class Report {
 		return aggregators;
 	}
 	
-	public ReportDesign getDesignAtIndex(int index) {
-		return null;
-	}
-
 	
 	
 }

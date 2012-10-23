@@ -15,7 +15,7 @@
 package co.nubetech.crux.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 public class ReportDesign {
 
@@ -24,7 +24,7 @@ public class ReportDesign {
 	private ColumnAlias columnAlias;
 	private RowAlias rowAlias;
 	private String mappingAxis;
-	private Collection<ReportDesignFunction> reportDesignFunctionList = new ArrayList<ReportDesignFunction>();
+	private List<ReportDesignFunction> reportDesignFunctionList = new ArrayList<ReportDesignFunction>();
 
 	public ReportDesign() {
 
@@ -89,12 +89,12 @@ public class ReportDesign {
 		this.mappingAxis = mappingAxis;
 	}
 	
-	public Collection<ReportDesignFunction> getReportDesignFunctionList() {
+	public List<ReportDesignFunction> getReportDesignFunctionList() {
 		return reportDesignFunctionList;
 	}
 
 	public void setReportDesignFunctionList(
-			Collection<ReportDesignFunction> reportDesignFunctionList) {
+			List<ReportDesignFunction> reportDesignFunctionList) {
 		this.reportDesignFunctionList = reportDesignFunctionList;
 	}
 

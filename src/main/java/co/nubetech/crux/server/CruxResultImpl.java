@@ -23,7 +23,7 @@ public class CruxResultImpl implements CruxResult{
 			Collection<ReportDesign> designs = report.getDesigns();
 			if (designs != null) {
 				if (index < designs.size()) {
-					ReportDesign design = report.getDesignAtIndex(index);
+					ReportDesign design = report.getDesigns().get(index);
 					Object data = ServerUtil.getValue(result, ServerUtil.getAlias(design), report);
 					return data;
 				}

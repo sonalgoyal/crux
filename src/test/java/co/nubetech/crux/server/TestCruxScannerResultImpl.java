@@ -23,12 +23,12 @@ import org.apache.hadoop.hbase.client.Result;
 
 //TODO : big one, tests in this package are breaking, need to revisit
 
-public class TestGetScanner {
+public class TestCruxScannerResultImpl {
 
 	//@Test
 	public void testNext() throws IOException {
 		Result result = mock(Result.class);
-		CruxScanner cruxScanner = new GetScanner(result, null);
+		CruxScanner cruxScanner = new CruxScannerResultImpl(result, null);
 		CruxResult resultFetched = null;
 		int count = 0;
 		while ((resultFetched = cruxScanner.next()) != null) {
@@ -42,7 +42,7 @@ public class TestGetScanner {
 	//@Test
 	public void testClose() throws IOException {
 		Result result = mock(Result.class);
-		CruxScanner cruxScanner = new GetScanner(result, null);
+		CruxScanner cruxScanner = new CruxScannerResultImpl(result, null);
 		cruxScanner.close();
 		assertEquals(null, cruxScanner.next());
 	}

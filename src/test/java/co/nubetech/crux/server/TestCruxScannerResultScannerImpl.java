@@ -21,7 +21,7 @@ import java.io.IOException;
 
 import org.apache.hadoop.hbase.client.Result;
 
-public class TestScanScanner {
+public class TestCruxScannerResultScannerImpl {
 
 	//@Test
 	public void testNext() throws IOException {
@@ -30,7 +30,7 @@ public class TestScanScanner {
 		Result result3 = new Result();
 		SubResultScanner resultScanner = new SubResultScanner(new Result[] {
 				result1, result2, result3 });
-		CruxScanner cruxScanner = new ScanScanner(resultScanner, null);
+		CruxScanner cruxScanner = new CruxScannerResultScannerImpl(resultScanner, null);
 
 		assertEquals(result1, cruxScanner.next());
 		assertEquals(result2, cruxScanner.next());
@@ -46,7 +46,7 @@ public class TestScanScanner {
 		Result result3 = new Result();
 		SubResultScanner resultScanner = new SubResultScanner(new Result[] {
 				result1, result2, result3 });
-		CruxScanner cruxScanner = new ScanScanner(resultScanner, null);
+		CruxScanner cruxScanner = new CruxScannerResultScannerImpl(resultScanner, null);
 		cruxScanner.next();
 	}
 
@@ -57,7 +57,7 @@ public class TestScanScanner {
 		Result result3 = new Result();
 		SubResultScanner resultScanner = new SubResultScanner(new Result[] {
 				result1, result2, result3 });
-		CruxScanner cruxScanner = new ScanScanner(resultScanner, null);
+		CruxScanner cruxScanner = new CruxScannerResultScannerImpl(resultScanner, null);
 		cruxScanner.next();
 		cruxScanner.next();
 		cruxScanner.next();
@@ -65,19 +65,20 @@ public class TestScanScanner {
 		cruxScanner.next();
 	}
 
-	/*//@Test
+	//TODO
+	//@Test
 	public void testNextArrayForValidLength() throws IOException {
 		Result result1 = new Result();
 		Result result2 = new Result();
 		Result result3 = new Result();
 		SubResultScanner resultScanner = new SubResultScanner(new Result[] {
 				result1, result2, result3 });
-		CruxScanner cruxScanner = new ScanScanner(resultScanner, null);
-		Result[] result = cruxScanner.next(2);
-		assertEquals(result1, result[0]);
-		assertEquals(result2, result[1]);
-		assertEquals(2, result.length);
-	}*/
+		CruxScanner cruxScanner = new CruxScannerResultScannerImpl(resultScanner, null);
+		CruxResult result = cruxScanner.next();
+		//assertEquals(result1, result.get(0));
+		//assertEquals(result2, result[1]);
+		//assertEquals(2, result.length);
+	}
 
 	//@Test
 	public void testClose() throws IOException {
@@ -86,8 +87,10 @@ public class TestScanScanner {
 		Result result3 = new Result();
 		SubResultScanner resultScanner = new SubResultScanner(new Result[] {
 				result1, result2, result3 });
-		CruxScanner cruxScanner = new ScanScanner(resultScanner, null);
+		CruxScanner cruxScanner = new CruxScannerResultScannerImpl(resultScanner, null);
 		cruxScanner.close();
 		assertEquals(null, cruxScanner.next());
 	}
+	
+	
 }
