@@ -105,7 +105,6 @@ public class FunctionUtil {
 		int index = 0;
 		List returnList = new ArrayList();
 		for (ReportDesign design: report.getDesigns()) {
-			index++;
 			//get each value and apply functions
 			Stack<CruxFunction> designFn = functions.get(index++);
 			returnList.add(FunctionUtil.getFunctionValue(designFn));

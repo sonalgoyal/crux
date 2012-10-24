@@ -2,6 +2,7 @@ package co.nubetech.crux.server.aggregate;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -21,6 +22,7 @@ import org.junit.Test;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.Util;
 import co.nubetech.crux.server.FunctionUtil;
+import co.nubetech.crux.server.functions.AverageAggregator;
 import co.nubetech.crux.server.functions.Ceil;
 import co.nubetech.crux.server.functions.CruxFunction;
 import co.nubetech.crux.server.functions.SumAggregator;
@@ -95,26 +97,30 @@ public class TestFunctionUtil {
 		xFnStack.push(new Ceil());
 		assertEquals(55d, FunctionUtil.getFunctionValue(xFnStack));
 	}
-
 	
 	@Test
 	public void testGetAppliedValuesAggregateFirst() throws CruxException{
-		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
-		SumAggregator summer = new SumAggregator();
-		xFnStack.push(summer);
-		xFnStack.push(new Ceil());
 		
-		Stack<CruxFunction> yFnStack = new Stack<CruxFunction>();
+		Report report = Util.getReport();
+		List<Stack<CruxFunction>> fnList = report.getFunctions();
 		
-		//yFnStack.push(new UpperCase());
+		byte[] value = Bytes.toBytes(new Double(54.55d));
+		FunctionUtil.applyAggregateFunctions(value, fnList.get(0));
+		FunctionUtil.applyAggregateFunctions(value, fnList.get(1));
+		FunctionUtil.applyAggregateFunctions(value, fnList.get(2));
 		
-		byte[] value = Bytes.toBytes(new Double(54.5d));
-		FunctionUtil.applyAggregateFunctions(value, xFnStack);
 		byte[] value1 = Bytes.toBytes(new Double(5.25d));
-		FunctionUtil.applyAggregateFunctions(value1, xFnStack);
+		FunctionUtil.applyAggregateFunctions(value1, fnList.get(0));
+		FunctionUtil.applyAggregateFunctions(value1, fnList.get(1));
+		FunctionUtil.applyAggregateFunctions(value1, fnList.get(2));
 		
-		byte[] value2 = Bytes.toBytes("i Am a Mixed sTRing");
-		List values = FunctionUtil.getFunctionValueList(Util.getReport(), Util.getReport().getFunctions());;
+		List values = FunctionUtil.getFunctionValueList(report, fnList);
+		for (Object val: values) {
+				System.out.println("Val is " + val);
+		}
+		assertEquals(61d, ((Double)values.get(0)).doubleValue(), 0.01d);
+		assertEquals(29.90d, ((Double)values.get(1)).doubleValue(), 0.01d);
+		assertEquals(29.90d, ((Double)values.get(2)).doubleValue(), 0.01d);
 	}
 	
 

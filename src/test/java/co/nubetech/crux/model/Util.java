@@ -102,11 +102,15 @@ public class Util {
 		List<ReportDesignFunction> xFunctions = new ArrayList<ReportDesignFunction>();
 		xFunctions.add(getReportDesignFunction(ceil, xDesign));
 		xFunctions.add(getReportDesignFunction(sum, xDesign));
-		
 		xDesign.setReportDesignFunctionList(xFunctions);
+		
 		List<ReportDesignFunction> yFunctions = new ArrayList<ReportDesignFunction>();
 		yFunctions.add(getReportDesignFunction(average, yDesign));
 		yDesign.setReportDesignFunctionList(yFunctions);
+		
+		List<ReportDesignFunction> yFunctions1 = new ArrayList<ReportDesignFunction>();
+		yFunctions1.add(getReportDesignFunction(average, yDesign1));
+		yDesign1.setReportDesignFunctionList(yFunctions1);
 		
 		ArrayList<ReportDesign> designs = new ArrayList<ReportDesign>();
 		
