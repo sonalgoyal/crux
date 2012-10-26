@@ -2,6 +2,8 @@ package co.nubetech.crux.server;
 
 import java.util.List;
 
+import co.nubetech.crux.util.CruxException;
+
 
 public class CruxResultListImpl implements CruxResult{
 	
@@ -11,7 +13,7 @@ public class CruxResultListImpl implements CruxResult{
 		this.row = list;
 	}
 	
-	public Object get(int index) {
+	public Object get(int index) throws CruxException{
 		if (row != null) {
 			return row.get(index);
 		}

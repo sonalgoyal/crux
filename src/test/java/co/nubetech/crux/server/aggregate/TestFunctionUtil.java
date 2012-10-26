@@ -20,7 +20,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import co.nubetech.crux.model.Report;
-import co.nubetech.crux.model.Util;
+import co.nubetech.crux.model.TestingUtil;
 import co.nubetech.crux.server.FunctionUtil;
 import co.nubetech.crux.server.functions.AverageAggregator;
 import co.nubetech.crux.server.functions.Ceil;
@@ -100,8 +100,7 @@ public class TestFunctionUtil {
 	
 	@Test
 	public void testGetAppliedValuesAggregateFirst() throws CruxException{
-		
-		Report report = Util.getReport();
+		Report report = TestingUtil.getReport();
 		List<Stack<CruxFunction>> fnList = report.getFunctions();
 		
 		byte[] value = Bytes.toBytes(new Double(54.55d));
@@ -121,7 +120,7 @@ public class TestFunctionUtil {
 		assertEquals(61d, ((Double)values.get(0)).doubleValue(), 0.01d);
 		assertEquals(29.90d, ((Double)values.get(1)).doubleValue(), 0.01d);
 		assertEquals(29.90d, ((Double)values.get(2)).doubleValue(), 0.01d);
-	}
+	}	
 	
 
 }

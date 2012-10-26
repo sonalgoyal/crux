@@ -143,7 +143,7 @@ public class TestReport {
 	
 	@Test
 	public void testGetAggregators() throws CruxException{
-		Report report = Util.getReport(); 
+		Report report = TestingUtil.getReport(); 
 		List<Stack<CruxFunction>> functionList = report.getFunctions();
 		assertEquals(3, functionList.size());
 		Stack<CruxFunction> xFnStack = functionList.get(0);
@@ -159,7 +159,7 @@ public class TestReport {
 	
 	@Test
 	public void testGetAggregatorsNoFunctions() throws CruxException{
-		Report report = Util.getReport(); 
+		Report report = TestingUtil.getReport(); 
 		for (ReportDesign design: report.getDesigns()) {
 			design.setReportDesignFunctionList(null);
 		}
@@ -175,13 +175,13 @@ public class TestReport {
 	
 	@Test
 	public void testIsAggregateTrue() throws CruxException{
-		Report report = Util.getReport();
+		Report report = TestingUtil.getReport();
 		assertTrue(report.isAggregateReport());
 	}
 	
 	@Test
 	public void testIsAggregateFalse() throws CruxException{
-		Report report = Util.getReportWithoutAggregateFunctions();
+		Report report = TestingUtil.getReportWithoutAggregateFunctions();
 		assertFalse(report.isAggregateReport());
 	}
 	

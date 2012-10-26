@@ -21,14 +21,15 @@ public class GroupingAggregationBatch implements Batch.Call<GroupingAggregationP
 	
 	@Override
     public List<List> call(GroupingAggregationProtocol instance) throws IOException {
+		List<List> result = null;
       try {
-    	  List<List> result = instance.getAggregates(scan, report);
+    	  result = instance.getAggregates(scan, report);
     	  return result;
       }
       catch(CruxException e) {
     	  e.printStackTrace();
       }
-      return null;
+      return result;
     }
 	
 	

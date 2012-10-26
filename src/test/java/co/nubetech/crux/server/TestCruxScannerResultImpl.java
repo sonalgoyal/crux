@@ -20,12 +20,13 @@ import static org.mockito.Mockito.mock;
 import java.io.IOException;
 
 import org.apache.hadoop.hbase.client.Result;
+import org.junit.Test;
 
 //TODO : big one, tests in this package are breaking, need to revisit
 
 public class TestCruxScannerResultImpl {
 
-	//@Test
+	@Test
 	public void testNext() throws IOException {
 		Result result = mock(Result.class);
 		CruxScanner cruxScanner = new CruxScannerResultImpl(result, null);
@@ -39,7 +40,7 @@ public class TestCruxScannerResultImpl {
 	}
 
 	
-	//@Test
+	@Test
 	public void testClose() throws IOException {
 		Result result = mock(Result.class);
 		CruxScanner cruxScanner = new CruxScannerResultImpl(result, null);

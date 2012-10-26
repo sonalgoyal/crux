@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.hadoop.hbase.util.Bytes;
 
-public class Util {
+public class TestingUtil {
 	
 	  public static final byte[] TEST_TABLE = Bytes.toBytes("TestTable");
 	  public static final byte[] TEST_FAMILY = Bytes.toBytes("TestFamily");
@@ -32,7 +32,38 @@ public class Util {
 	    return ret;
 	  }
 
-
+	  public static ValueType getStringValueType() {
+		  ValueType string = new ValueType();
+		  string.setClassName("java.lang.String");
+		  string.setNumeric(false);
+		  return string;
+	  }
+	  
+	  public static ValueType getDoubleValueType() {
+		  ValueType string = new ValueType();
+		  string.setClassName("java.lang.Double");
+		  string.setNumeric(true);
+		  return string;
+	  }
+	  
+	  
+	  public static RowAlias getRowAlias(String alias, int length, ValueType val) {
+		  RowAlias rowAlias = new RowAlias();
+		  rowAlias.setAlias(alias);
+		  rowAlias.setLength(length);
+		  rowAlias.setValueType(val);
+		  return rowAlias;			
+	  }
+	  
+	  public static ColumnAlias getColAlias(String alias, int length, String columnFamily, 
+			  String qualifier, ValueType val) {
+		  ColumnAlias colAlias = new ColumnAlias();
+		  colAlias.setAlias(alias);
+		  colAlias.setQualifier(qualifier);
+		  colAlias.setColumnFamily(columnFamily);
+		  colAlias.setValueType(val);
+		  return colAlias;			
+	  }
 	
 	public static Function getFunction(String name, String clazz, boolean isAggregate) {
 		Function fn1 = new Function();
@@ -142,21 +173,33 @@ public class Util {
 		Mapping mapping = new Mapping();
 		mapping.setTableName(new String(TEST_TABLE));
 		
+		ValueType string = new ValueType();
+		string.setClassName("java.lang.String");
+		string.setNumeric(false);
+		string.setId(1);
+		
+		ValueType dbl = new ValueType();
+		dbl.setClassName("java.lang.Double");
+		dbl.setNumeric(true);
+		dbl.setId(2);
+		
 		ColumnAlias alias = new ColumnAlias();
-		alias.setValueType(new ValueType());
+		alias.setValueType(dbl);
 		alias.setAlias("alias");
 		alias.setColumnFamily(new String(TEST_FAMILY));
 		alias.setQualifier(new String(TEST_QUALIFIER));
 		
 		ColumnAlias alias1 = new ColumnAlias();
-		alias1.setValueType(new ValueType());
-		alias1.setAlias("alias");
+		alias1.setValueType(string);
+		alias1.setAlias("alias1");
 		alias1.setColumnFamily(new String(TEST_FAMILY));
 		alias1.setQualifier(new String(TEST_MULTI_CQ));
 	
 		RowAlias rowAlias = new RowAlias();
 		rowAlias.setAlias("rowAlias");
 		rowAlias.setLength(8);
+		rowAlias.setValueType(dbl);
+		
 		mapping.addRowAlias(rowAlias);
 		mapping.addColumnAlias(alias);
 		mapping.addColumnAlias(alias1);

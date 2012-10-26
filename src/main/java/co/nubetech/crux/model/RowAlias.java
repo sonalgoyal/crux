@@ -83,7 +83,7 @@ public class RowAlias extends Alias {
 		return true;
 	}
 
-	protected int getOffset() {
+	public int getOffset() {
 		int offset = 0;
 		Map<String, RowAlias> rowAliases = mapping.getRowAlias();
 		for (String alias : rowAliases.keySet()) {
