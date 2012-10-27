@@ -30,7 +30,7 @@ public class CruxResultImpl implements CruxResult{
 				if (index < designs.size()) {
 					ReportDesign design = report.getDesigns().get(index);
 					FunctionUtil.applyAggregateFunctions(
-							ServerUtil.getValue(result, ServerUtil.getAlias(design), report), functions.get(index));					
+							ServerUtil.getValue(result, ServerUtil.getAlias(design)), functions.get(index));					
 				}
 			}
 		}		

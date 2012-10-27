@@ -90,7 +90,7 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 						 //convert and apply
 						 //see if the design is on row or column alias
 						 Alias alias = ServerUtil.getAlias(design);
-						 value = ServerUtil.getValue(results, alias, report);
+						 value = ServerUtil.getValue(results, alias);
 						 FunctionUtil.applyAggregateFunctions(value, designFn);					 
 					 }					 
 				}
