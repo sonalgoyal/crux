@@ -18,22 +18,39 @@ public class FunctionUtil {
 	
 	private final static Logger logger = Logger.getLogger(FunctionUtil.class);
 	
-	public static Object getFunctionValue(Stack<CruxFunction> functions) throws CruxException {
+	/**
+	 * Functions - aggregate ones have been applied so far
+	 * @param functions
+	 * @return
+	 * @throws CruxException
+	 */
+	
+	public static Object getSemiAggregatedResult(Stack<CruxFunction> functions) throws CruxException {
 		Object returnVal = null;
+		boolean foundAggFunction = false;
 		for (CruxFunction fn : functions) {
 			logger.debug("Trying to find the aggregate function, is it " + fn);
 			if (fn.isAggregate()) {
+				foundAggFunction = true;
 				returnVal = ((CruxAggregator)fn).getAggregate();
 				break;
 			}			
 		}
-		logger.debug("Lets get to the final val now");
+		return returnVal;
+	}
+	
+	public static Object getSimpleFunctionResult(Stack<CruxFunction> functions, Object value) throws CruxException {
+		Object returnVal = value;
+		logger.debug("Lets get to the final val");
 		for (CruxFunction fn : functions) {
 			logger.debug("Trying the non agg function now, is it " + fn);
 			if (!fn.isAggregate()) {
 				logger.debug("Executing " );
 				returnVal = ((CruxNonAggregator)fn).execute(returnVal);				
-			}			
+			}
+			else {
+				throw new CruxException("This method should not have been called");
+			}
 		}
 		return returnVal;
 	}
@@ -107,7 +124,7 @@ public class FunctionUtil {
 		for (ReportDesign design: report.getDesigns()) {
 			//get each value and apply functions
 			Stack<CruxFunction> designFn = functions.get(index++);
-			returnList.add(FunctionUtil.getFunctionValue(designFn));
+			returnList.add(FunctionUtil.getSemiAggregatedResult(designFn));
 		}
 		return returnList;
 	}

@@ -79,23 +79,23 @@ public class TestFunctionUtil {
 	}
 	
 	@Test
-	public void testGetValueNonAggregateFirst() throws CruxException{
+	public void testGetSemiAggregatedResultNonAggregateFirst() throws CruxException{
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
 		SumAggregator summer = new SumAggregator();
 		summer.aggregate(Bytes.toBytes(new Double(54.5d)));
 		xFnStack.push(new Ceil());
 		xFnStack.push(summer);
-		assertEquals(55d, FunctionUtil.getFunctionValue(xFnStack));
+		assertEquals(54.5d, FunctionUtil.getSemiAggregatedResult(xFnStack));
 	}
 	
 	@Test
-	public void testGetValueAggregateFirst() throws CruxException{
+	public void testGetResultAggregateFirst() throws CruxException{
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
 		SumAggregator summer = new SumAggregator();
 		summer.aggregate(Bytes.toBytes(new Double(54.5d)));
 		xFnStack.push(summer);
 		xFnStack.push(new Ceil());
-		assertEquals(55d, FunctionUtil.getFunctionValue(xFnStack));
+		assertEquals(54.5d, FunctionUtil.getSemiAggregatedResult(xFnStack));
 	}
 	
 	@Test
