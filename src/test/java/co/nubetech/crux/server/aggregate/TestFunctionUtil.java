@@ -25,6 +25,7 @@ import co.nubetech.crux.server.FunctionUtil;
 import co.nubetech.crux.server.functions.AverageAggregator;
 import co.nubetech.crux.server.functions.Ceil;
 import co.nubetech.crux.server.functions.CruxFunction;
+import co.nubetech.crux.server.functions.LowerCase;
 import co.nubetech.crux.server.functions.SumAggregator;
 import co.nubetech.crux.server.functions.UpperCase;
 import co.nubetech.crux.util.CruxException;
@@ -89,7 +90,7 @@ public class TestFunctionUtil {
 	}
 	
 	@Test
-	public void testGetResultAggregateFirst() throws CruxException{
+	public void testGetSemiAggResultAggregateFirst() throws CruxException{
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
 		SumAggregator summer = new SumAggregator();
 		summer.aggregate(Bytes.toBytes(new Double(54.5d)));
@@ -98,8 +99,43 @@ public class TestFunctionUtil {
 		assertEquals(54.5d, FunctionUtil.getSemiAggregatedResult(xFnStack));
 	}
 	
+	@Test(expected=CruxException.class)
+	public void testGetSemiAggregatedResultWithoutAggFn() throws CruxException{
+		//getSimpleFunctionResult
+		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
+		xFnStack.push(new UpperCase());
+		xFnStack.push(new Ceil());
+		FunctionUtil.getSemiAggregatedResult(xFnStack);
+	}
+	
+	@Test(expected=CruxException.class)
+	public void testGetSimpleFunctionResulttWithAggFn() throws CruxException{
+		//getSimpleFunctionResult
+		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
+		xFnStack.push(new SumAggregator());
+		xFnStack.push(new Ceil());
+		FunctionUtil.getSimpleFunctionResult(xFnStack, null);
+	}
+	
 	@Test
-	public void testGetAppliedValuesAggregateFirst() throws CruxException{
+	public void testGetSimpleFunctionResult() throws CruxException{
+		//getSimpleFunctionResult
+		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
+		xFnStack.push(new Ceil());
+		assertEquals(57d, FunctionUtil.getSimpleFunctionResult(xFnStack, Bytes.toBytes(56.4d)));
+	}
+	
+	@Test
+	public void testGetSimpleFunctionResultTwoFns() throws CruxException{
+		//getSimpleFunctionResult
+		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
+		xFnStack.push(new UpperCase());
+		xFnStack.push(new LowerCase());
+		assertEquals("i am a stranger", FunctionUtil.getSimpleFunctionResult(xFnStack, Bytes.toBytes("i AM a stranger")));
+	}
+	
+	@Test
+	public void testFunctionValueListAggregateFirst() throws CruxException{
 		Report report = TestingUtil.getReport();
 		List<Stack<CruxFunction>> fnList = report.getFunctions();
 		

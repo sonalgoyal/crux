@@ -36,6 +36,9 @@ public class FunctionUtil {
 				break;
 			}			
 		}
+		if (foundAggFunction != true) {
+			throw new CruxException("Seems wrong method was called");
+		}
 		return returnVal;
 	}
 	
@@ -112,7 +115,7 @@ public class FunctionUtil {
 	/**
 	 * Get list of values
 	 * all aggregations have been performed so far
-	 * lets apply other functions on top of them and return the final values
+	 * 
 	 * @param report
 	 * @param functions
 	 * @return
