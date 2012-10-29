@@ -99,22 +99,23 @@ public class TestFunctionUtil {
 		assertEquals(54.5d, FunctionUtil.getSemiAggregatedResult(xFnStack));
 	}
 	
-	@Test(expected=CruxException.class)
+	@Test
 	public void testGetSemiAggregatedResultWithoutAggFn() throws CruxException{
 		//getSimpleFunctionResult
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
 		xFnStack.push(new UpperCase());
-		xFnStack.push(new Ceil());
+		xFnStack.push(new LowerCase());
 		FunctionUtil.getSemiAggregatedResult(xFnStack);
 	}
 	
-	@Test(expected=CruxException.class)
-	public void testGetSimpleFunctionResulttWithAggFn() throws CruxException{
+	/*@Test
+	public void testGetSimpleFunctionResultWithAggFn() throws CruxException{
 		//getSimpleFunctionResult
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
 		xFnStack.push(new SumAggregator());
 		xFnStack.push(new Ceil());
-		FunctionUtil.getSimpleFunctionResult(xFnStack, null);
+		assertEquals(1235.0d, (Double) FunctionUtil.getSimpleFunctionResult(Bytes.toBytes(1234.5d),
+				xFnStack), 0.01);
 	}
 	
 	@Test
@@ -122,7 +123,8 @@ public class TestFunctionUtil {
 		//getSimpleFunctionResult
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
 		xFnStack.push(new Ceil());
-		assertEquals(57d, FunctionUtil.getSimpleFunctionResult(xFnStack, Bytes.toBytes(56.4d)));
+		assertEquals(57d, FunctionUtil.getSimpleFunctionResult( Bytes.toBytes(56.4d), 
+				xFnStack));
 	}
 	
 	@Test
@@ -131,8 +133,9 @@ public class TestFunctionUtil {
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
 		xFnStack.push(new UpperCase());
 		xFnStack.push(new LowerCase());
-		assertEquals("i am a stranger", FunctionUtil.getSimpleFunctionResult(xFnStack, Bytes.toBytes("i AM a stranger")));
-	}
+		assertEquals("i am a stranger", FunctionUtil.getSimpleFunctionResult(Bytes.toBytes("i AM a stranger"),
+				xFnStack));
+	}*/
 	
 	@Test
 	public void testFunctionValueListAggregateFirst() throws CruxException{
@@ -149,7 +152,7 @@ public class TestFunctionUtil {
 		FunctionUtil.applyAggregateFunctions(value1, fnList.get(1));
 		FunctionUtil.applyAggregateFunctions(value1, fnList.get(2));
 		
-		List values = FunctionUtil.getFunctionValueList(report, fnList);
+		List values = FunctionUtil.getSemiAggregatedFunctionValueList(report, fnList);
 		for (Object val: values) {
 				System.out.println("Val is " + val);
 		}
@@ -158,5 +161,14 @@ public class TestFunctionUtil {
 		assertEquals(29.90d, ((Double)values.get(2)).doubleValue(), 0.01d);
 	}	
 	
+	@Test
+	public void testGetResultByApplyingAllFunctions() throws CruxException{
+		//getSimpleFunctionResult
+		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
+		xFnStack.push(new UpperCase());
+		xFnStack.push(new LowerCase());
+		assertEquals("i am a stranger", FunctionUtil.getResultByApplyingAllFunctions(Bytes.toBytes("i AM a stranger"), 
+				xFnStack));
+	}
 
 }

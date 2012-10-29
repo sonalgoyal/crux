@@ -90,6 +90,7 @@ public class TestServerUtil {
 		List<KeyValue> kvList = new ArrayList<KeyValue>();
 		kvList.add(kv);
 		byte[] valueReturned = ServerUtil.getValue(kvList, alias);
+		System.out.println("Value returned is " + valueReturned);
 		assertEquals(0, Bytes.compareTo(value, valueReturned));
 	}
 	

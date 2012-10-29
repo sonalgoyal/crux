@@ -25,38 +25,55 @@ public class FunctionUtil {
 	 * @throws CruxException
 	 */
 	
-	public static Object getSemiAggregatedResult(Stack<CruxFunction> functions) throws CruxException {
+	public static Object getSemiAggregatedResult(Stack<CruxFunction> functions) {
 		Object returnVal = null;
-		boolean foundAggFunction = false;
 		for (CruxFunction fn : functions) {
 			logger.debug("Trying to find the aggregate function, is it " + fn);
 			if (fn.isAggregate()) {
-				foundAggFunction = true;
 				returnVal = ((CruxAggregator)fn).getAggregate();
 				break;
 			}			
 		}
-		if (foundAggFunction != true) {
-			throw new CruxException("Seems wrong method was called");
-		}
 		return returnVal;
 	}
 	
-	public static Object getSimpleFunctionResult(Stack<CruxFunction> functions, Object value) throws CruxException {
+	/*
+	public static Object getSimpleFunctionResult(Object value, Stack<CruxFunction> functions) throws CruxException {
 		Object returnVal = value;
 		logger.debug("Lets get to the final val");
 		for (CruxFunction fn : functions) {
-			logger.debug("Trying the non agg function now, is it " + fn);
+			logger.debug("Trying the function " + fn);
 			if (!fn.isAggregate()) {
 				logger.debug("Executing " );
 				returnVal = ((CruxNonAggregator)fn).execute(returnVal);				
 			}
+			else break;
+		}
+		return returnVal;
+	}*/
+	
+	/**
+	 * Apply all functions over the sent value
+	 * Used in cases when some query internally translated to get but may have had aggregate functions as well.
+	 * @param functions
+	 * @return
+	 * @throws CruxException
+	 */
+	public static Object getResultByApplyingAllFunctions(Object value, Stack<CruxFunction> functions) throws CruxException {
+		Object returnVal = value;
+		for (CruxFunction fn : functions) {
+			if (fn.isAggregate()) {
+				CruxAggregator aggregator = (CruxAggregator) fn; 
+				aggregator.aggregate(returnVal);
+				returnVal = ((CruxAggregator)fn).getAggregate();
+				}
 			else {
-				throw new CruxException("This method should not have been called");
+				returnVal = ((CruxNonAggregator)fn).execute(returnVal);			
 			}
 		}
 		return returnVal;
 	}
+	
 	
 	/**
 	 * Apply functions till you hit an aggregate
@@ -121,7 +138,7 @@ public class FunctionUtil {
 	 * @return
 	 * @throws CruxException
 	 */
-	public static List getFunctionValueList(Report report, List<Stack<CruxFunction>> functions) throws CruxException{
+	public static List getSemiAggregatedFunctionValueList(Report report, List<Stack<CruxFunction>> functions) throws CruxException{
 		int index = 0;
 		List returnList = new ArrayList();
 		for (ReportDesign design: report.getDesigns()) {

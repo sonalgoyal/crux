@@ -14,13 +14,15 @@
  */
 package co.nubetech.crux.server;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
 
 import org.apache.hadoop.hbase.client.Result;
 import org.junit.Test;
+
+import co.nubetech.crux.model.TestingUtil;
 
 //TODO : big one, tests in this package are breaking, need to revisit
 
@@ -29,12 +31,12 @@ public class TestCruxScannerResultImpl {
 	@Test
 	public void testNext() throws IOException {
 		Result result = mock(Result.class);
-		CruxScanner cruxScanner = new CruxScannerResultImpl(result, null);
+		CruxScanner cruxScanner = new CruxScannerResultImpl(result, TestingUtil.getReport());
 		CruxResult resultFetched = null;
 		int count = 0;
 		while ((resultFetched = cruxScanner.next()) != null) {
 			count++;
-			assertEquals(result, resultFetched);
+			assertTrue(resultFetched instanceof CruxResultImpl);
 		}
 		assertEquals(1, count);
 	}

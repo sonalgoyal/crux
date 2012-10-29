@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 
 import co.nubetech.crux.model.Alias;
@@ -37,11 +38,14 @@ public class ServerUtil {
 			ColumnAlias colAlias = (ColumnAlias) alias;
 			String family = colAlias.getColumnFamily();
 			String qualifier = colAlias.getQualifier();
+			logger.debug("Checking for family and qualifier "  + family + ", " + qualifier);
 			byte[] familyBytes = family.getBytes();
 			byte[] qualifierBytes = qualifier.getBytes();
 			for (KeyValue kv: results) {
-				if (kv.getFamily().equals(familyBytes)) {
-					if (kv.getQualifier().equals(qualifierBytes)) {
+				logger.debug("Checking in KV " + kv.toString());
+				if (Bytes.compareTo(kv.getFamily(), familyBytes) == 0) {
+					if (Bytes.compareTo(qualifierBytes, kv.getQualifier()) == 0) {
+						logger.debug("Yes I found the value for cf:q");
 						value = kv.getValue();
 						break;
 					}

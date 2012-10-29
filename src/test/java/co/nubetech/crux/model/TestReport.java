@@ -154,7 +154,7 @@ public class TestReport {
 		assertEquals(1, yFnStack.size());
 		assertEquals(co.nubetech.crux.server.functions.AverageAggregator.class, yFnStack.pop().getClass());
 		Stack<CruxFunction> yFnStack1 = functionList.get(2);
-		assertEquals(0, yFnStack1.size());		
+		assertEquals(1, yFnStack1.size());		
 	}
 	
 	@Test
