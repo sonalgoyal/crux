@@ -37,20 +37,37 @@ public class FunctionUtil {
 		return returnVal;
 	}
 	
-	/*
+	/**
+	 * All aggregate fn have been applied
+	 * lets apply non aggregates
+	 * @param value
+	 * @param functions
+	 * @return
+	 * @throws CruxException
+	 */
+	
 	public static Object getSimpleFunctionResult(Object value, Stack<CruxFunction> functions) throws CruxException {
 		Object returnVal = value;
 		logger.debug("Lets get to the final val");
+		boolean foundAggFn = false;
 		for (CruxFunction fn : functions) {
 			logger.debug("Trying the function " + fn);
 			if (!fn.isAggregate()) {
-				logger.debug("Executing " );
-				returnVal = ((CruxNonAggregator)fn).execute(returnVal);				
+				if (foundAggFn) {
+					logger.debug("Executing " );
+					returnVal = ((CruxNonAggregator)fn).execute(returnVal);
+				}
 			}
-			else break;
+			else {
+				foundAggFn = true;
+			}
+		}
+		//above fails when no agg function is found, eg only ceil is sent
+		if (!foundAggFn) {
+			returnVal = getResultByApplyingAllFunctions(value, functions);
 		}
 		return returnVal;
-	}*/
+	}
 	
 	/**
 	 * Apply all functions over the sent value
@@ -131,8 +148,8 @@ public class FunctionUtil {
 	
 	/**
 	 * Get list of values
-	 * all aggregations have been performed so far
-	 * 
+	 * all aggregations have been performed so far by calling applyAggregateFunctions by the caller 
+	 * We just get the 
 	 * @param report
 	 * @param functions
 	 * @return
@@ -145,6 +162,28 @@ public class FunctionUtil {
 			//get each value and apply functions
 			Stack<CruxFunction> designFn = functions.get(index++);
 			returnList.add(FunctionUtil.getSemiAggregatedResult(designFn));
+		}
+		return returnList;
+	}
+	
+	/**
+	 * Get list of values
+	 * aggregate till you hit aggregate function
+	 * then apply all non aggregated functions and return result 
+	 * @param report
+	 * @param functions
+	 * @return
+	 * @throws CruxException
+	 */
+	public static List getAggregatedFunctionValueList(Report report, List<Stack<CruxFunction>> functions) throws CruxException{
+		int index = 0;
+		List returnList = new ArrayList();
+		for (ReportDesign design: report.getDesigns()) {
+			//get each value and apply functions
+			Stack<CruxFunction> designFn = functions.get(index++);
+			Object obj = FunctionUtil.getSemiAggregatedResult(designFn);
+			logger.debug("Aggregated value at index " + index + " is " + obj);					
+			returnList.add(FunctionUtil.getSimpleFunctionResult(obj, designFn));
 		}
 		return returnList;
 	}

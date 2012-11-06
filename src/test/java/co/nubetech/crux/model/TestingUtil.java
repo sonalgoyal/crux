@@ -93,6 +93,69 @@ public class TestingUtil {
 		return desFunction;
 	}
 	
+
+	public static Report getReportNoGroupBy() {
+		Mapping mapping = new Mapping();
+		mapping.setTableName(new String(TEST_TABLE));
+		
+		ColumnAlias alias = new ColumnAlias();
+		alias.setValueType(new ValueType());
+		alias.setAlias("alias");
+		alias.setColumnFamily(new String(TEST_FAMILY));
+		alias.setQualifier(new String(TEST_QUALIFIER));
+		
+		ColumnAlias alias1 = new ColumnAlias();
+		alias1.setValueType(new ValueType());
+		alias1.setAlias("alias");
+		alias1.setColumnFamily(new String(TEST_FAMILY));
+		alias1.setQualifier(new String(TEST_MULTI_CQ));
+	
+		RowAlias rowAlias = new RowAlias();
+		rowAlias.setAlias("rowAlias");
+		rowAlias.setLength(8);
+		mapping.addRowAlias(rowAlias);
+		mapping.addColumnAlias(alias);
+		mapping.addColumnAlias(alias1);
+		
+		Report report = new Report();
+		report.setName("reportTest");
+		
+		ReportDesign xDesign = getDesign("x", rowAlias, report);
+		ReportDesign yDesign = getDesign("y", alias, report);
+		ReportDesign yDesign1 = getDesign("y", alias1, report);
+		
+		Function sum = getFunction("sum", 
+				"co.nubetech.crux.server.functions.SumAggregator", true);
+		Function average = getFunction("avergae", "co.nubetech.crux.server.functions.AverageAggregator",
+				true);
+		Function ceil = getFunction("ceil", "co.nubetech.crux.server.functions.Ceil", false);
+		Function round = getFunction("round", "co.nubetech.crux.server.functions.Round", false);
+		
+		List<ReportDesignFunction> xFunctions = new ArrayList<ReportDesignFunction>();
+		xFunctions.add(getReportDesignFunction(ceil, xDesign));
+		xFunctions.add(getReportDesignFunction(sum, xDesign));
+		xDesign.setReportDesignFunctionList(xFunctions);
+		
+		List<ReportDesignFunction> yFunctions = new ArrayList<ReportDesignFunction>();
+		yFunctions.add(getReportDesignFunction(average, yDesign));
+		yFunctions.add(getReportDesignFunction(ceil, yDesign));
+		yDesign.setReportDesignFunctionList(yFunctions);
+		
+		List<ReportDesignFunction> yFunctions1 = new ArrayList<ReportDesignFunction>();
+		yFunctions1.add(getReportDesignFunction(average, yDesign1));
+		yFunctions1.add(getReportDesignFunction(round, yDesign1));
+		yDesign1.setReportDesignFunctionList(yFunctions1);
+		
+		ArrayList<ReportDesign> designs = new ArrayList<ReportDesign>();
+		
+		designs.add(xDesign);
+		designs.add(yDesign);
+		designs.add(yDesign1);
+		report.setDesigns(designs);
+		
+		return report;
+	}
+	
 	
 	public static Report getReport() {
 		Mapping mapping = new Mapping();

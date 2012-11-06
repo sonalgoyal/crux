@@ -14,6 +14,7 @@
  */
 package co.nubetech.crux.server.functions;
 
+import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 
 import co.nubetech.crux.util.CruxException;
@@ -29,7 +30,18 @@ public class Round extends FunctionBase implements CruxNonAggregator{
 
 	@Override
 	public Object execute(Object value) throws CruxException {
-		return null;
+		try {
+			if (value instanceof byte[]) {
+				Double dbl = Bytes.toDouble((byte[]) value);
+				return Math.round(dbl);
+			}
+			else {
+				Double dbl = (Double) value;
+				return Math.round(dbl);
+			}
+		} catch (Exception e) {
+			throw new CruxException(e.getMessage());
+		}
 	}
 	
 	@Override

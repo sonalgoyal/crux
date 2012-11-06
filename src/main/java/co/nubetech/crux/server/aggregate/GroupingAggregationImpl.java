@@ -96,7 +96,7 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 				}
 				while (hasMoreRows); 	
 				//we have applied functions to each row of the scan
-				//now lets get final values and populate
+				//now lets get final aggregated values and populate
 				returnList.add(FunctionUtil.getSemiAggregatedFunctionValueList(report, functions));
 			}
 			else {
