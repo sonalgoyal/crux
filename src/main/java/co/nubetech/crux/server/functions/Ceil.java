@@ -41,6 +41,7 @@ public class Ceil extends FunctionBase implements CruxNonAggregator{
 				return Math.ceil(dbl);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new CruxException(e.getMessage());
 		}
 	}

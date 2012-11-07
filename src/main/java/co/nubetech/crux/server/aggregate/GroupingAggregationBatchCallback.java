@@ -18,9 +18,9 @@ import co.nubetech.crux.util.CruxException;
 
 public class GroupingAggregationBatchCallback implements Batch.Callback<List<List>>{
 	private final static Logger logger = Logger.getLogger(GroupingAggregationBatchCallback.class);
-	public List<List> results;
-	public Report report;
-	List<Stack<CruxFunction>> functions;	
+	private List<List> results;
+	private Report report;
+	private List<Stack<CruxFunction>> functions;	
 	
 	public GroupingAggregationBatchCallback(Report report) throws CruxException{
 		this.report = report;
@@ -33,11 +33,14 @@ public class GroupingAggregationBatchCallback implements Batch.Callback<List<Lis
 	 */
 	public synchronized void update(byte[] region, byte[] row, List<List> result) {
 		try {
-			int index = 0;
+			
 			if (report.getGroupBys() == null) {
-				for (List resultRow: results) {
-					Stack<CruxFunction> designFn = functions.get(index++);
+				logger.debug("Updating for " + region);
+				for (List resultRow: result) {
+					int index = 0;
 					for (Object val: resultRow) {
+						Stack<CruxFunction> designFn = functions.get(index++);
+						logger.debug("Applying aggregate fn for " + val);
 						FunctionUtil.applyAggregateFunctions(val, designFn);
 					}
 				}
@@ -52,10 +55,11 @@ public class GroupingAggregationBatchCallback implements Batch.Callback<List<Lis
 	}
 	
 	public List<List> getAggregates() throws CruxException{
-		List<Stack<CruxFunction>> functions = report.getFunctions();
 		GroupBys groupBys = report.getGroupBys();
 		if (groupBys == null) {
-			return FunctionUtil.getAggregatedFunctionValueList(report, functions);
+			List returnList = new ArrayList();
+			returnList.add(FunctionUtil.getAggregatedFunctionValueList(report, functions));
+			return returnList;
 		}
 		else {
 			return null;

@@ -131,9 +131,8 @@ public class FunctionUtil {
 		//we will apply only till we meet an aggregate
 		//CruxFunction fn = null;
 		Object intermediateValue = obj;
-		int size = functions.size() - 1;
 		for (CruxFunction fn : functions) {
-			logger.debug("Function is " + fn + " and size is " + size);
+			logger.debug("Function is " + fn);
 			if (fn.isAggregate()) {
 				logger.debug("applying aggregator " + fn);
 				((CruxAggregator) fn).aggregate(intermediateValue);
@@ -142,6 +141,7 @@ public class FunctionUtil {
 			else {
 				logger.debug("applying non aggregator " + fn);
 				intermediateValue = ((CruxNonAggregator)fn).execute(obj);
+				logger.debug("applied non aggregator, returning " + intermediateValue);
 			}
 		}
 	}
@@ -182,7 +182,8 @@ public class FunctionUtil {
 			//get each value and apply functions
 			Stack<CruxFunction> designFn = functions.get(index++);
 			Object obj = FunctionUtil.getSemiAggregatedResult(designFn);
-			logger.debug("Aggregated value at index " + index + " is " + obj);					
+			logger.debug("Semi Aggregated value at index " + index + " is " + obj);		
+			logger.debug("Simple fn result is " + FunctionUtil.getSimpleFunctionResult(obj, designFn));
 			returnList.add(FunctionUtil.getSimpleFunctionResult(obj, designFn));
 		}
 		return returnList;
