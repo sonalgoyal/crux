@@ -161,8 +161,19 @@ public class TestingUtil {
 		Mapping mapping = new Mapping();
 		mapping.setTableName(new String(TEST_TABLE));
 		
+		ValueType string = new ValueType();
+		string.setClassName("java.lang.String");
+		string.setNumeric(false);
+		string.setId(1);
+		
+		ValueType dbl = new ValueType();
+		dbl.setClassName("java.lang.Double");
+		dbl.setNumeric(true);
+		dbl.setId(2);
+		
+		
 		ColumnAlias alias = new ColumnAlias();
-		alias.setValueType(new ValueType());
+		alias.setValueType(dbl);
 		alias.setAlias("alias");
 		alias.setColumnFamily(new String(TEST_FAMILY));
 		alias.setQualifier(new String(TEST_QUALIFIER));
@@ -176,6 +187,8 @@ public class TestingUtil {
 		RowAlias rowAlias = new RowAlias();
 		rowAlias.setAlias("rowAlias");
 		rowAlias.setLength(8);
+		rowAlias.setValueType(dbl);
+		
 		mapping.addRowAlias(rowAlias);
 		mapping.addColumnAlias(alias);
 		mapping.addColumnAlias(alias1);
@@ -309,6 +322,58 @@ public class TestingUtil {
 		groupBys.setGroupBy(groupByList);
 		groupBys.setReport(report);
 		report.setGroupBys(groupBys);
+		return report;
+	}
+	
+	public static Report getReportNoFunctionsNoGroupBy() {
+		Mapping mapping = new Mapping();
+		mapping.setTableName(new String(TEST_TABLE));
+		
+		ValueType string = new ValueType();
+		string.setClassName("java.lang.String");
+		string.setNumeric(false);
+		string.setId(1);
+		
+		ValueType dbl = new ValueType();
+		dbl.setClassName("java.lang.Double");
+		dbl.setNumeric(true);
+		dbl.setId(2);
+		
+		ColumnAlias alias = new ColumnAlias();
+		alias.setValueType(dbl);
+		alias.setAlias("alias");
+		alias.setColumnFamily(new String(TEST_FAMILY));
+		alias.setQualifier(new String(TEST_QUALIFIER));
+		
+		ColumnAlias alias1 = new ColumnAlias();
+		alias1.setValueType(string);
+		alias1.setAlias("alias1");
+		alias1.setColumnFamily(new String(TEST_FAMILY));
+		alias1.setQualifier(new String(TEST_MULTI_CQ));
+	
+		RowAlias rowAlias = new RowAlias();
+		rowAlias.setAlias("rowAlias");
+		rowAlias.setLength(8);
+		rowAlias.setValueType(dbl);
+		
+		mapping.addRowAlias(rowAlias);
+		mapping.addColumnAlias(alias);
+		mapping.addColumnAlias(alias1);
+		
+		Report report = new Report();
+		report.setName("reportTest");
+		
+		ReportDesign xDesign = getDesign("x", rowAlias, report);
+		ReportDesign yDesign = getDesign("y", alias, report);
+		ReportDesign yDesign1 = getDesign("y", alias1, report);
+		
+		ArrayList<ReportDesign> designs = new ArrayList<ReportDesign>();
+		
+		designs.add(xDesign);
+		designs.add(yDesign);
+		designs.add(yDesign1);
+		report.setDesigns(designs);
+		
 		return report;
 	}
 

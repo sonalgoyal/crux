@@ -14,6 +14,8 @@
  */
 package co.nubetech.crux.model;
 
+import org.apache.hadoop.hbase.util.Bytes;
+
 public class ValueType {
 
 	private long id;
@@ -185,6 +187,33 @@ public class ValueType {
 			return false;
 		}
 		return true;
+	}
+	
+	public Object fromBytes(byte[] b) {
+		if (b != null) {
+			if (className.equals("java.lang.String")) {
+				return Bytes.toString(b);
+			}
+			else if (className.equals("java.lang.Integer")) {
+				return Bytes.toInt(b);
+			}
+			else if (className.equals("java.lang.Double")){
+				return Bytes.toDouble(b);
+			}
+			else if (className.equals("java.lang.Long")){
+				return Bytes.toLong(b);
+			}
+			else if (className.equals("java.lang.Float")){
+				return Bytes.toFloat(b);
+			}
+			else if (className.equals("java.lang.Short")){
+				return Bytes.toShort(b);
+			}
+			else if (className.equals("java.lang.Boolean")){
+				return Bytes.toBoolean(b);
+			}
+		}
+		return null;
 	}
 
 		

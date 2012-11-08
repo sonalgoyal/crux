@@ -6,6 +6,7 @@ import java.util.Stack;
 
 import org.apache.hadoop.hbase.client.Result;
 
+import co.nubetech.crux.model.Alias;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
 import co.nubetech.crux.server.functions.CruxFunction;
@@ -31,12 +32,13 @@ public class CruxResultImpl implements CruxResult{
 			if (designs != null) {
 				if (index < designs.size()) {
 					ReportDesign design = report.getDesigns().get(index);
-					Object val = ServerUtil.getValue(result, ServerUtil.getAlias(design));
+					Object val = ServerUtil.getObjectValue(result, ServerUtil.getAlias(design));
 					return FunctionUtil.getResultByApplyingAllFunctions(val, functions.get(index));					
 				}
 			}
 		}		
 		return null;
-	}
+	}	
+	
 
 }

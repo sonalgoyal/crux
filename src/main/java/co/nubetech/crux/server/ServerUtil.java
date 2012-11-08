@@ -71,11 +71,21 @@ public class ServerUtil {
 		return value;
 	}
 	
+	public static Object getValue(byte[] b, Alias alias) {
+		logger.debug("Alias " + alias + " , and value type is " + alias.getValueType());
+		return alias.getValueType().fromBytes(b);
+	}
+	
+	public static Object getObjectValue(Result result, Alias alias) {
+		return getValue(getValue(result, alias), alias);
+	}
+	
 	public static Alias getAlias(ReportDesign design) {
 		Alias alias = design.getRowAlias();
-		logger.debug("The ReportDesign " + design + " has the alias " + alias);
+		logger.debug("The ReportDesign " + design + " has the row alias " + alias);
 		 if (alias == null) {
 			 alias = design.getColumnAlias(); 
+			 logger.debug("The ReportDesign " + design + " has the col alias " + alias);
 		 }
 		 return alias;
 	}	

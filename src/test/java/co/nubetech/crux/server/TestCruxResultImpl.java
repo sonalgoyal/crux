@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.io.IOException;
 
+import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
@@ -36,5 +37,19 @@ public class TestCruxResultImpl {
 		when(result.getRow()).thenReturn(Bytes.toBytes(dbl));
 		CruxResultImpl impl = new CruxResultImpl(result, report);
 		assertEquals(1234568.0d, (Double) impl.get(0), 0.001d);		
+	}
+	
+	@Test
+	public void testNoFn() throws CruxException{
+		//ceil is applied
+		Result result = mock(Result.class);
+		KeyValue kv = mock(KeyValue.class);
+		Report report = TestingUtil.getReportNoFunctionsNoGroupBy();
+		String val = "123";
+		when(result.getColumnLatest(TestingUtil.TEST_FAMILY, 
+				TestingUtil.TEST_MULTI_CQ)).thenReturn(kv);
+		when (kv.getValue()).thenReturn(Bytes.toBytes(val));
+		CruxResultImpl impl = new CruxResultImpl(result, report);
+		assertEquals("123", impl.get(2));		
 	}
 }

@@ -29,9 +29,26 @@
 	<logger name="org.hibernate">
 		<level value="DEBUG" />
 	</logger>
+	
+  <logger name="org.apache.hadoop">
+		<level value="WARN" />
+	</logger>
+
+  <logger name="org.apache.zookeeper">
+		<level value="WARN" />
+	</logger>
+  
+  <logger name="org.mortbay">
+		<level value="WARN" />
+	</logger>
+  
+  <logger name="org.apache.jasper">
+		<level value="WARN" />
+	</logger>
+
 
 	<logger name="com.opensymphony">
-		<level value="DEBUG" />
+		<level value="WARN" />
 	</logger>
 
 	<logger name="org.apache.struts2">

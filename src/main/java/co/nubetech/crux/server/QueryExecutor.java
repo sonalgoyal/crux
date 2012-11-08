@@ -86,8 +86,7 @@ public class QueryExecutor {
 				scan.setFilter(rowFilters);
 				setSelectedColumns(report, scan);
 				logger.debug("Scan object is " + scan);
-				if (report.getGroupBys() != null || report.isAggregateReport()) {
-					
+				if (report.isAggregateReport()) {
 					//means we have to aggregate
 					GroupingAggregationBatch batchCall = new GroupingAggregationBatch(scan, report);
 					GroupingAggregationBatchCallback callback = new GroupingAggregationBatchCallback(report);
