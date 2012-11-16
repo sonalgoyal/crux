@@ -31,8 +31,12 @@ public class ServerUtil {
 		byte[] value = null;
 		if (alias instanceof RowAlias) {
 			RowAlias rowAlias = (RowAlias) alias;
-			value = results.get(0).getRow();			
-			value = Arrays.copyOfRange(value, rowAlias.getOffset(), rowAlias.getOffset() + rowAlias.getLength());
+			value = results.get(0).getRow();	
+			int offset = rowAlias.getOffset();
+			int length = rowAlias.getOffset() + rowAlias.getLength();
+			logger.debug("Truncating row between index " + offset
+					+ " and " + length);
+			value = Arrays.copyOfRange(value, offset, length);
 		}
 		else {
 			ColumnAlias colAlias = (ColumnAlias) alias;
@@ -72,8 +76,11 @@ public class ServerUtil {
 	}
 	
 	public static Object getValue(byte[] b, Alias alias) {
-		logger.debug("Alias " + alias + " , and value type is " + alias.getValueType());
-		return alias.getValueType().fromBytes(b);
+		logger.debug("Alias " + alias + " , and value type is " + alias.getValueType() + 
+				" and bytes are " + b);
+		Object returnObject = alias.getValueType().fromBytes(b);
+		logger.debug("Returning " + returnObject);
+		return returnObject;
 	}
 	
 	public static Object getObjectValue(Result result, Alias alias) {

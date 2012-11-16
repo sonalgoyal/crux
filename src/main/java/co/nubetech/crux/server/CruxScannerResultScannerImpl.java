@@ -2,6 +2,7 @@ package co.nubetech.crux.server;
 
 import java.io.IOException;
 
+import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 
 import co.nubetech.crux.model.Report;
@@ -26,7 +27,13 @@ public class CruxScannerResultScannerImpl implements CruxScanner{
 	@Override
 	public CruxResult next() throws IOException {
 		if (scanner != null) {
-			return new CruxResultImpl(scanner.next(), report);
+			Result r = scanner.next();
+			if (r != null) {
+				return new CruxResultImpl(r, report);
+			}
+			else {
+				return null;
+			}
 		}
 		return null;
 	}
