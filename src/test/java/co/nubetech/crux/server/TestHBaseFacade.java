@@ -1284,14 +1284,6 @@ public class TestHBaseFacade {
 		}
 		assertEquals(5, results.size());
 		for (int i=15; i <20; ++i) {
-			//byte[] longBytes = Bytes.toBytes(new Long(i));
-			//byte[] intBytes = Bytes.toBytes((int) i);
-			//byte[] stringBytes = Bytes.toBytes("I am a String" + i);
-
-			//TODOassertTrue(Bytes.equals(Bytes.add(longBytes, intBytes, stringBytes), results.get(i-15).getRow()));
-			//TODObyte[] column = results.get(i-15).get(COLUMN_1, Bytes.toBytes("qualifier"));
-			//TODOassertTrue(Bytes.equals(Bytes.toBytes("value" +i), column));
-			//TODOassertNull(results.get(i-15).get(COLUMN_2, Bytes.toBytes("qualifier")));
 			Object column = results.get(i-15).get(0);
 			
 			assertEquals("value" +i, column);
@@ -1398,11 +1390,6 @@ public class TestHBaseFacade {
 		}
 		assertEquals(4, results.size());
 		for (int i=16; i <20; ++i) {
-		
-			//TODOassertTrue(Bytes.equals(Bytes.add(longBytes, intBytes, stringBytes), results.get(i-16).getRow()));
-			//TODObyte[] column = results.get(i-16).get(COLUMN_1, Bytes.toBytes("qualifier"));
-			//TODOassertTrue(Bytes.equals(Bytes.toBytes("value" +i), column));
-			//TODOassertNull(results.get(i-16).get(COLUMN_2, Bytes.toBytes("qualifier")));
 			
 			Object column = results.get(i-16).get(0);
 			
@@ -1916,6 +1903,7 @@ public class TestHBaseFacade {
 		ValueType valueType = new ValueType();
 		valueType.setClassName("java.lang.String");
 		rAlias.setValueType(valueType);
+		rAlias.setLength(4);
 		mapping.addRowAlias(rAlias);
 
 		ColumnAlias cAlias = new ColumnAlias();
@@ -1938,6 +1926,10 @@ public class TestHBaseFacade {
 		ArrayList<RowAliasFilter> filters = new ArrayList<RowAliasFilter>();
 		filters.add(rowFilter);
 		report.setRowAliasFilters(filters);
+		
+		ReportDesign design = new ReportDesign();
+		design.setRowAlias(rAlias);
+		report.addDesign(design);
 
 		HBaseFacade hbaseFacade = new HBaseFacade(pool);
 		CruxScanner scanner = hbaseFacade.execute(connection, report, mapping);
@@ -1952,9 +1944,9 @@ public class TestHBaseFacade {
 			
 		}
 		assertEquals(1, results.size());
-		//for (int i=5; i <7; ++i) {
-		//TODOassertTrue(Bytes.equals(Bytes.toBytes("row1"), results.get(0).getRow()));
-		//}
+		for (long i=5; i <7; ++i) {
+			assertEquals("row1", results.get(0).get(0));
+		}
 		scanner.close();
 	}
 	
@@ -1971,7 +1963,7 @@ public class TestHBaseFacade {
 			ValueType valueType1 = new ValueType();
 			valueType1.setClassName("java.lang.Long");
 			rAlias1.setValueType(valueType1);
-			//mapping.addRowAlias(rAlias1);
+			rAlias1.setMapping(mapping);
 
 			RowAlias rAlias2 = new RowAlias();
 			rAlias2.setAlias("rowkeyInt");
@@ -1980,7 +1972,7 @@ public class TestHBaseFacade {
 			ValueType valueType2 = new ValueType();
 			valueType2.setClassName("java.lang.Integer");
 			rAlias2.setValueType(valueType2);
-			//mapping.addRowAlias(rAlias2);
+			rAlias2.setMapping(mapping);
 
 			RowAlias rAlias3 = new RowAlias();
 			rAlias3.setAlias("rowkeyString");
@@ -1989,6 +1981,8 @@ public class TestHBaseFacade {
 			ValueType valueType3 = new ValueType();
 			valueType3.setClassName("java.lang.String");
 			rAlias3.setValueType(valueType3);
+			rAlias3.setMapping(mapping);
+			
 			//mapping.addRowAlias(rAlias3);
 			//add aliases in order
 			LinkedHashMap<String, RowAlias> rowMap = new LinkedHashMap<String, RowAlias>();
@@ -2014,6 +2008,7 @@ public class TestHBaseFacade {
 			cAlias2.setAlias("col2");
 			cAlias2.setColumnFamily("cf");
 			cAlias2.setQualifier("qualifier1");
+			cAlias2.setValueType(valueType3);
 			mapping.addColumnAlias(cAlias2);
 
 			RowAliasFilter rowFilter = new RowAliasFilter();
@@ -2029,11 +2024,19 @@ public class TestHBaseFacade {
 			
 			ReportDesign design = new ReportDesign();
 			design.setColumnAlias(cAlias);
-			report.addDesign(design);
-			
+			report.addDesign(design);			
 			ReportDesign design1 = new ReportDesign();
 			design1.setColumnAlias(cAlias2);
-			report.addDesign(design1);
+			report.addDesign(design1);			
+			ReportDesign design3 = new ReportDesign();
+			design3.setRowAlias(rAlias1);
+			report.addDesign(design3);
+			ReportDesign design4 = new ReportDesign();
+			design4.setRowAlias(rAlias2);
+			report.addDesign(design4);
+			ReportDesign design5 = new ReportDesign();
+			design5.setRowAlias(rAlias3);
+			report.addDesign(design5);
 
 			HBaseFacade hbaseFacade = new HBaseFacade(pool);
 			CruxScanner scanner = hbaseFacade.execute(connection, report, mapping);
@@ -2048,33 +2051,27 @@ public class TestHBaseFacade {
 				
 			}
 			assertEquals(8, results.size());
-			/*TODO
 			for (int i=10; i <16; ++i) {
-					byte[] longBytes = Bytes.toBytes(new Long(i));
-					byte[] intBytes = Bytes.toBytes((int) i);
-					byte[] stringBytes = Bytes.toBytes("I am a String" + i);
-	
-					assertTrue(Bytes.equals(Bytes.add(longBytes, intBytes, stringBytes), results.get(i-10).getRow()));
-					byte[] column = results.get(i-10).get(COLUMN_1, Bytes.toBytes("qualifier"));
-					byte[] column1 = results.get(i-10).get(COLUMN_1, Bytes.toBytes("qualifier1"));
-					
-					assertTrue(Bytes.equals(Bytes.toBytes("value" +i), column));
-					assertTrue(Bytes.equals(Bytes.toBytes("I am a sub" +i*2 + " and I am a long"), column1));
-					assertNull(results.get(i-10).get(COLUMN_2, Bytes.toBytes("qualifier")));
+				Object column = results.get(i-10).get(0);
+				Object column1 = results.get(i-10).get(1);
+				
+				assertEquals("value" +i, column);
+				assertEquals("I am a sub" +i*2 + " and I am a long", column1);
+				assertEquals(new Long(i), results.get(i-10).get(2));
+				assertEquals((int) i, results.get(i-10).get(3));
+				assertEquals("I am a String" + i, results.get(i-10).get(4));
+				assertNull(results.get(i-10).get(5));
 			}
 			for (int i=18; i <20; ++i) {
-				byte[] longBytes = Bytes.toBytes(new Long(i));
-				byte[] intBytes = Bytes.toBytes((int) i);
-				byte[] stringBytes = Bytes.toBytes("I am a String" + i);
-
-				assertTrue(Bytes.equals(Bytes.add(longBytes, intBytes, stringBytes), results.get(i-12).getRow()));
-				byte[] column = results.get(i-12).get(COLUMN_1, Bytes.toBytes("qualifier"));
-				byte[] column1 = results.get(i-12).get(COLUMN_1, Bytes.toBytes("qualifier1"));
+				Object column = results.get(i-12).get(0);
+				Object column1 = results.get(i-12).get(1);
 				
-				assertTrue(Bytes.equals(Bytes.toBytes("value" +i), column));
-				assertTrue(Bytes.equals(Bytes.toBytes("I am a sub" +i*2 + " and I am a long"), column1));
-				assertNull(results.get(i-12).get(COLUMN_2, Bytes.toBytes("qualifier")));
-			}*/
+				assertEquals("value" +i, column);
+				assertEquals("I am a sub" +i*2 + " and I am a long", column1);
+				assertEquals(new Long(i), results.get(i-12).get(2));
+				assertEquals((int) i, results.get(i-12).get(3));
+				assertEquals("I am a String" + i, results.get(i-12).get(4));
+				assertNull(results.get(i-12).get(5));			}
 			scanner.close();
 	}
 	
@@ -2114,6 +2111,11 @@ public class TestHBaseFacade {
 		filters.add(rowFilter);
 		report.setRowAliasFilters(filters);
 
+		ReportDesign design = new ReportDesign();
+		design.setRowAlias(rAlias);
+		design.setReport(report);
+		report.addDesign(design);
+		
 		HBaseFacade hbaseFacade = new HBaseFacade(pool);
 		CruxScanner scanner = hbaseFacade.execute(connection, report, mapping);
 		assertTrue(scanner instanceof CruxScannerResultScannerImpl);
@@ -2127,9 +2129,8 @@ public class TestHBaseFacade {
 			
 		}
 		assertEquals(1, results.size());
-		//TODOassertTrue(Bytes.equals(Bytes.toBytes("row5"), results.get(0).getRow()));
-		scanner.close();
-		
+		assertEquals("row5", results.get(0).get(0));
+		scanner.close();		
 	}
 	
 	@Test
@@ -2166,7 +2167,12 @@ public class TestHBaseFacade {
 		ArrayList<RowAliasFilter> filters = new ArrayList<RowAliasFilter>();
 		filters.add(rowFilter);
 		report.setRowAliasFilters(filters);
-
+		
+		ReportDesign design = new ReportDesign();
+		design.setRowAlias(rAlias);
+		design.setReport(report);
+		report.addDesign(design);
+		
 		HBaseFacade hbaseFacade = new HBaseFacade(pool);
 		CruxScanner scanner = hbaseFacade.execute(connection, report, mapping);
 		assertTrue(scanner instanceof CruxScannerResultScannerImpl);
@@ -2180,9 +2186,8 @@ public class TestHBaseFacade {
 			
 		}
 		assertEquals(1, results.size());
-		//TODOassertTrue(Bytes.equals(Bytes.toBytes("row5"), results.get(0).getRow()));
-		scanner.close();
-		
+		assertEquals("row5", results.get(0).get(0));
+		scanner.close();		
 	}
 	
 	@Test
@@ -2195,6 +2200,7 @@ public class TestHBaseFacade {
 		rAlias.setAlias("rowkey");
 		ValueType valueType = new ValueType();
 		valueType.setClassName("java.lang.String");
+		rAlias.setLength(4);
 		rAlias.setValueType(valueType);
 		mapping.addRowAlias(rAlias);
 
@@ -2218,7 +2224,12 @@ public class TestHBaseFacade {
 		ArrayList<RowAliasFilter> filters = new ArrayList<RowAliasFilter>();
 		filters.add(rowFilter);
 		report.setRowAliasFilters(filters);
-
+		
+		ReportDesign design = new ReportDesign();
+		design.setRowAlias(rAlias);
+		design.setReport(report);
+		report.addDesign(design);
+		
 		HBaseFacade hbaseFacade = new HBaseFacade(pool);
 		CruxScanner scanner = hbaseFacade.execute(connection, report, mapping);
 		assertTrue(scanner instanceof CruxScannerResultScannerImpl);
@@ -2232,7 +2243,7 @@ public class TestHBaseFacade {
 			
 		}
 		assertEquals(1, results.size());
-		//TODOassertTrue(Bytes.equals(Bytes.toBytes("row5"), results.get(0).getRow()));
+		assertEquals("row5", results.get(0).get(0));
 		scanner.close();
 		
 	}
