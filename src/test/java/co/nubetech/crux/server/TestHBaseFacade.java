@@ -2071,7 +2071,8 @@ public class TestHBaseFacade {
 				assertEquals(new Long(i), results.get(i-12).get(2));
 				assertEquals((int) i, results.get(i-12).get(3));
 				assertEquals("I am a String" + i, results.get(i-12).get(4));
-				assertNull(results.get(i-12).get(5));			}
+				assertNull(results.get(i-12).get(5));			
+			}
 			scanner.close();
 	}
 	
@@ -2261,7 +2262,7 @@ public class TestHBaseFacade {
             ValueType valueType1 = new ValueType();
             valueType1.setClassName("java.lang.Long");
             rAlias1.setValueType(valueType1);
-            //mapping.addRowAlias(rAlias1);
+            rAlias1.setMapping(mapping);
 
             RowAlias rAlias2 = new RowAlias();
             rAlias2.setAlias("rowkeyInt");
@@ -2270,7 +2271,7 @@ public class TestHBaseFacade {
             ValueType valueType2 = new ValueType();
             valueType2.setClassName("java.lang.Integer");
             rAlias2.setValueType(valueType2);
-            //mapping.addRowAlias(rAlias2);
+            rAlias2.setMapping(mapping);
 
             RowAlias rAlias3 = new RowAlias();
             rAlias3.setAlias("rowkeyString");
@@ -2279,7 +2280,8 @@ public class TestHBaseFacade {
             ValueType valueType3 = new ValueType();
             valueType3.setClassName("java.lang.String");
             rAlias3.setValueType(valueType3);
-            //mapping.addRowAlias(rAlias3);
+            rAlias3.setMapping(mapping);
+            
             //add aliases in order
             LinkedHashMap<String, RowAlias> rowMap = new LinkedHashMap<String, RowAlias>();
             rowMap.put(rAlias1.getAlias(), rAlias1);
@@ -2304,7 +2306,7 @@ public class TestHBaseFacade {
             cAlias2.setAlias("col2");
             cAlias2.setColumnFamily("cf");
             cAlias2.setQualifier("qualifier1");
-            cAlias2.setValueType(valueType1);
+            cAlias2.setValueType(valueType3);
             mapping.addColumnAlias(cAlias2);
 
             RowAliasFilter rowFilter = new RowAliasFilter();
@@ -2318,13 +2320,21 @@ public class TestHBaseFacade {
             filters.add(rowFilter);
             report.setRowAliasFilters(filters);
             
-            ReportDesign design = new ReportDesign();
-            design.setColumnAlias(cAlias);
-            report.addDesign(design);
-            
-            ReportDesign design1 = new ReportDesign();
-            design1.setColumnAlias(cAlias2);
-            report.addDesign(design1);
+			ReportDesign design = new ReportDesign();
+			design.setColumnAlias(cAlias);
+			report.addDesign(design);			
+			ReportDesign design1 = new ReportDesign();
+			design1.setColumnAlias(cAlias2);
+			report.addDesign(design1);			
+			ReportDesign design3 = new ReportDesign();
+			design3.setRowAlias(rAlias1);
+			report.addDesign(design3);
+			ReportDesign design4 = new ReportDesign();
+			design4.setRowAlias(rAlias2);
+			report.addDesign(design4);
+			ReportDesign design5 = new ReportDesign();
+			design5.setRowAlias(rAlias3);
+			report.addDesign(design5);
 
             HBaseFacade hbaseFacade = new HBaseFacade(pool);
             CruxScanner scanner = hbaseFacade.execute(connection, report, mapping);
@@ -2339,36 +2349,20 @@ public class TestHBaseFacade {
                 
             }
             assertEquals(3, results.size());
+			for (int i=17; i <20; ++i) {
+				Object column = results.get(i-17).get(0);
+				Object column1 = results.get(i-17).get(1);
+				
+				assertEquals("value" +i, column);
+				assertEquals("I am a sub" +i*2 + " and I am a long", column1);
+				assertEquals(new Long(i), results.get(i-17).get(2));
+				assertEquals((int) i, results.get(i-17).get(3));
+				assertEquals("I am a String" + i, results.get(i-17).get(4));
+				assertNull(results.get(i-17).get(5));			
+			}
+			scanner.close();
 	}
-            /*for (int i=10; i <16; ++i) {
-                    byte[] longBytes = Bytes.toBytes(new Long(i));
-                    byte[] intBytes = Bytes.toBytes((int) i);
-                    byte[] stringBytes = Bytes.toBytes("I am a String" + i);
-    
-                    assertTrue(Bytes.equals(Bytes.add(longBytes, intBytes, stringBytes), results.get(i-10).getRow()));
-                    byte[] column = results.get(i-10).get(COLUMN_1, Bytes.toBytes("qualifier"));
-                    byte[] column1 = results.get(i-10).get(COLUMN_1, Bytes.toBytes("qualifier1"));
-                    
-                    assertTrue(Bytes.equals(Bytes.toBytes("value" +i), column));
-                    assertTrue(Bytes.equals(Bytes.toBytes("I am a sub" +i*2 + " and I am a long"), column1));
-                    assertNull(results.get(i-10).get(COLUMN_2, Bytes.toBytes("qualifier")));
-            }
-            for (int i=18; i <20; ++i) {
-                byte[] longBytes = Bytes.toBytes(new Long(i));
-                byte[] intBytes = Bytes.toBytes((int) i);
-                byte[] stringBytes = Bytes.toBytes("I am a String" + i);
-
-                assertTrue(Bytes.equals(Bytes.add(longBytes, intBytes, stringBytes), results.get(i-12).getRow()));
-                byte[] column = results.get(i-12).get(COLUMN_1, Bytes.toBytes("qualifier"));
-                byte[] column1 = results.get(i-12).get(COLUMN_1, Bytes.toBytes("qualifier1"));
-                
-                assertTrue(Bytes.equals(Bytes.toBytes("value" +i), column));
-                assertTrue(Bytes.equals(Bytes.toBytes("I am a sub" +i*2 + " and I am a long"), column1));
-                assertNull(results.get(i-12).get(COLUMN_2, Bytes.toBytes("qualifier")));
-        }
-            scanner.close();
-    }
-*/
+	
 
 
 }
