@@ -14,7 +14,9 @@
  */
 package co.nubetech.crux.model;
 
-public class BaseFilter {
+import java.io.Serializable;
+
+public class BaseFilter implements Serializable{
 
 	protected long id;
 	protected Report report;

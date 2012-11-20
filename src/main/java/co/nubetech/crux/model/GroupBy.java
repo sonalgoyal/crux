@@ -14,7 +14,9 @@
  */
 package co.nubetech.crux.model;
 
-public class GroupBy {
+import java.io.Serializable;
+
+public class GroupBy implements Serializable{
 	private long id;
 	private RowAlias rowAlias;
 	private int position;

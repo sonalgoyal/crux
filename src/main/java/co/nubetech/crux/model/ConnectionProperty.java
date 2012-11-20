@@ -14,7 +14,9 @@
  */
 package co.nubetech.crux.model;
 
-public class ConnectionProperty {
+import java.io.Serializable;
+
+public class ConnectionProperty implements Serializable{
 
 	private long id;
 	private Connection connection;

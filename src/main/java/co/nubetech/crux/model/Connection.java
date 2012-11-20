@@ -14,10 +14,11 @@
  */
 package co.nubetech.crux.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Connection {
+public class Connection implements Serializable{
 
 	private long id;
 	private Datastore datastore;

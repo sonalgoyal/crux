@@ -14,7 +14,9 @@
  */
 package co.nubetech.crux.model;
 
-public class ReportType {
+import java.io.Serializable;
+
+public class ReportType implements Serializable{
 
 	private long id;
 	private String type;

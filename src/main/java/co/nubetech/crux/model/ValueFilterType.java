@@ -14,7 +14,9 @@
  */
 package co.nubetech.crux.model;
 
-public class ValueFilterType {
+import java.io.Serializable;
+
+public class ValueFilterType implements Serializable{
 
 	private long id;
 	private ValueType valueType;

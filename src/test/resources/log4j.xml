@@ -33,6 +33,11 @@
   <logger name="org.apache.hadoop">
 		<level value="WARN" />
 	</logger>
+  
+  <logger name="org.apache.hadoop.hbase">
+		<level value="DEBUG" />
+	</logger>
+
 
   <logger name="org.apache.zookeeper">
 		<level value="WARN" />

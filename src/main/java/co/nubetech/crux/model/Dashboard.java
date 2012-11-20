@@ -1,6 +1,8 @@
 package co.nubetech.crux.model;
 
-public class Dashboard {
+import java.io.Serializable;
+
+public class Dashboard implements Serializable{
 
 	private long id;
 	private int index;

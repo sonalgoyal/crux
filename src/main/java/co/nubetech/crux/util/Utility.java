@@ -14,7 +14,10 @@
  */
 package co.nubetech.crux.util;
 
+import java.io.PrintWriter;
+
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.coprocessor.CoprocessorHost;
 import org.apache.log4j.Logger;
 
 import co.nubetech.crux.model.Connection;
@@ -41,8 +44,16 @@ public class Utility {
 			logger.debug("Port is: " + port);
 			conf.set("hbase.zookeeper.quorum", host);
 			conf.set("hbase.zookeeper.property.clientPort", port);
+			conf.set(CoprocessorHost.REGION_COPROCESSOR_CONF_KEY,
+					"co.nubetech.crux.server.aggregate.GroupingAggregationImpl");
 		}
-		logger.debug("Returning Configuration: ");
+		logger.debug("Returning Configuration: " + conf);
+		try {
+			conf.writeXml(System.out);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 		return conf;
 	}
 

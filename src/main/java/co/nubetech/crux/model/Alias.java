@@ -14,7 +14,9 @@
  */
 package co.nubetech.crux.model;
 
-public abstract class Alias {
+import java.io.Serializable;
+
+public abstract class Alias implements Serializable{
 
 	public long id;
 	public Mapping mapping;

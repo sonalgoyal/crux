@@ -1,6 +1,8 @@
 package co.nubetech.crux.model;
 
-public class FunctionTypeMapping {
+import java.io.Serializable;
+
+public class FunctionTypeMapping implements Serializable{
 	
 	private long id;
 	private Function function;	

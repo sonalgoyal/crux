@@ -110,6 +110,7 @@ public class FunctionUtil {
 			if (fn.isAggregate()) {
 				logger.debug("applying aggregator " + fn);
 				((CruxAggregator) fn).aggregate(intermediateValue);
+				logger.debug("applied aggregator, agg is " + ((CruxAggregator) fn).getAggregate());
 				break;				
 			}
 			else {
@@ -136,6 +137,7 @@ public class FunctionUtil {
 			if (fn.isAggregate()) {
 				logger.debug("applying aggregator " + fn);
 				((CruxAggregator) fn).aggregate(intermediateValue);
+				logger.debug("applied aggregator, agg is " + ((CruxAggregator) fn).getAggregate());
 				break;				
 			}
 			else {

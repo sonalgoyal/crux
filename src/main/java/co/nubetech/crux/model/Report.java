@@ -14,6 +14,7 @@
  */
 package co.nubetech.crux.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.List;
@@ -24,7 +25,7 @@ import org.apache.log4j.Logger;
 import co.nubetech.crux.server.functions.CruxFunction;
 import co.nubetech.crux.util.CruxException;
 
-public class Report {
+public class Report implements Serializable{
 
 	private long id;
 	private User user;

@@ -1,6 +1,8 @@
 package co.nubetech.crux.model;
 
-public class Function {
+import java.io.Serializable;
+
+public class Function implements Serializable{
 
 	private long id;
 	private String functionName;

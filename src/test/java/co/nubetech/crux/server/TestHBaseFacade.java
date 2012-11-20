@@ -17,6 +17,7 @@ package co.nubetech.crux.server;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.apache.commons.pool.KeyedPoolableObjectFactory;
 import org.apache.commons.pool.PoolUtils;
@@ -26,6 +27,7 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.coprocessor.CoprocessorHost;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
@@ -38,11 +40,14 @@ import co.nubetech.crux.model.ColumnFilter;
 import co.nubetech.crux.model.Connection;
 import co.nubetech.crux.model.ConnectionProperty;
 import co.nubetech.crux.model.FilterType;
+import co.nubetech.crux.model.Function;
 import co.nubetech.crux.model.Mapping;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
+import co.nubetech.crux.model.ReportDesignFunction;
 import co.nubetech.crux.model.RowAlias;
 import co.nubetech.crux.model.RowAliasFilter;
+import co.nubetech.crux.model.TestingUtil;
 import co.nubetech.crux.model.ValueType;
 import co.nubetech.crux.pool.HBaseConnectionPool;
 import co.nubetech.crux.pool.HBaseConnectionPoolFactory;
@@ -71,8 +76,10 @@ public class TestHBaseFacade {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		
+		TEST_UTIL.getConfiguration().set(CoprocessorHost.REGION_COPROCESSOR_CONF_KEY,
+				"co.nubetech.crux.server.aggregate.GroupingAggregationImpl");
 		TEST_UTIL.startMiniCluster(3);
+		
 		// REST_TEST_UTIL.startServletContainer(TEST_UTIL.getConfiguration());
 		HBaseAdmin admin = TEST_UTIL.getHBaseAdmin();
 
@@ -139,9 +146,9 @@ public class TestHBaseFacade {
 
 				table1.put(put1);
 
-				for (int k = 0; k < put1.getRow().length; ++k) {
+				/*for (int k = 0; k < put1.getRow().length; ++k) {
 					logger.debug("Entered " + put1.getRow()[k]);
-				}
+				}*/
 			}
 			table1.flushCommits();
 		}
@@ -188,9 +195,9 @@ public class TestHBaseFacade {
 
 				table1.put(put1);
 
-				for (int k = 0; k < put1.getRow().length; ++k) {
+				/*for (int k = 0; k < put1.getRow().length; ++k) {
 					logger.debug("Entered " + put1.getRow()[k]);
-				}
+				}*/
 			}
 			table1.flushCommits();
 		}
@@ -215,7 +222,7 @@ public class TestHBaseFacade {
 
 			table1.flushCommits();
 		}
-
+		
 		KeyedPoolableObjectFactory factory = PoolUtils
 				.synchronizedPoolableFactory(new HBaseConnectionPoolFactory());
 
@@ -2360,6 +2367,241 @@ public class TestHBaseFacade {
 				assertEquals("I am a String" + i, results.get(i-17).get(4));
 				assertNull(results.get(i-17).get(5));			
 			}
+			scanner.close();
+	}
+	
+	@Test
+    public void testRangeScanCompRowNonAgg() throws IOException, CruxException {
+            Report report = new Report();
+            Mapping mapping = new Mapping();
+            mapping.setTableName(TABLE_2);
+
+            RowAlias rAlias1 = new RowAlias();
+            rAlias1.setAlias("rowkeyLong");
+            rAlias1.setLength(8);
+            rAlias1.setId(1l);
+            ValueType valueType1 = new ValueType();
+            valueType1.setClassName("java.lang.Long");
+            rAlias1.setValueType(valueType1);
+            rAlias1.setMapping(mapping);
+
+            RowAlias rAlias2 = new RowAlias();
+            rAlias2.setAlias("rowkeyInt");
+            rAlias2.setLength(4);
+            rAlias2.setId(2l);
+            ValueType valueType2 = new ValueType();
+            valueType2.setClassName("java.lang.Integer");
+            rAlias2.setValueType(valueType2);
+            rAlias2.setMapping(mapping);
+
+            RowAlias rAlias3 = new RowAlias();
+            rAlias3.setAlias("rowkeyString");
+            rAlias3.setId(3l);
+            rAlias3.setLength((int) Bytes.toBytes("I am a String" + 11).length);
+            ValueType valueType3 = new ValueType();
+            valueType3.setClassName("java.lang.String");
+            rAlias3.setValueType(valueType3);
+            rAlias3.setMapping(mapping);
+            
+            //add aliases in order
+            LinkedHashMap<String, RowAlias> rowMap = new LinkedHashMap<String, RowAlias>();
+            rowMap.put(rAlias1.getAlias(), rAlias1);
+            rowMap.put(rAlias2.getAlias(), rAlias2);
+            rowMap.put(rAlias3.getAlias(), rAlias3);
+            mapping.setRowAlias(rowMap);
+            
+            ColumnAlias cAlias = new ColumnAlias();
+            cAlias.setAlias("col");
+            cAlias.setColumnFamily("cf");
+            cAlias.setQualifier("qualifier");
+            cAlias.setValueType(valueType3);
+            mapping.addColumnAlias(cAlias);
+
+            ColumnAlias cAlias1 = new ColumnAlias();
+            cAlias1.setAlias("col1");
+            cAlias1.setColumnFamily("cf1");
+            cAlias.setValueType(valueType3);
+            mapping.addColumnAlias(cAlias1);
+            
+            ColumnAlias cAlias2 = new ColumnAlias();
+            cAlias2.setAlias("col2");
+            cAlias2.setColumnFamily("cf");
+            cAlias2.setQualifier("qualifier1");
+            cAlias2.setValueType(valueType3);
+            mapping.addColumnAlias(cAlias2);
+
+            RowAliasFilter rowFilter = new RowAliasFilter();
+            FilterType filter = new FilterType();
+            filter.setType("Greater Than Equals");
+            rowFilter.setFilterType(filter);
+            rowFilter.setRowAlias(rAlias3);
+            rowFilter.setValue("I am a String17");
+
+            ArrayList<RowAliasFilter> filters = new ArrayList<RowAliasFilter>();
+            filters.add(rowFilter);
+            report.setRowAliasFilters(filters);
+            
+            Function upper = TestingUtil.getFunction("upper", 
+    				"co.nubetech.crux.server.functions.UpperCase", false);
+    		
+    		ReportDesign design = new ReportDesign();
+			design.setColumnAlias(cAlias);
+			List<ReportDesignFunction> xFunctions = new ArrayList<ReportDesignFunction>();
+			xFunctions.add(TestingUtil.getReportDesignFunction(upper, design));
+			design.setReportDesignFunctionList(xFunctions);			
+			report.addDesign(design);
+			
+			ReportDesign design1 = new ReportDesign();
+			design1.setColumnAlias(cAlias2);
+			List<ReportDesignFunction> yFunctions = new ArrayList<ReportDesignFunction>();
+			yFunctions.add(TestingUtil.getReportDesignFunction(upper, design1));
+			design1.setReportDesignFunctionList(yFunctions);
+			report.addDesign(design1);			
+
+            HBaseFacade hbaseFacade = new HBaseFacade(pool);
+            CruxScanner scanner = hbaseFacade.execute(connection, report, mapping);
+            assertTrue(scanner instanceof CruxScannerResultScannerImpl);
+            CruxResult scanResult = null;
+            ArrayList<CruxResult> results = new ArrayList<CruxResult>();
+            while ((scanResult = scanner.next()) != null) {
+                results.add(scanResult);
+                logger.debug("Value is "
+                        + scanResult.get(1));
+                logger.debug("CruxResult is " + scanResult);
+                
+            }
+            assertEquals(3, results.size());
+			for (int i=17; i <20; ++i) {
+				Object column = results.get(i-17).get(0);
+				Object column1 = results.get(i-17).get(1);
+				
+				assertEquals("VALUE" +i, column);
+				assertEquals("I AM A SUB" +i*2 + " AND I AM A LONG", column1);
+				assertNull(results.get(i-17).get(5));			
+			}
+			scanner.close();
+	}
+	
+	@Test
+    public void testRangeScanCompRowAgg() throws IOException, CruxException {
+            Report report = new Report();
+            Mapping mapping = new Mapping();
+            mapping.setTableName(TABLE_2);
+
+            RowAlias rAlias1 = new RowAlias();
+            rAlias1.setAlias("rowkeyLong");
+            rAlias1.setLength(8);
+            rAlias1.setId(1l);
+            ValueType valueType1 = new ValueType();
+            valueType1.setClassName("java.lang.Long");
+            rAlias1.setValueType(valueType1);
+            rAlias1.setMapping(mapping);
+
+            RowAlias rAlias2 = new RowAlias();
+            rAlias2.setAlias("rowkeyInt");
+            rAlias2.setLength(4);
+            rAlias2.setId(2l);
+            ValueType valueType2 = new ValueType();
+            valueType2.setClassName("java.lang.Integer");
+            rAlias2.setValueType(valueType2);
+            rAlias2.setMapping(mapping);
+
+            RowAlias rAlias3 = new RowAlias();
+            rAlias3.setAlias("rowkeyString");
+            rAlias3.setId(3l);
+            rAlias3.setLength((int) Bytes.toBytes("I am a String" + 11).length);
+            ValueType valueType3 = new ValueType();
+            valueType3.setClassName("java.lang.String");
+            rAlias3.setValueType(valueType3);
+            rAlias3.setMapping(mapping);
+            
+            //add aliases in order
+            LinkedHashMap<String, RowAlias> rowMap = new LinkedHashMap<String, RowAlias>();
+            rowMap.put(rAlias1.getAlias(), rAlias1);
+            rowMap.put(rAlias2.getAlias(), rAlias2);
+            rowMap.put(rAlias3.getAlias(), rAlias3);
+            mapping.setRowAlias(rowMap);
+            
+            ColumnAlias cAlias = new ColumnAlias();
+            cAlias.setAlias("col");
+            cAlias.setColumnFamily("cf");
+            cAlias.setQualifier("qualifier");
+            cAlias.setValueType(valueType3);
+            mapping.addColumnAlias(cAlias);
+
+            ColumnAlias cAlias1 = new ColumnAlias();
+            cAlias1.setAlias("col1");
+            cAlias1.setColumnFamily("cf1");
+            cAlias.setValueType(valueType3);
+            mapping.addColumnAlias(cAlias1);
+            
+            ColumnAlias cAlias2 = new ColumnAlias();
+            cAlias2.setAlias("col2");
+            cAlias2.setColumnFamily("cf");
+            cAlias2.setQualifier("qualifier1");
+            cAlias2.setValueType(valueType3);
+            mapping.addColumnAlias(cAlias2);
+
+            FilterType filter1 = new FilterType();
+    		filter1.setType("Greater Than Equals");
+
+    		RowAliasFilter rowFilter1 = new RowAliasFilter();
+    		rowFilter1.setFilterType(filter1);
+    		rowFilter1.setRowAlias(rAlias1);
+    		rowFilter1.setValue("15");
+
+    		FilterType filter2 = new FilterType();
+    		filter2.setType("Equals");
+
+    		RowAliasFilter rowFilter2 = new RowAliasFilter();
+    		rowFilter2.setFilterType(filter2);
+    		rowFilter2.setRowAlias(rAlias2);
+    		rowFilter2.setValue("12");
+    		
+    		FilterType filter3 = new FilterType();
+    		filter3.setType("Less Than");
+
+    		RowAliasFilter rowFilter3 = new RowAliasFilter();
+    		rowFilter3.setFilterType(filter3);
+    		rowFilter3.setRowAlias(rAlias1);
+    		rowFilter3.setValue("20");
+
+    		ArrayList<RowAliasFilter> filters = new ArrayList<RowAliasFilter>();
+    		filters.add(rowFilter1);
+    		//filters.add(rowFilter2);
+    		filters.add(rowFilter3);
+    		report.setRowAliasFilters(filters);
+    		
+            Function max = TestingUtil.getFunction("max", 
+    				"co.nubetech.crux.server.functions.MaxAggregator", false);
+    		
+            ReportDesign design3 = new ReportDesign();
+			design3.setRowAlias(rAlias1);
+			List<ReportDesignFunction> xFunctions = new ArrayList<ReportDesignFunction>();
+			xFunctions.add(TestingUtil.getReportDesignFunction(max, design3));
+			design3.setReportDesignFunctionList(xFunctions);			
+			
+			report.addDesign(design3);
+			/*ReportDesign design4 = new ReportDesign();
+			design4.setRowAlias(rAlias2);
+			report.addDesign(design4);
+			ReportDesign design5 = new ReportDesign();
+			design5.setRowAlias(rAlias3);
+			report.addDesign(design5);
+			*/
+            HBaseFacade hbaseFacade = new HBaseFacade(pool);
+            CruxScanner scanner = hbaseFacade.execute(connection, report, mapping);
+            assertTrue(scanner instanceof CruxScannerListImpl);
+            CruxResult scanResult = null;
+            ArrayList<CruxResult> results = new ArrayList<CruxResult>();
+            while ((scanResult = scanner.next()) != null) {
+                results.add(scanResult);
+                logger.debug("Value is "
+                        + scanResult.get(0));
+                logger.debug("CruxResult is " + scanResult);
+                
+            }
+            assertEquals(1, results.size());
 			scanner.close();
 	}
 	

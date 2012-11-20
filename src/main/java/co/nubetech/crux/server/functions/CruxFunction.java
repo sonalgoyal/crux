@@ -1,5 +1,7 @@
 package co.nubetech.crux.server.functions;
 
+import co.nubetech.crux.model.ValueType;
+
 
 /**
  * This interface can handle both aggregate and non aggregate functions
@@ -10,14 +12,10 @@ package co.nubetech.crux.server.functions;
  */
 public interface CruxFunction {	
 	
-	public void setValueType(String valueType);
-	
-	public String getValueType();
-	
-	public void setReturnValueType(String returnValueType);
-	
-	public String getReturnValueType();
-	
+	public ValueType getValueType();
+	public void setValueType(ValueType valueType);	
+	public Object getFromBytes(byte[] b);
+	public Object getPromotedType(Object o);
 	public boolean isAggregate();
 
 }

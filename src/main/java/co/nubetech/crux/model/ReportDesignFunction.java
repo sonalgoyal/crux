@@ -1,6 +1,8 @@
 package co.nubetech.crux.model;
 
-public class ReportDesignFunction {
+import java.io.Serializable;
+
+public class ReportDesignFunction implements Serializable{
 	
 	private long id;
 	private ReportDesign reportDesign;

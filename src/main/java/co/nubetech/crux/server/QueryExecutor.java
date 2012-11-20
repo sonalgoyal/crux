@@ -99,6 +99,7 @@ public class QueryExecutor {
 						e.printStackTrace();
 						throw new CruxException("Error executing query", e);
 					}
+					return new CruxScannerListImpl(callback.getAggregates());
 				}
 				else {
 					ResultScanner resultScanner = hTable.getScanner(scan);

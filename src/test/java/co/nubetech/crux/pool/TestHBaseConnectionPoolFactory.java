@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.client.HTablePool;
+import org.apache.hadoop.hbase.coprocessor.CoprocessorHost;
 import org.junit.Test;
 
 import co.nubetech.crux.model.Connection;
@@ -42,6 +43,8 @@ public class TestHBaseConnectionPoolFactory {
 		Configuration conf = utility.getConfiguration(connection);
 		assertEquals(conf.get("hbase.zookeeper.quorum"), "h1");
 		assertEquals(conf.get("hbase.zookeeper.property.clientPort"), "2181");
+		assertEquals(conf.get(CoprocessorHost.REGION_COPROCESSOR_CONF_KEY), 
+				"co.nubetech.crux.server.aggregate.GroupingAggregationImpl");
 	}
 
 	// InComplete

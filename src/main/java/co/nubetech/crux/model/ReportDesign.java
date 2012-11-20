@@ -14,10 +14,11 @@
  */
 package co.nubetech.crux.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReportDesign {
+public class ReportDesign implements Serializable{
 
 	private long id;
 	private Report report;

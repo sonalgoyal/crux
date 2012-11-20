@@ -82,9 +82,9 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 				 boolean hasMoreRows = false;
 				 do {
 					 hasMoreRows = scanner.next(results);
+					 logger.debug("Rowkey is " + results.get(0).getRow());
 					 int index = 0;
 					 for (ReportDesign design: designs) {
-						 index++;
 						 //get each value and apply functions
 						 Stack<CruxFunction> designFn = functions.get(index++);
 						 //convert and apply

@@ -14,9 +14,11 @@
  */
 package co.nubetech.crux.model;
 
+import java.io.Serializable;
+
 import org.apache.hadoop.hbase.util.Bytes;
 
-public class ValueType {
+public class ValueType implements Serializable{
 
 	private long id;
 	private Datastore datastore;

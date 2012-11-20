@@ -14,9 +14,10 @@
  */
 package co.nubetech.crux.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GroupBys {
+public class GroupBys implements Serializable{
 	
 	private long id;	
 	private List<GroupBy> groupBy;	

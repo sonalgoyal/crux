@@ -14,38 +14,35 @@
  */
 package co.nubetech.crux.server.functions;
 
+import co.nubetech.crux.model.ValueType;
+
 
 public abstract class FunctionBase implements CruxFunction{
 	
-	String valueType;
-	String returnValueType;
-	
+	ValueType valueType;
+
 	/**
 	 * @return the valueType
 	 */
-	public String getValueType() {
+	public ValueType getValueType() {
 		return valueType;
 	}
+
 	/**
 	 * @param valueType the valueType to set
 	 */
-	public void setValueType(String valueType) {
+	public void setValueType(ValueType valueType) {
 		this.valueType = valueType;
 	}
-	/**
-	 * @return the returnValueType
-	 */
-	public String getReturnValueType() {
-		return returnValueType;
-	}
-	/**
-	 * @param returnValueType the returnValueType to set
-	 */
-	public void setReturnValueType(String returnValueType) {
-		this.returnValueType = returnValueType;
-	}
-
 	
+	public Object getFromBytes(byte[] b) {
+		return valueType.fromBytes(b);
+	}	
+	
+	//TODO
+	public Object getPromotedType(Object o) {
+		return null;
+	}
 	
 
 }
