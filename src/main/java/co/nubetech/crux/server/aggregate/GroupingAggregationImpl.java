@@ -78,9 +78,9 @@ public class GroupingAggregationImpl extends BaseEndpointCoprocessor implements
 				 //just simple function application, but an aggregate like min/max is lurking in somewhere
 				 //without a groupby ..ouch
 				 byte[] value = null;
-				 List<KeyValue> results = new ArrayList<KeyValue>();
 				 boolean hasMoreRows = false;
 				 do {
+					 List<KeyValue> results = new ArrayList<KeyValue>();
 					 hasMoreRows = scanner.next(results);
 					 logger.debug("Rowkey is " + results.get(0).getRow());
 					 int index = 0;
