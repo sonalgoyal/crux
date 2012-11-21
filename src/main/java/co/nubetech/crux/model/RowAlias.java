@@ -85,12 +85,14 @@ public class RowAlias extends Alias {
 
 	public int getOffset() {
 		int offset = 0;
-		Map<String, RowAlias> rowAliases = mapping.getRowAlias();
-		for (String alias : rowAliases.keySet()) {
-			if (alias.equals(this.getAlias())) {
-				break;
-			} else {
-				offset += rowAliases.get(alias).getLength();
+		if (mapping != null) {
+			Map<String, RowAlias> rowAliases = mapping.getRowAlias();
+			for (String alias : rowAliases.keySet()) {
+				if (alias.equals(this.getAlias())) {
+					break;
+				} else {
+					offset += rowAliases.get(alias).getLength();
+				}
 			}
 		}
 		return offset;

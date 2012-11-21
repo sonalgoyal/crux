@@ -249,7 +249,14 @@ public class MappingAction extends CruxAction {
 			tableList = hbaseFacade.getTableList(connection);
 			logger.debug("tableList.length is: " + tableList.length
 					+ " for connection" + connection);
+			logger.debug("Tables are " );
+			if (tableList != null) {
+				for (String table: tableList) {
+					logger.debug(table );
+				}
+			}
 		} catch (CruxException e) {
+			e.printStackTrace();
 			error.setMessage(e.getMessage());
 		}
 		return SUCCESS;
