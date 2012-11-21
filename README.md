@@ -132,8 +132,8 @@ Instructions to set up the dev environment in Eclipse
 Crux Limitations
 -
 - Crux is an HBase application, so the schema and the querying has to be designed accordingly.
-- As far as possible, try to create row filters with  equals/greater than equals/less than 
-- so as to leverage HBase's Get and Range Scan operations.  
+- As far as possible, try to create row filters with  equals/greater than equals/less than
+ so as to leverage HBase's Get and Range Scan operations.  
 
 Sample data
 -
