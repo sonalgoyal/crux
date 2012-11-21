@@ -129,7 +129,7 @@ public class TestHBaseFacade {
 			admin.createTable(htd1);
 
 			HTable table1 = new HTable(TEST_UTIL.getConfiguration(), TABLE_2);
-
+			TEST_UTIL.createMultiRegions(table1, COLUMN_2);
 			for (long i = 10; i < 20; ++i) {
 				byte[] longBytes = Bytes.toBytes(new Long(i));
 				byte[] intBytes = Bytes.toBytes((int) i);
@@ -143,7 +143,8 @@ public class TestHBaseFacade {
 				put1.add(COLUMN_2, Bytes.toBytes("qualifier"), Bytes.toBytes(i));
 				put1.add(COLUMN_2, Bytes.toBytes("qualifier1"),
 						Bytes.toBytes((int) i));
-
+				put1.add(COLUMN_2, Bytes.toBytes("qualifier2"),
+						Bytes.toBytes(i * 2.5d));
 				table1.put(put1);
 
 				/*for (int k = 0; k < put1.getRow().length; ++k) {
@@ -2574,22 +2575,24 @@ public class TestHBaseFacade {
     		
             Function max = TestingUtil.getFunction("max", 
     				"co.nubetech.crux.server.functions.MaxAggregator", false);
+            Function min = TestingUtil.getFunction("max", 
+    				"co.nubetech.crux.server.functions.MinAggregator", false);
     		
             ReportDesign design3 = new ReportDesign();
 			design3.setRowAlias(rAlias1);
 			List<ReportDesignFunction> xFunctions = new ArrayList<ReportDesignFunction>();
 			xFunctions.add(TestingUtil.getReportDesignFunction(max, design3));
 			design3.setReportDesignFunctionList(xFunctions);			
-			
 			report.addDesign(design3);
-			/*ReportDesign design4 = new ReportDesign();
-			design4.setRowAlias(rAlias2);
+			
+			ReportDesign design4 = new ReportDesign();
+			design4.setRowAlias(rAlias1);
+			List<ReportDesignFunction> functions = new ArrayList<ReportDesignFunction>();
+			functions.add(TestingUtil.getReportDesignFunction(min, design4));
+			design4.setReportDesignFunctionList(functions);			
 			report.addDesign(design4);
-			ReportDesign design5 = new ReportDesign();
-			design5.setRowAlias(rAlias3);
-			report.addDesign(design5);
-			*/
-            HBaseFacade hbaseFacade = new HBaseFacade(pool);
+			
+			HBaseFacade hbaseFacade = new HBaseFacade(pool);
             CruxScanner scanner = hbaseFacade.execute(connection, report, mapping);
             assertTrue(scanner instanceof CruxScannerListImpl);
             CruxResult scanResult = null;
@@ -2602,9 +2605,150 @@ public class TestHBaseFacade {
                 
             }
             assertEquals(1, results.size());
+            assertEquals(19l, results.get(0).get(0));
+            assertEquals(15l, results.get(0).get(1));
 			scanner.close();
 	}
 	
 
+	@Test
+    public void testRangeScanCompRowAggCol() throws IOException, CruxException {
+            Report report = new Report();
+            Mapping mapping = new Mapping();
+            mapping.setTableName(TABLE_2);
 
+            RowAlias rAlias1 = new RowAlias();
+            rAlias1.setAlias("rowkeyLong");
+            rAlias1.setLength(8);
+            rAlias1.setId(1l);
+            ValueType valueType1 = new ValueType();
+            valueType1.setClassName("java.lang.Long");
+            rAlias1.setValueType(valueType1);
+            rAlias1.setMapping(mapping);
+
+            RowAlias rAlias2 = new RowAlias();
+            rAlias2.setAlias("rowkeyInt");
+            rAlias2.setLength(4);
+            rAlias2.setId(2l);
+            ValueType valueType2 = new ValueType();
+            valueType2.setClassName("java.lang.Integer");
+            rAlias2.setValueType(valueType2);
+            rAlias2.setMapping(mapping);
+
+            RowAlias rAlias3 = new RowAlias();
+            rAlias3.setAlias("rowkeyString");
+            rAlias3.setId(3l);
+            rAlias3.setLength((int) Bytes.toBytes("I am a String" + 11).length);
+            ValueType valueType3 = new ValueType();
+            valueType3.setClassName("java.lang.String");
+            rAlias3.setValueType(valueType3);
+            rAlias3.setMapping(mapping);
+            
+            //add aliases in order
+            LinkedHashMap<String, RowAlias> rowMap = new LinkedHashMap<String, RowAlias>();
+            rowMap.put(rAlias1.getAlias(), rAlias1);
+            rowMap.put(rAlias2.getAlias(), rAlias2);
+            rowMap.put(rAlias3.getAlias(), rAlias3);
+            mapping.setRowAlias(rowMap);
+            
+            ColumnAlias cAlias = new ColumnAlias();
+            cAlias.setAlias("col");
+            cAlias.setColumnFamily("cf");
+            cAlias.setQualifier("qualifier");
+            cAlias.setValueType(valueType3);
+            mapping.addColumnAlias(cAlias);
+
+            ColumnAlias cAlias1 = new ColumnAlias();
+            cAlias1.setAlias("col1");
+            cAlias1.setColumnFamily("cf1");
+            cAlias1.setQualifier("qualifier2");
+            ValueType valueType4 = new ValueType();
+            valueType4.setClassName("java.lang.Double");            
+            cAlias1.setValueType(valueType4);
+            mapping.addColumnAlias(cAlias1);
+            
+            ColumnAlias cAlias2 = new ColumnAlias();
+            cAlias2.setAlias("col2");
+            cAlias2.setColumnFamily("cf");
+            cAlias2.setQualifier("qualifier1");
+            cAlias2.setValueType(valueType3);
+            mapping.addColumnAlias(cAlias2);
+
+            FilterType filter1 = new FilterType();
+    		filter1.setType("Greater Than Equals");
+
+    		RowAliasFilter rowFilter1 = new RowAliasFilter();
+    		rowFilter1.setFilterType(filter1);
+    		rowFilter1.setRowAlias(rAlias1);
+    		rowFilter1.setValue("15");
+
+    		FilterType filter2 = new FilterType();
+    		filter2.setType("Equals");
+
+    		RowAliasFilter rowFilter2 = new RowAliasFilter();
+    		rowFilter2.setFilterType(filter2);
+    		rowFilter2.setRowAlias(rAlias2);
+    		rowFilter2.setValue("12");
+    		
+    		FilterType filter3 = new FilterType();
+    		filter3.setType("Less Than");
+
+    		RowAliasFilter rowFilter3 = new RowAliasFilter();
+    		rowFilter3.setFilterType(filter3);
+    		rowFilter3.setRowAlias(rAlias1);
+    		rowFilter3.setValue("20");
+
+    		ArrayList<RowAliasFilter> filters = new ArrayList<RowAliasFilter>();
+    		filters.add(rowFilter1);
+    		//filters.add(rowFilter2);
+    		filters.add(rowFilter3);
+    		report.setRowAliasFilters(filters);
+    		
+            Function max = TestingUtil.getFunction("max", 
+    				"co.nubetech.crux.server.functions.MaxAggregator", true);
+            Function min = TestingUtil.getFunction("max", 
+    				"co.nubetech.crux.server.functions.MinAggregator", true);
+
+            Function sum = TestingUtil.getFunction("sum", 
+    				"co.nubetech.crux.server.functions.SumAggregator", true);
+    		
+            ReportDesign design3 = new ReportDesign();
+			design3.setRowAlias(rAlias1);
+			List<ReportDesignFunction> xFunctions = new ArrayList<ReportDesignFunction>();
+			xFunctions.add(TestingUtil.getReportDesignFunction(max, design3));
+			design3.setReportDesignFunctionList(xFunctions);			
+			report.addDesign(design3);
+			
+			ReportDesign design4 = new ReportDesign();
+			design4.setRowAlias(rAlias1);
+			List<ReportDesignFunction> functions = new ArrayList<ReportDesignFunction>();
+			functions.add(TestingUtil.getReportDesignFunction(min, design4));
+			design4.setReportDesignFunctionList(functions);			
+			report.addDesign(design4);
+
+			ReportDesign design5 = new ReportDesign();
+			design5.setColumnAlias(cAlias1);
+			List<ReportDesignFunction> cfunctions = new ArrayList<ReportDesignFunction>();
+			cfunctions.add(TestingUtil.getReportDesignFunction(sum, design5));
+			design5.setReportDesignFunctionList(cfunctions);			
+			report.addDesign(design5);
+			
+			HBaseFacade hbaseFacade = new HBaseFacade(pool);
+            CruxScanner scanner = hbaseFacade.execute(connection, report, mapping);
+            assertTrue(scanner instanceof CruxScannerListImpl);
+            CruxResult scanResult = null;
+            ArrayList<CruxResult> results = new ArrayList<CruxResult>();
+            while ((scanResult = scanner.next()) != null) {
+                results.add(scanResult);
+                logger.debug("Value is "
+                        + scanResult.get(0));
+                logger.debug("CruxResult is " + scanResult);
+                
+            }
+            assertEquals(1, results.size());
+            assertEquals(19l, results.get(0).get(0));
+            assertEquals(15l, results.get(0).get(1));
+            assertEquals(85*2.5d, results.get(0).get(2));
+			scanner.close();
+	}
 }
