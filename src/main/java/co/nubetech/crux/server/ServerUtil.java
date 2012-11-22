@@ -77,7 +77,10 @@ public class ServerUtil {
 	
 	public static Object getValue(byte[] b, Alias alias) {
 		logger.debug("Alias " + alias + " , and value type is " + alias.getValueType() + 
-				" and bytes are " + b);
+				" and bytes are " + b );
+		if (b != null) {
+			logger.debug("bytes.length is " + b.length);
+		}
 		Object returnObject = alias.getValueType().fromBytes(b);
 		logger.debug("Returning " + returnObject);
 		return returnObject;

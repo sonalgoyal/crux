@@ -16,21 +16,26 @@ Copyright 2011 Nube Technologies
 package co.nubetech.crux.action;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import co.nubetech.crux.dao.MappingDAO;
+import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.ColumnFilter;
 import co.nubetech.crux.model.Connection;
 import co.nubetech.crux.model.Mapping;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
+import co.nubetech.crux.model.RowAlias;
 import co.nubetech.crux.model.RowAliasFilter;
 import co.nubetech.crux.model.ValueType;
+import co.nubetech.crux.server.CruxResult;
 import co.nubetech.crux.server.CruxScanner;
 import co.nubetech.crux.server.HBaseFacade;
 import co.nubetech.crux.util.CruxError;
 import co.nubetech.crux.util.CruxException;
+import co.nubetech.crux.view.Cell;
 import co.nubetech.crux.view.FilterAliasView;
 
 public class ViewReportAction extends ViewReportListAction {
@@ -44,18 +49,18 @@ public class ViewReportAction extends ViewReportListAction {
 	private String axisValues = new String();
 	private ArrayList<FilterAliasView> filterList = new ArrayList<FilterAliasView>();
 	private long mappingId;
-	private ArrayList<ArrayList> dataList = new ArrayList<ArrayList>();
+	private List<ArrayList<Cell>> dataList = new ArrayList<ArrayList<Cell>>();
 	private MappingDAO mappingDAO;
 
 	public ViewReportAction() {
 		mappingDAO = new MappingDAO();
 	}
 
-	public ArrayList<ArrayList> getDataList() {
+	public List<ArrayList<Cell>> getDataList() {
 		return dataList;
 	}
 
-	public void setDataList(ArrayList<ArrayList> dataList) {
+	public void setDataList(List<ArrayList<Cell>> dataList) {
 		this.dataList = dataList;
 	}
 
@@ -166,8 +171,8 @@ public class ViewReportAction extends ViewReportListAction {
 		return SUCCESS;
 	}
 
-	public ArrayList<ArrayList> getData(Report report, Mapping mapping) {
-		ArrayList<ArrayList> dataList = new ArrayList<ArrayList>();
+	public List<ArrayList<Cell>> getData(Report report, Mapping mapping) {
+		List<ArrayList<Cell>> dataList = new ArrayList<ArrayList<Cell>>();
 		CruxScanner cruxScanner = null;
 		try {
 			Connection conn = mapping.getConnection();
@@ -176,9 +181,8 @@ public class ViewReportAction extends ViewReportListAction {
 			logger.debug("About to get data for Report:" + report);
 			cruxScanner = hbaseFacade.execute(conn, report, mapping);
 			logger.debug("Data fetched from HBaseFacade");
-			/*Result result = null;
-			ArrayList<ReportDesign> reportDesignList = new ArrayList<ReportDesign>(
-					report.getDesigns());
+
+			List<ReportDesign> reportDesignList = report.getDesigns();
 			
 			for (ReportDesign reportDesign : reportDesignList) {
 				String alias = (reportDesign.getColumnAlias() != null) ? reportDesign
@@ -188,23 +192,19 @@ public class ViewReportAction extends ViewReportListAction {
 						+ alias + ":";
 				logger.debug("AxisValues:"+axisValues);
 			}
-
-			//TODO
-			/*if (cruxScanner != null) {
+			
+			if (cruxScanner != null) {
 				logger.debug("About to create dataList");
-				ArrayList<Conversion> conversionList = getConversionList(reportDesignList);
-				ArrayList<SubByteArray> subByteArrayList = getSubByteArrayList(reportDesignList);
+				int designSize = reportDesignList.size();
+				CruxResult result = null;
 				while ((result = cruxScanner.next()) != null) {
-					if (!result.isEmpty()) {
-						dataList.add(getCellList(reportDesignList, result,
-								conversionList, subByteArrayList));
-					}
+					dataList.add(getCellList(reportDesignList, result));
 				}
 				logger.debug("DataList is populated closing scanner");
-
-			} else {
+			} 
+			else {
 				error.setMessage("Cannot determine result.");
-			}*/
+			}
 		} catch (CruxException e) {
 			e.printStackTrace();
 			error.setMessage(e.getMessage());
@@ -219,40 +219,25 @@ public class ViewReportAction extends ViewReportListAction {
 		return dataList;
 	}
 
-/*	private ArrayList<Cell> getCellList(
-			ArrayList<ReportDesign> reportDesignList, Result result,
-			ArrayList<Conversion> conversionList,
-			ArrayList<SubByteArray> subByteArrayList) throws CruxException {
-
-		byte[] rowKey = result.getRow();
-		if (rowKey == null) {
-			throw new CruxException("The result set is empty.");
-		}
+	private ArrayList<Cell> getCellList(
+			List<ReportDesign> reportDesignList, CruxResult r) throws CruxException {
 		ArrayList<Cell> cellList = new ArrayList<Cell>();
 		int i = 0;
-		int j = 0;
 		for (ReportDesign reportDesign : reportDesignList) {
 			if (reportDesign.getRowAlias() != null) {
 				RowAlias rowAlias = reportDesign.getRowAlias();
-				byte[] value = subByteArrayList.get(j).execute(rowKey);
-				cellList.add(new Cell(rowAlias.getAlias(), conversionList
-						.get(i).execute(value)));
-				j++;
+				cellList.add(new Cell(rowAlias.getAlias(), r.get(i)));
 			} else if (reportDesign.getColumnAlias() != null) {
 				ColumnAlias columnAlias = reportDesign.getColumnAlias();
-				byte[] value = result.getValue(
-						Bytes.toBytes(columnAlias.getColumnFamily()),
-						Bytes.toBytes(columnAlias.getQualifier()));
-				if (value != null) {
-					cellList.add(new Cell(columnAlias.getAlias(),
-							conversionList.get(i).execute(value)));
-				}
+				cellList.add(new Cell(columnAlias.getAlias(),
+						r.get(i)));
 			}
 			i++;
 		}
 		return cellList;
 	}
 
+	/*
 	private ArrayList<SubByteArray> getSubByteArrayList(
 			ArrayList<ReportDesign> reportDesignList) {
 		ArrayList<SubByteArray> subByteArrayList = new ArrayList<SubByteArray>();

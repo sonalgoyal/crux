@@ -1,11 +1,13 @@
 package co.nubetech.crux.action;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import co.nubetech.crux.util.CruxError;
 import co.nubetech.crux.util.CruxException;
+import co.nubetech.crux.view.Cell;
 
 public class PreviewAction extends SaveReportAction {
 
@@ -14,13 +16,13 @@ public class PreviewAction extends SaveReportAction {
 	final static Logger logger = Logger
 			.getLogger(co.nubetech.crux.action.PreviewAction.class);
 
-	private ArrayList<ArrayList> dataList = new ArrayList<ArrayList>();
+	private List<ArrayList<Cell>> dataList = new ArrayList<ArrayList<Cell>>();
 
-	public ArrayList<ArrayList> getDataList() {
+	public List<ArrayList<Cell>> getDataList() {
 		return dataList;
 	}
 
-	public void setDataList(ArrayList<ArrayList> dataList) {
+	public void setDataList(List<ArrayList<Cell>> dataList) {
 		this.dataList = dataList;
 	}
 
