@@ -15,6 +15,7 @@
 package co.nubetech.crux.action;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -25,11 +26,14 @@ import org.apache.log4j.Logger;
 import co.nubetech.crux.dao.FunctionDAO;
 import co.nubetech.crux.dao.MappingDAO;
 import co.nubetech.crux.dao.ReportTypeDAO;
+import co.nubetech.crux.dao.RowAliasDAO;
 import co.nubetech.crux.dao.ValueFilterTypeDAO;
 import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.ColumnFilter;
 import co.nubetech.crux.model.FilterType;
 import co.nubetech.crux.model.Function;
+import co.nubetech.crux.model.FunctionTypeMapping;
+import co.nubetech.crux.model.GroupBy;
 import co.nubetech.crux.model.Mapping;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
@@ -43,6 +47,7 @@ import co.nubetech.crux.util.CruxException;
 import co.nubetech.crux.view.DimensionAndMeasureView;
 import co.nubetech.crux.view.FilterAliasView;
 import co.nubetech.crux.view.FunctionView;
+import co.nubetech.crux.view.GroupBysView;
 
 public class ReportDesignAction extends ViewReportListAction {
 
@@ -53,6 +58,7 @@ public class ReportDesignAction extends ViewReportListAction {
 
 	protected ReportTypeDAO reportTypeDAO = new ReportTypeDAO();
 	private ValueFilterTypeDAO valueFilterTypeDAO = new ValueFilterTypeDAO();
+	private RowAliasDAO rowAliasDAO = new RowAliasDAO();
 	private ArrayList<ReportType> reportTypeList;
 	private ArrayList<FilterType> filterTypeList;
 	protected long mappingId;
@@ -64,6 +70,7 @@ public class ReportDesignAction extends ViewReportListAction {
 	protected boolean addToDashBoard;
 	private ArrayList<DimensionAndMeasureView> dimensionAndMeasureViewList = new ArrayList<DimensionAndMeasureView>();
 	private ArrayList<FunctionView> functionViewList = new ArrayList<FunctionView>();
+	private ArrayList<RowAlias> rowAliasList;
 	protected FunctionDAO functionDAO = new FunctionDAO();
 
 	public ReportDesignAction() {
@@ -175,6 +182,23 @@ public class ReportDesignAction extends ViewReportListAction {
 		this.edit = edit;
 	}
 
+	
+	public ArrayList<GroupBysView> getGroupByViewList() {
+		return groupByViewList;
+	}
+
+	public void setGroupByViewList(ArrayList<GroupBysView> groupByViewList) {
+		this.groupByViewList = groupByViewList;
+	}
+
+	public ArrayList<RowAlias> getRowAliasList() {
+		return rowAliasList;
+	}
+
+	public void setRowAliasList(ArrayList<RowAlias> rowAliasList) {
+		this.rowAliasList = rowAliasList;
+	}
+
 	public String getDesignPage() {
 		mappingList = populateMappingList(mappingDAO, mappingList);
 		return SUCCESS;
@@ -205,6 +229,14 @@ public class ReportDesignAction extends ViewReportListAction {
 
 	public ArrayList<DimensionAndMeasureView> getDimensionAndMeasureViewList() {
 		return dimensionAndMeasureViewList;
+	}
+
+	public RowAliasDAO getRowAliasDAO() {
+		return rowAliasDAO;
+	}
+
+	public void setRowAliasDAO(RowAliasDAO rowAliasDAO) {
+		this.rowAliasDAO = rowAliasDAO;
 	}
 
 	public void setDimensionAndMeasureViewList(
@@ -321,6 +353,7 @@ public class ReportDesignAction extends ViewReportListAction {
 			}
 			mappingList = populateMappingList(mappingDAO, mappingList);
 			getFilterAliasView();
+			getGroupByView();
 			edit = "true";
 			logger.debug("Mapping Id: " + mappingId + "," + reportType);
 		} catch (CruxException e) {
@@ -343,5 +376,41 @@ public class ReportDesignAction extends ViewReportListAction {
 		for (RowAliasFilter rowFilter : rowFilterList) {
 			filterViewList.add(new FilterAliasView(rowFilter));
 		}
+	}
+	
+	public String populateGroupBy() {
+	     Map<String, RowAlias> rowAlias = null;
+	     rowAliasList = new ArrayList<RowAlias>();
+	     		if (mappingId != 0) {
+				  try {
+					 Iterator<RowAlias> iterator = mappingDAO.findById(mappingId).getRowAlias().values().iterator();
+					 logger.debug("RowAlias :"+rowAlias);
+					 while (iterator.hasNext()) {
+			        	 rowAliasList.add(iterator.next());
+			         }
+				  } catch (CruxException e) {
+					error.setMessage(e.getMessage());
+					return SUCCESS;
+				    }
+	     	}
+	     	Iterator<RowAlias> itr = rowAliasList.iterator();
+	     	while(itr.hasNext()){
+	     	    
+	     		logger.debug("RowAlias List"+itr.next());
+	     	}
+	     		
+	     	return SUCCESS; 
+	}
+	
+	public void getGroupByView() throws CruxException {
+		   int index = 0;
+		   try{
+		     ArrayList<GroupBy> groupByList = new ArrayList<GroupBy>(report.getGroupBys().getGroupBy());
+		     for(GroupBy groupBy : groupByList){
+		       groupByViewList.add(new GroupBysView(++index, groupBy.getRowAlias()));  
+		     }
+		   }catch(Exception e){
+			   error.setMessage(e.getMessage());
+		   }
 	}
 }

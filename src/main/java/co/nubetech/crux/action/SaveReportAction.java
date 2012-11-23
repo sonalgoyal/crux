@@ -28,6 +28,8 @@ import co.nubetech.crux.model.ColumnFilter;
 import co.nubetech.crux.model.Dashboard;
 import co.nubetech.crux.model.FilterType;
 import co.nubetech.crux.model.Function;
+import co.nubetech.crux.model.GroupBy;
+import co.nubetech.crux.model.GroupBys;
 import co.nubetech.crux.model.Mapping;
 import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.ReportDesign;
@@ -40,6 +42,7 @@ import co.nubetech.crux.model.ValueType;
 import co.nubetech.crux.util.CruxError;
 import co.nubetech.crux.util.CruxException;
 import co.nubetech.crux.view.FilterAliasView;
+import co.nubetech.crux.view.GroupBysView;
 
 public class SaveReportAction extends ReportDesignAction {
 
@@ -50,6 +53,7 @@ public class SaveReportAction extends ReportDesignAction {
 
 	private FilterTypeDAO filterTypeDAO = new FilterTypeDAO();
 	private UserDAO userDAO = new UserDAO();
+	private GroupBys groupBys = new GroupBys();
 	private FunctionDAO functionDAO = new FunctionDAO();
 
 	private ReportType reportTypeObject = new ReportType();
@@ -57,6 +61,7 @@ public class SaveReportAction extends ReportDesignAction {
 	private ArrayList<String> aliasList = new ArrayList<String>();
 
 	private ArrayList<FilterAliasView> filterList = new ArrayList<FilterAliasView>();
+	private ArrayList<GroupBysView> groupBysViewList = new ArrayList<GroupBysView>();
 
 	public CruxError getError() {
 		return error;
@@ -80,6 +85,14 @@ public class SaveReportAction extends ReportDesignAction {
 
 	public void setAliasList(ArrayList<String> aliasList) {
 		this.aliasList = aliasList;
+	}
+
+	public ArrayList<GroupBysView> getGroupBysViewList() {
+		return groupBysViewList;
+	}
+
+	public void setGroupBysViewList(ArrayList<GroupBysView> groupBysViewList) {
+		this.groupBysViewList = groupBysViewList;
 	}
 
 	public String saveReport() {
@@ -170,6 +183,7 @@ public class SaveReportAction extends ReportDesignAction {
 			report.setReportType(reportTypeObject);
 
 			populateRowAndColumnFilter(hashColumnAlias, hashRowAlias);
+			populateGroupBys(hashRowAlias);
 		} catch (CruxException e) {
 			e.printStackTrace();
 			error.setMessage(e.getMessage());
@@ -341,5 +355,25 @@ public class SaveReportAction extends ReportDesignAction {
 			}
 		}
 		return result;
+	}
+	
+	public void populateGroupBys(Map<String, RowAlias> hashRowAlias) throws CruxException{
+		List<GroupBy> groupByList = new ArrayList<GroupBy>();
+		for(GroupBysView groupBysView : groupBysViewList){
+			if (hashRowAlias.containsKey(groupBysView.getAlias())) {
+				RowAlias rowAlias = hashRowAlias.get(groupBysView.getAlias());
+				GroupBy groupBy = new GroupBy();
+				groupBy.setRowAlias(rowAlias);
+				groupBy.setPosition(groupBysView.getIndex());
+				groupByList.add(groupBy);			
+				logger.debug("groupBy:" + groupBy);
+			}
+			
+		}
+		groupBys.setGroupBy(groupByList);
+		groupBys.setReport(report);
+		logger.debug("groupByListSize:" + groupByList.size());
+		
+		report.setGroupBys(groupBys);
 	}
 }

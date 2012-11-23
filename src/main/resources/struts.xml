@@ -105,6 +105,10 @@
 			method="populateFilterType">
 			<result type="json" />
 		</action>
+		<action name="populateGroupBy" class="co.nubetech.crux.action.ReportDesignAction"
+			method="populateGroupBy">
+			<result type="json" />
+		</action>		
 		<action name="saveReport" class="co.nubetech.crux.action.SaveReportAction"
 			method="saveReport">
 			<interceptor-ref name="cruxDemoInterceptorStack"/>

@@ -1,21 +1,19 @@
 package co.nubetech.crux.action;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-
-import org.junit.Test;
 
 import co.nubetech.crux.dao.FunctionDAO;
 import co.nubetech.crux.dao.MappingDAO;
 import co.nubetech.crux.dao.ReportDAO;
 import co.nubetech.crux.dao.ReportTypeDAO;
+import co.nubetech.crux.dao.RowAliasDAO;
 import co.nubetech.crux.dao.ValueFilterTypeDAO;
 import co.nubetech.crux.model.ColumnAlias;
 import co.nubetech.crux.model.Datastore;
@@ -177,7 +175,7 @@ public class TestReportDesignAction {
 		rowAlias3.setAlias("rowAlias3");
 		rowAlias3.setValueType(valueType3);
 		
-		Map<String, RowAlias> rowAliasMap = new TreeMap<String, RowAlias>();
+		Map<String, RowAlias> rowAliasMap = new HashMap<String, RowAlias>();
 		rowAliasMap.put("rowAlias1", rowAlias1);
 		rowAliasMap.put("rowAlias2", rowAlias2);
 		rowAliasMap.put("rowAlias3", rowAlias3);
