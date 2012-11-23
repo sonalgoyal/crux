@@ -10,6 +10,8 @@
       <useDefaultExcludes>true</useDefaultExcludes>
        <includes>
             <include>*.war</include>  
+            <include>*.jar</include>  
+            <include>${project.basedir}/db/schema.sql</include>
         </includes>   
       <excludes>
         <exclude>**/*.log</exclude>
