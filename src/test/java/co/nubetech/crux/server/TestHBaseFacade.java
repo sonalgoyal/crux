@@ -2710,7 +2710,7 @@ public class TestHBaseFacade {
     				"co.nubetech.crux.server.functions.MinAggregator", true);
 
             Function sum = TestingUtil.getFunction("sum", 
-    				"co.nubetech.crux.server.functions.SumAggregator", true);
+    				"co.nubetech.crux.server.functions.SumDoubleAggregator", true);
     		
             ReportDesign design3 = new ReportDesign();
 			design3.setRowAlias(rAlias1);

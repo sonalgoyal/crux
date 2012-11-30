@@ -14,7 +14,7 @@ import co.nubetech.crux.server.FunctionUtil;
 import co.nubetech.crux.server.functions.Ceil;
 import co.nubetech.crux.server.functions.CruxFunction;
 import co.nubetech.crux.server.functions.LowerCase;
-import co.nubetech.crux.server.functions.SumAggregator;
+import co.nubetech.crux.server.functions.SumDoubleAggregator;
 import co.nubetech.crux.server.functions.UpperCase;
 import co.nubetech.crux.util.CruxException;
 
@@ -23,7 +23,7 @@ public class TestFunctionUtil {
 	@Test
 	public void testApplyFunctionsAggregateFirst() throws CruxException{
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
-		SumAggregator summer = new SumAggregator();
+		SumDoubleAggregator summer = new SumDoubleAggregator();
 		xFnStack.push(summer);
 		xFnStack.push(new Ceil());
 		byte[] value = Bytes.toBytes(new Double(54.5d));
@@ -37,7 +37,7 @@ public class TestFunctionUtil {
 	public void testApplyFunctionsNonAggregateFirst() throws CruxException{
 		GroupingAggregationImpl impl = new GroupingAggregationImpl();
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
-		SumAggregator summer = new SumAggregator();
+		SumDoubleAggregator summer = new SumDoubleAggregator();
 		xFnStack.push(new Ceil());
 		xFnStack.push(summer);
 		byte[] value = Bytes.toBytes(new Double(54.5d));
@@ -58,7 +58,7 @@ public class TestFunctionUtil {
 	@Test
 	public void testApplyFunctionsOnlyAggregate() throws CruxException{
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
-		SumAggregator summer = new SumAggregator();
+		SumDoubleAggregator summer = new SumDoubleAggregator();
 		xFnStack.push(summer);
 		byte[] value = Bytes.toBytes(new Double(54.5d));
 		FunctionUtil.applyAggregateFunctions(value, xFnStack);
@@ -70,7 +70,7 @@ public class TestFunctionUtil {
 	@Test
 	public void testGetSemiAggregatedResultNonAggregateFirst() throws CruxException{
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
-		SumAggregator summer = new SumAggregator();
+		SumDoubleAggregator summer = new SumDoubleAggregator();
 		summer.aggregate(Bytes.toBytes(new Double(54.5d)));
 		xFnStack.push(new Ceil());
 		xFnStack.push(summer);
@@ -80,7 +80,7 @@ public class TestFunctionUtil {
 	@Test
 	public void testGetSemiAggResultAggregateFirst() throws CruxException{
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
-		SumAggregator summer = new SumAggregator();
+		SumDoubleAggregator summer = new SumDoubleAggregator();
 		summer.aggregate(Bytes.toBytes(new Double(54.5d)));
 		xFnStack.push(summer);
 		xFnStack.push(new Ceil());
@@ -100,7 +100,7 @@ public class TestFunctionUtil {
 	public void testGetSimpleFunctionResultWithAggFn() throws CruxException{
 		//getSimpleFunctionResult
 		Stack<CruxFunction> xFnStack = new Stack<CruxFunction>();
-		xFnStack.push(new SumAggregator());
+		xFnStack.push(new SumDoubleAggregator());
 		xFnStack.push(new Ceil());		
 		System.out.println("Value is " + FunctionUtil.getSimpleFunctionResult(Bytes.toBytes(1234.5d),
 				xFnStack));

@@ -148,7 +148,7 @@ public class TestReport {
 		assertEquals(3, functionList.size());
 		Stack<CruxFunction> xFnStack = functionList.get(0);
 		assertEquals(2,xFnStack.size());
-		assertEquals(co.nubetech.crux.server.functions.SumAggregator.class, xFnStack.pop().getClass());
+		assertEquals(co.nubetech.crux.server.functions.SumDoubleAggregator.class, xFnStack.pop().getClass());
 		assertEquals(co.nubetech.crux.server.functions.Ceil.class, xFnStack.pop().getClass());
 		Stack<CruxFunction> yFnStack = functionList.get(1);
 		assertEquals(1, yFnStack.size());

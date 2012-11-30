@@ -5,11 +5,11 @@ import org.apache.hadoop.hbase.util.Bytes;
 import co.nubetech.crux.util.CruxException;
 
 
-public class SumAggregator extends FunctionBase implements CruxAggregator{
+public class SumDoubleAggregator extends FunctionBase implements CruxAggregator{
 	
 	private double sum;
 	
-	public SumAggregator(){
+	public SumDoubleAggregator(){
 		sum = 0;
 	}
 	

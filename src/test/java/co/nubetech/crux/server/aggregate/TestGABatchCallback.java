@@ -12,7 +12,7 @@ import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.TestingUtil;
 import co.nubetech.crux.server.functions.AverageAggregator;
 import co.nubetech.crux.server.functions.CruxFunction;
-import co.nubetech.crux.server.functions.SumAggregator;
+import co.nubetech.crux.server.functions.SumDoubleAggregator;
 import co.nubetech.crux.util.CruxException;
 
 public class TestGABatchCallback {

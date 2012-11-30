@@ -125,7 +125,7 @@ public class TestingUtil {
 		ReportDesign yDesign1 = getDesign("y", alias1, report);
 		
 		Function sum = getFunction("sum", 
-				"co.nubetech.crux.server.functions.SumAggregator", true);
+				"co.nubetech.crux.server.functions.SumDoubleAggregator", true);
 		Function average = getFunction("avergae", "co.nubetech.crux.server.functions.AverageAggregator",
 				true);
 		Function ceil = getFunction("ceil", "co.nubetech.crux.server.functions.Ceil", false);
@@ -201,7 +201,7 @@ public class TestingUtil {
 		ReportDesign yDesign1 = getDesign("y", alias1, report);
 		
 		Function sum = getFunction("sum", 
-				"co.nubetech.crux.server.functions.SumAggregator", true);
+				"co.nubetech.crux.server.functions.SumDoubleAggregator", true);
 		Function average = getFunction("avergae", "co.nubetech.crux.server.functions.AverageAggregator",
 				true);
 		Function ceil = getFunction("ceil", "co.nubetech.crux.server.functions.Ceil", false);

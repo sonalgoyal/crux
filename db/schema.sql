@@ -602,6 +602,10 @@ INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId
 	VALUES ('Min','co.nubetech.crux.server.functions.MinAggregator',1, 4, 4);
 INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) 
 	VALUES ('Round','co.nubetech.crux.server.functions.Round',0, 6, 6);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) 
+	VALUES ('Sum','co.nubetech.crux.server.functions.SumDoubleAggregator',1, 6, 6);
+INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) 
+	VALUES ('Sum','co.nubetech.crux.server.functions.SumFloatAggregator',1, 5, 6);
 	
 #INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('date','co.nubetech.crux.server.functions.DateFunction',0, 1, 3);
 #INSERT  INTO `function`(`functionName`,`functionClass`,`aggregate`, `valueTypeId`,`returnValueTypeId`) VALUES ('date','co.nubetech.crux.server.functions.DateFunction',0, 1, 4);
