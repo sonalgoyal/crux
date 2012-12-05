@@ -1,4 +1,4 @@
-Crux is a reporting application for HBase.
+Crux is an analytics application built using HBase.
 -
 Crux development is happening in two branches, master and aggregation. The aggregation branch is the current action branch, where we are providing enhanced querying and reporting capabilities. 
 
@@ -10,17 +10,16 @@ Crux development is happening in two branches, master and aggregation. The aggre
  <li>Apache HBase 0.90.3 on Apache Hadoop 0.20.2 with Hadoop  append.</li>
 </ol>
 
-<h5>Crux features</h5>
-<ol>
- <li>Aggregation of HBase data - min, max etc</li>
- <li>Functions like ceil, round, uppercase etc</li>
- <li>Advanced querying and filtering</li>
- <li>Drag and drop report designer</li>
- <li>Web based front end</li>
- <li>Support for various HBase versions</li>
- <li>Support for various datatypes</li>
- and lots more..give it a try
-</ol>
+Crux features
+-
+- Aggregation of HBase data - min, max etc
+- Functions like ceil, round, uppercase etc
+- Advanced querying and filtering
+- Drag and drop report designer
+- Web based front end
+- Support for various HBase versions
+- Support for various datatypes
+- and lots more..give it a try
 
 Crux license 
 -
