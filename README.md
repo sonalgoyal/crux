@@ -10,6 +10,18 @@ Crux development is happening in two branches, master and aggregation. The aggre
  <li>Apache HBase 0.90.3 on Apache Hadoop 0.20.2 with Hadoop  append.</li>
 </ol>
 
+<h5>Crux features</h5>
+<ol>
+ <li>Aggregation of HBase data - min, max etc</li>
+ <li>Functions like ceil, round, uppercase etc</li>
+ <li>Advanced querying and filtering</li>
+ <li>Drag and drop report designer</li>
+ <li>Web based front end</li>
+ <li>Support for various HBase versions</li>
+ <li>Support for various datatypes</li>
+ and lots more..give it a try
+</ol>
+
 Crux license 
 -
 - Crux license is <b>Apache License v2</b>
