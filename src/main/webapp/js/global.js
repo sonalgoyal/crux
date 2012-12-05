@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 dojo.require("dojox.widget.Standby");
+var helpLink;
+var helpTitle;
 
 function showProgressIndicator(){
 	document.body.appendChild(response.domNode);
@@ -31,4 +33,8 @@ function clearResponse(){
 function responseMessage(message){
 	var res=document.getElementById("responseText");
 	 res.innerHTML=message;
+}
+
+function showHelp(){
+	 window.open (helpLink, helpTitle, 'width=600,scrollbars=1');
 }

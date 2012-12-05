@@ -84,7 +84,7 @@ public class GroupBys implements Serializable{
 		int result = 1;
 		result = prime * result + ((groupBy == null) ? 0 : groupBy.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((report == null) ? 0 : report.hashCode());
+		//result = prime * result + ((report == null) ? 0 : report.hashCode());
 		return result;
 	}
 
@@ -128,8 +128,7 @@ public class GroupBys implements Serializable{
 	 */
 	@Override
 	public String toString() {
-		return "GroupBys [id=" + id + ", groupBy=" + groupBy + ", report="
-				+ report + "]";
+		return "GroupBys [id=" + id + ", groupBy=" + groupBy + "]";
 	}
 	
 	
