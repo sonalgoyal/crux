@@ -25,6 +25,7 @@ import org.apache.hadoop.hbase.filter.RowFilter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.filter.WritableByteArrayComparable;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.log4j.Logger;
 
 import co.nubetech.crux.model.Alias;
 import co.nubetech.crux.model.ColumnAlias;
@@ -35,6 +36,7 @@ import co.nubetech.crux.model.Report;
 import co.nubetech.crux.model.RowAlias;
 import co.nubetech.crux.model.RowAliasFilter;
 import co.nubetech.crux.server.BytesHelper;
+import co.nubetech.crux.server.QueryExecutor;
 import co.nubetech.crux.server.filter.types.BooleanComparator;
 import co.nubetech.crux.server.filter.types.DoubleComparator;
 import co.nubetech.crux.server.filter.types.FloatComparator;
@@ -50,6 +52,7 @@ import co.nubetech.crux.util.CruxException;
 
 public class HBaseFilterFactory {
 	
+	final static Logger logger = Logger.getLogger(HBaseFilterFactory.class);
 	/**
 	 * factory method for creating a hbase row filter from Crux Row filter 
 	 * @param rowFilter
@@ -188,13 +191,12 @@ public class HBaseFilterFactory {
 		byte[] family = Bytes.toBytes(alias.getColumnFamily());
 		byte[] qualifier = Bytes.toBytes(alias.getQualifier());
 		WritableByteArrayComparable comparator = getComparator(columnFilter.getFilterType(), alias, columnFilter.getValue(), 0, -1);
+		logger.debug("Comparator is " + comparator);
 		SingleColumnValueFilter filter = new SingleColumnValueFilter(family, qualifier,
 				compareOp, comparator);
 		//if the column does not exist, do not include
 		filter.setFilterIfMissing(true);
 		return filter;
-	}
-	
-	
+	}	
 
 }

@@ -118,23 +118,24 @@ public class HBaseFacade {
 		logger.debug("Getting column families for " + conn + " and table " + table);
 		HTablePool hTablePool = null;
 		Collection<HColumnDescriptor> columnDescriptor = null;
-		HTable hTable = null;
+		HTableInterface hTableInterface = null;
 		try {
 			hTablePool = (HTablePool) hbaseConnectionPool.borrowObject(conn);
-			hTable = (HTable) hTablePool.getTable(table);
-			columnDescriptor = hTable.getTableDescriptor().getFamilies();
-			hTablePool.putTable(hTable);
+			hTableInterface = (HTableInterface) hTablePool.getTable(table);
+			columnDescriptor = hTableInterface.getTableDescriptor().getFamilies();
+			hTableInterface.close();
 			//hbaseConnectionPool.returnObject(conn, hTablePool);
 			//hTable.close();
 			logger.debug("Column Descriptor is " + columnDescriptor);
 			return columnDescriptor;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new CruxException(e);
 		} finally {
 			if (hTablePool != null) {
 				try {
-					if (hTable != null) {
-						hTablePool.putTable(hTable);
+					if (hTableInterface != null) {
+						hTableInterface.close();
 					}
 					hbaseConnectionPool.returnObject(conn, hTablePool);
 				} catch (Exception e1) {

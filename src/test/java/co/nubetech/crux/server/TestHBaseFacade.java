@@ -78,6 +78,7 @@ public class TestHBaseFacade {
 	public static void setUpBeforeClass() throws Exception {
 		TEST_UTIL.getConfiguration().set(CoprocessorHost.REGION_COPROCESSOR_CONF_KEY,
 				"co.nubetech.crux.server.aggregate.GroupingAggregationImpl");
+		TEST_UTIL.getConfiguration().set("dfs.datanode.data.dir.perm", "755");
 		TEST_UTIL.startMiniCluster(3);
 		
 		// REST_TEST_UTIL.startServletContainer(TEST_UTIL.getConfiguration());
@@ -226,7 +227,6 @@ public class TestHBaseFacade {
 		
 		KeyedPoolableObjectFactory factory = PoolUtils
 				.synchronizedPoolableFactory(new HBaseConnectionPoolFactory());
-
 		connection = new Connection();
 		ConnectionProperty connectionProperty = new ConnectionProperty();
 		connectionProperty.setProperty(CruxConstants.HBASE_ZOOKEEPER_PROPERTY);
@@ -234,7 +234,6 @@ public class TestHBaseFacade {
 		connectionProperty.setValue("localhost:"
 				+ TEST_UTIL.getConfiguration().get("hbase.zookeeper.property.clientPort"));
 		connection.addProperty(connectionProperty);
-
 		pool = new HBaseConnectionPool(factory);
 	}
 
@@ -242,7 +241,6 @@ public class TestHBaseFacade {
 	public static void tearDownAfterClass() throws Exception {
 		connection = null;
 		pool = null;
-
 		// REST_TEST_UTIL.shutdownServletContainer();
 		TEST_UTIL.shutdownMiniCluster();
 	}
@@ -252,10 +250,9 @@ public class TestHBaseFacade {
 		HBaseFacade hbaseFacade = new HBaseFacade(pool);
 		boolean connectionAvailable = hbaseFacade.isValidConnection(connection);
 		assertTrue(connectionAvailable);
-
 	}
 
-	@Test
+	
 	public void testIsValidConnectionForWrongValue() throws IOException {
 		HBaseFacade hbaseFacade = new HBaseFacade(pool);
 		Connection connection = new Connection();

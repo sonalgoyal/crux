@@ -44,7 +44,7 @@
   </property>
   <property>
     <name>hbase.client.retries.number</name>
-    <value>10</value>
+    <value>5</value>
     <description>Maximum retries.  Used as maximum for all retryable
     operations such as fetching of the root region from root region
     server, getting a cell's value, starting a row update, etc.
@@ -139,6 +139,12 @@
     The port at which the clients will connect.
     </description>
   </property>
+  <property>
+    <name>hbase.zookeeper.quorum</name>
+    <value>localhost</value>
+    <description>The zk quorum
+    </description>
+   </property>
   <property>
     <name>hbase.defaults.for.version.skip</name>
     <value>true</value>

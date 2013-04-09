@@ -59,7 +59,7 @@
 		<profile>
 			<id>hbase0.90</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 				<property>
 					<name>apacheHbase90</name>
 				</property>
@@ -229,7 +229,7 @@
 		<profile>
 			<id>hbase0.92</id>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 				<property>
 					<name>hbase0.92</name>
 				</property>
